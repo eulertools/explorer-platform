@@ -1,0 +1,156 @@
+{
+  "identifier": {
+    "S": "coinmarketcap-marketcap~825"
+  },
+  "update_date": {
+    "N": "1662394200"
+  },
+  "circulating_supply": {
+    "N": "67550404103.52471"
+  },
+  "cmc_rank": {
+    "N": "3"
+  },
+  "date_added": {
+    "S": "2015-02-25T00:00:00.000Z"
+  },
+  "id": {
+    "N": "825"
+  },
+  "last_updated": {
+    "S": "2022-09-05T16:10:00.000Z"
+  },
+  "max_supply": {
+    "NULL": true
+  },
+  "name": {
+    "S": "Tether"
+  },
+  "num_market_pairs": {
+    "N": "39249"
+  },
+  "platform": {
+    "M": {
+      "id": {
+        "N": "1027"
+      },
+      "name": {
+        "S": "Ethereum"
+      },
+      "slug": {
+        "S": "ethereum"
+      },
+      "symbol": {
+        "S": "ETH"
+      },
+      "token_address": {
+        "S": "0xdac17f958d2ee523a2206206994597c13d831ec7"
+      }
+    }
+  },
+  "quote": {
+    "M": {
+      "USD": {
+        "M": {
+          "fully_diluted_market_cap": {
+            "N": "69158853689.96"
+          },
+          "last_updated": {
+            "S": "2022-09-05T16:10:00.000Z"
+          },
+          "market_cap": {
+            "N": "67552426864.77461"
+          },
+          "market_cap_dominance": {
+            "N": "6.8636"
+          },
+          "percent_change_1h": {
+            "N": "0.00035458"
+          },
+          "percent_change_24h": {
+            "N": "-0.00418356"
+          },
+          "percent_change_30d": {
+            "N": "-0.00208319"
+          },
+          "percent_change_60d": {
+            "N": "0.07654784"
+          },
+          "percent_change_7d": {
+            "N": "0.00104763"
+          },
+          "percent_change_90d": {
+            "N": "0.08394481"
+          },
+          "price": {
+            "N": "1.0000299444729717"
+          },
+          "tvl": {
+            "NULL": true
+          },
+          "volume_24h": {
+            "N": "37287864365.852234"
+          },
+          "volume_change_24h": {
+            "N": "22.7676"
+          }
+        }
+      }
+    }
+  },
+  "self_reported_circulating_supply": {
+    "NULL": true
+  },
+  "self_reported_market_cap": {
+    "NULL": true
+  },
+  "slug": {
+    "S": "tether"
+  },
+  "source": {
+    "S": "coinmarketcap-marketcap"
+  },
+  "symbol": {
+    "S": "USDT"
+  },
+  "tags": {
+    "L": [
+      {
+        "S": "payments"
+      },
+      {
+        "S": "stablecoin"
+      },
+      {
+        "S": "asset-backed-stablecoin"
+      },
+      {
+        "S": "avalanche-ecosystem"
+      },
+      {
+        "S": "solana-ecosystem"
+      },
+      {
+        "S": "arbitrum-ecosytem"
+      },
+      {
+        "S": "moonriver-ecosystem"
+      },
+      {
+        "S": "injective-ecosystem"
+      },
+      {
+        "S": "bnb-chain"
+      },
+      {
+        "S": "usd-stablecoin"
+      }
+    ]
+  },
+  "total_supply": {
+    "N": "69156782826.54617"
+  },
+  "tvl_ratio": {
+    "NULL": true
+  }
+}

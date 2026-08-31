@@ -1,0 +1,3405 @@
+{
+	"info": {
+		"_postman_id": "0b0b1434-4ec9-4a34-aa51-2fdae78ec958",
+		"name": "App - Explorer",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Tokens",
+			"item": [
+				{
+					"name": "All Tokens",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "8b71402e-ee20-4501-a435-043409ab3415",
+								"exec": [
+									"const response = pm.response.json();\r",
+									"  pm.test(\"Status code is 201\", function() {\r",
+									"      pm.response.to.have.status(201);\r",
+									"  });\r",
+									"    \r",
+									"    pm.test(\"Payload has all properties\", () => {\r",
+									"    for (i = 0; i < response.hits.length; i++) {\r",
+									"        if (i == 6) {\r",
+									"            continue;\r",
+									"        }\r",
+									"        pm.expect(response.hits[i][\"_index\"]).to.eql(\"catalog_20210721\");\r",
+									"        pm.expect(response.hits[i][\"_type\"]).to.eql(\"_doc\");\r",
+									"        pm.expect(response.hits[i][\"_id\"]).to.include(\"bsc\");\r",
+									"        pm.expect(response.hits[i][\"_score\"]).to.eql(null);\r",
+									"        pm.expect(response.hits[i][\"_source\"].price_usd).to.be.string;\r",
+									"        pm.expect(response.hits[i][\"_source\"].identifier).to.have.lengthOf(52);\r",
+									"        pm.expect(response.hits[i][\"_source\"].symbol).to.be.string;\r",
+									"        pm.expect(response.hits[i][\"_source\"].address).to.have.lengthOf(42);\r",
+									"        pm.expect(response.hits[i][\"_source\"].name).to.be.string;\r",
+									"        }\r",
+									"});\r",
+									"    \r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"  \r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "4f6175b2-d58d-4fd4-89b0-35b50dad5a5e",
+								"exec": [
+									"let body = '{\"query\":{\"bool\":{\"must\":[{\"terms\":{\"category\":[\"token\"]}},{\"exists\":{\"field\":\"coin\"}}]}},\"size\":16,\"from\":0,\"sort\":[{\"update_date\":{\"order\":\"desc\"}},{\"market_cap\":{\"order\":\"desc\"}}],\"_source\":[\"name\",\"symbol\",\"address\",\"price_usd\",\"price_changes\",\"market_cap\",\"identifier\"]}'\r",
+									"pm.test(\"Body raw is present\", () => {\r",
+									"    pm.expect(pm.request.body.raw).to.eql(body);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "5eb5f805-36da-40ab-acc7-31810044b356",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true,
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"query\":{\"bool\":{\"must\":[{\"terms\":{\"category\":[\"token\"]}},{\"exists\":{\"field\":\"coin\"}}]}},\"size\":16,\"from\":0,\"sort\":[{\"update_date\":{\"order\":\"desc\"}},{\"market_cap\":{\"order\":\"desc\"}}],\"_source\":[\"name\",\"symbol\",\"address\",\"price_usd\",\"price_changes\",\"market_cap\",\"identifier\"]}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUri}}/{{network}}/tokens",
+							"host": [
+								"{{baseUri}}"
+							],
+							"path": [
+								"{{network}}",
+								"tokens"
+							]
+						},
+						"description": "Returns all tokens available in the network,currently, BNB and Ethereum are the availables networks."
+					},
+					"response": [
+						{
+							"id": "a3531488-8792-4764-945f-84e2e32ac82d",
+							"name": "Object containig all tokens information",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{baseUri}}/tokens",
+									"host": [
+										"{{baseUri}}"
+									],
+									"path": [
+										"tokens"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n    \"total\": {\n        \"value\": 544,\n        \"relation\": \"eq\"\n    },\n    \"max_score\": null,\n    \"hits\": [\n        {\n            \"_index\": \"catalog_20210721\",\n            \"_type\": \"_doc\",\n            \"_id\": \"bsc~token~0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c\",\n            \"_score\": null,\n            \"_source\": {\n                \"price_usd\": 375.369914827909,\n                \"price_changes\": {\n                    \"day_priceusd\": 0,\n                    \"week_priceusd\": 0,\n                    \"hour_priceusd\": 0,\n                    \"month_priceusd\": 0\n                },\n                \"identifier\": \"bsc~token~0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c\",\n                \"symbol\": \"WBNB\",\n                \"address\": \"0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c\",\n                \"market_cap\": 3738152342.147282,\n                \"name\": \"Wrapped BNB\"\n            },\n            \"sort\": [\n                1646656850000,\n                3738152342\n            ]\n        },\n        {\n            \"_index\": \"catalog_20210721\",\n            \"_type\": \"_doc\",\n            \"_id\": \"bsc~token~0x843D4a358471547f51534e3e51fae91cb4Dc3F28\",\n            \"_score\": null,\n            \"_source\": {\n                \"price_usd\": 0.000045074851923121,\n                \"price_changes\": {\n                    \"day_priceusd\": 6422676429.804539,\n                    \"week_priceusd\": 6428180367.255179,\n                    \"hour_priceusd\": 6422676429.804539,\n                    \"month_priceusd\": 0\n                },\n                \"identifier\": \"bsc~token~0x843D4a358471547f51534e3e51fae91cb4Dc3F28\",\n                \"symbol\": \"lowb\",\n                \"address\": \"0x843D4a358471547f51534e3e51fae91cb4Dc3F28\",\n                \"market_cap\": 3125393.6875748727,\n                \"name\": \"loser coin\"\n            },\n            \"sort\": [\n                1646656847000,\n                3125393\n            ]\n        },\n        {\n            \"_index\": \"catalog_20210721\",\n            \"_type\": \"_doc\",\n            \"_id\": \"bsc~token~0x4BD17003473389A42DAF6a0a729f6Fdb328BbBd7\",\n            \"_score\": null,\n            \"_source\": {\n                \"price_usd\": 0.9062615406126265,\n                \"price_changes\": {\n                    \"day_priceusd\": 341777.3555536457,\n                    \"week_priceusd\": 362636.9842195405,\n                    \"hour_priceusd\": 719336725026.8403,\n                    \"month_priceusd\": 0\n                },\n                \"identifier\": \"bsc~token~0x4BD17003473389A42DAF6a0a729f6Fdb328BbBd7\",\n                \"symbol\": \"VAI\",\n                \"address\": \"0x4BD17003473389A42DAF6a0a729f6Fdb328BbBd7\",\n                \"market_cap\": 186862725.67453542,\n                \"name\": \"VAI Stablecoin\"\n            },\n            \"sort\": [\n                1646656841000,\n                186862725\n            ]\n        },\n        {\n            \"_index\": \"catalog_20210721\",\n            \"_type\": \"_doc\",\n            \"_id\": \"bsc~token~0xd32d01A43c869EdcD1117C640fBDcfCFD97d9d65\",\n            \"_score\": null,\n            \"_source\": {\n                \"price_usd\": 1.4056718519664113,\n                \"price_changes\": {\n                    \"day_priceusd\": 286635.9618700099,\n                    \"week_priceusd\": 0,\n                    \"hour_priceusd\": 286635.9618700099,\n                    \"month_priceusd\": 0\n                },\n                \"identifier\": \"bsc~token~0xd32d01A43c869EdcD1117C640fBDcfCFD97d9d65\",\n                \"symbol\": \"NMX\",\n                \"address\": \"0xd32d01A43c869EdcD1117C640fBDcfCFD97d9d65\",\n                \"market_cap\": 32869335.380848803,\n                \"name\": \"Nominex\"\n            },\n            \"sort\": [\n                1646656835000,\n                32869335\n            ]\n        },\n        {\n            \"_index\": \"catalog_20210721\",\n            \"_type\": \"_doc\",\n            \"_id\": \"bsc~token~0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82\",\n            \"_score\": null,\n            \"_source\": {\n                \"price_usd\": 6.097153460217973,\n                \"price_changes\": {\n                    \"day_priceusd\": 28550.003003947266,\n                    \"week_priceusd\": 28426.907919303652,\n                    \"hour_priceusd\": 57248.766309145445,\n                    \"month_priceusd\": 0\n                },\n                \"identifier\": \"bsc~token~0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82\",\n                \"symbol\": \"Cake\",\n                \"address\": \"0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82\",\n                \"market_cap\": 5539410351.396955,\n                \"name\": \"PancakeSwap Token\"\n            },\n            \"sort\": [\n                1646656832000,\n                5539410351\n            ]\n        },\n        {\n            \"_index\": \"catalog_20210721\",\n            \"_type\": \"_doc\",\n            \"_id\": \"bsc~token~0x762539b45A1dCcE3D36d080F74d1AED37844b878\",\n            \"_score\": null,\n            \"_source\": {\n                \"price_usd\": 0.017700269575519057,\n                \"price_changes\": {\n                    \"day_priceusd\": 5944295027.15391,\n                    \"week_priceusd\": 7316430.311742028,\n                    \"hour_priceusd\": 8195576.7026345,\n                    \"month_priceusd\": 0\n                },\n                \"identifier\": \"bsc~token~0x762539b45A1dCcE3D36d080F74d1AED37844b878\",\n                \"symbol\": \"LINA\",\n                \"address\": \"0x762539b45A1dCcE3D36d080F74d1AED37844b878\",\n                \"market_cap\": 361516707.3955287,\n                \"name\": \"Linear Token\"\n            },\n            \"sort\": [\n                1646656814000,\n                361516707\n            ]\n        },\n        {\n            \"_index\": \"catalog_20210721\",\n            \"_type\": \"_doc\",\n            \"_id\": \"bsc~token~0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c\",\n            \"_score\": null,\n            \"_source\": {\n                \"price_usd\": 38545.222743909726,\n                \"price_changes\": {\n                    \"day_priceusd\": 6.5671297651871745,\n                    \"week_priceusd\": 6.888346250409315,\n                    \"hour_priceusd\": 6.5671297651871745,\n                    \"month_priceusd\": 0\n                },\n                \"identifier\": \"bsc~token~0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c\",\n                \"symbol\": \"BTCB\",\n                \"address\": \"0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c\",\n                \"market_cap\": 4411657721.332781,\n                \"name\": \"BTCB Token\"\n            },\n            \"sort\": [\n                1646656811000,\n                4411657721\n            ]\n        },\n        {\n            \"_index\": \"catalog_20210721\",\n            \"_type\": \"_doc\",\n            \"_id\": \"bsc~token~0xcF6BB5389c92Bdda8a3747Ddb454cB7a64626C63\",\n            \"_score\": null,\n            \"_source\": {\n                \"price_usd\": 8.668263915121397,\n                \"price_changes\": {\n                    \"day_priceusd\": 18819.891527791086,\n                    \"week_priceusd\": 20580.198796291013,\n                    \"hour_priceusd\": 2226901.39971336,\n                    \"month_priceusd\": 0\n                },\n                \"identifier\": \"bsc~token~0xcF6BB5389c92Bdda8a3747Ddb454cB7a64626C63\",\n                \"symbol\": \"XVS\",\n                \"address\": \"0xcF6BB5389c92Bdda8a3747Ddb454cB7a64626C63\",\n                \"market_cap\": 499909156.1012144,\n                \"name\": \"Venus\"\n            },\n            \"sort\": [\n                1646656757000,\n                499909156\n            ]\n        },\n        {\n            \"_index\": \"catalog_20210721\",\n            \"_type\": \"_doc\",\n            \"_id\": \"bsc~token~0x8b303d5BbfBbf46F1a4d9741E491e06986894e18\",\n            \"_score\": null,\n            \"_source\": {\n                \"price_usd\": 0.11196208422487211,\n                \"price_changes\": {\n                    \"day_priceusd\": 1493927.590991633,\n                    \"week_priceusd\": 1582612.7044410168,\n                    \"hour_priceusd\": 1493927.590991633,\n                    \"month_priceusd\": 0\n                },\n                \"identifier\": \"bsc~token~0x8b303d5BbfBbf46F1a4d9741E491e06986894e18\",\n                \"symbol\": \"WOOP\",\n                \"address\": \"0x8b303d5BbfBbf46F1a4d9741E491e06986894e18\",\n                \"market_cap\": 238472883.3841733,\n                \"name\": \"Woonkly Power\"\n            },\n            \"sort\": [\n                1646656745000,\n                238472883\n            ]\n        },\n        {\n            \"_index\": \"catalog_20210721\",\n            \"_type\": \"_doc\",\n            \"_id\": \"bsc~token~0x07663837218A003e66310a01596af4bf4e44623D\",\n            \"_score\": null,\n            \"_source\": {\n                \"price_usd\": 0.9679946171467149,\n                \"price_changes\": {\n                    \"day_priceusd\": 300202.4462712145,\n                    \"week_priceusd\": 336042.3348807344,\n                    \"hour_priceusd\": 300202.4462712145,\n                    \"month_priceusd\": 0\n                },\n                \"identifier\": \"bsc~token~0x07663837218A003e66310a01596af4bf4e44623D\",\n                \"symbol\": \"rUSD\",\n                \"address\": \"0x07663837218A003e66310a01596af4bf4e44623D\",\n                \"market_cap\": 5155732.57904765,\n                \"name\": \"rUSD\"\n            },\n            \"sort\": [\n                1646656739000,\n                5155732\n            ]\n        },\n        {\n            \"_index\": \"catalog_20210721\",\n            \"_type\": \"_doc\",\n            \"_id\": \"bsc~token~0x8263CD1601FE73C066bf49cc09841f35348e3be0\",\n            \"_score\": null,\n            \"_source\": {\n                \"price_usd\": 0.0625923000836591,\n                \"price_changes\": {\n                    \"day_priceusd\": 1975488.928008739,\n                    \"week_priceusd\": 2261028.0192403095,\n                    \"hour_priceusd\": 1975488.928008739,\n                    \"month_priceusd\": 0\n                },\n                \"identifier\": \"bsc~token~0x8263CD1601FE73C066bf49cc09841f35348e3be0\",\n                \"symbol\": \"ALU\",\n                \"address\": \"0x8263CD1601FE73C066bf49cc09841f35348e3be0\",\n                \"market_cap\": 190588143.16472295,\n                \"name\": \"Altura\"\n            },\n            \"sort\": [\n                1646656730000,\n                190588143\n            ]\n        },\n        {\n            \"_index\": \"catalog_20210721\",\n            \"_type\": \"_doc\",\n            \"_id\": \"bsc~token~0x1D2F0da169ceB9fC7B3144628dB156f3F6c60dBE\",\n            \"_score\": null,\n            \"_source\": {\n                \"price_usd\": 0.7457753414454305,\n                \"price_changes\": {\n                    \"day_priceusd\": 388265.56194602733,\n                    \"week_priceusd\": 413732.77842778567,\n                    \"hour_priceusd\": 388265.56194602733,\n                    \"month_priceusd\": 0\n                },\n                \"identifier\": \"bsc~token~0x1D2F0da169ceB9fC7B3144628dB156f3F6c60dBE\",\n                \"symbol\": \"XRP\",\n                \"address\": \"0x1D2F0da169ceB9fC7B3144628dB156f3F6c60dBE\",\n                \"market_cap\": 165349174.51206073,\n                \"name\": \"XRP Token\"\n            },\n            \"sort\": [\n                1646656724000,\n                165349174\n            ]\n        },\n        {\n            \"_index\": \"catalog_20210721\",\n            \"_type\": \"_doc\",\n            \"_id\": \"bsc~token~0x6a6Ccf15B38DA4b5B0eF4C8fe9FefCB472A893F9\",\n            \"_score\": null,\n            \"_source\": {\n                \"price_usd\": 0.028302578413210842,\n                \"price_changes\": {\n                    \"day_priceusd\": 1791360130.5009696,\n                    \"week_priceusd\": 434252.5754215748,\n                    \"hour_priceusd\": 2337754.0318121426,\n                    \"month_priceusd\": 0\n                },\n                \"identifier\": \"bsc~token~0x6a6Ccf15B38DA4b5B0eF4C8fe9FefCB472A893F9\",\n                \"symbol\": \"MNST\",\n                \"address\": \"0x6a6Ccf15B38DA4b5B0eF4C8fe9FefCB472A893F9\",\n                \"market_cap\": 24735802.195460457,\n                \"name\": \"MoonStarter.net\"\n            },\n            \"sort\": [\n                1646656712000,\n                24735802\n            ]\n        },\n        {\n            \"_index\": \"catalog_20210721\",\n            \"_type\": \"_doc\",\n            \"_id\": \"bsc~token~0x603c7f932ED1fc6575303D8Fb018fDCBb0f39a95\",\n            \"_score\": null,\n            \"_source\": {\n                \"price_usd\": 0.3184991068507596,\n                \"price_changes\": {\n                    \"day_priceusd\": 280377.7913010387,\n                    \"week_priceusd\": 268215.04874161625,\n                    \"hour_priceusd\": 1.836896776847402e+23,\n                    \"month_priceusd\": 0\n                },\n                \"identifier\": \"bsc~token~0x603c7f932ED1fc6575303D8Fb018fDCBb0f39a95\",\n                \"symbol\": \"BANANA\",\n                \"address\": \"0x603c7f932ED1fc6575303D8Fb018fDCBb0f39a95\",\n                \"market_cap\": 71191492.86335154,\n                \"name\": \"ApeSwapFinance Banana\"\n            },\n            \"sort\": [\n                1646656703000,\n                71191492\n            ]\n        },\n        {\n            \"_index\": \"catalog_20210721\",\n            \"_type\": \"_doc\",\n            \"_id\": \"bsc~token~0x3EE2200Efb3400fAbB9AacF31297cBdD1d435D47\",\n            \"_score\": null,\n            \"_source\": {\n                \"price_usd\": 0.8255735666298606,\n                \"price_changes\": {\n                    \"day_priceusd\": 257529.4178484101,\n                    \"week_priceusd\": 244375.96201464027,\n                    \"hour_priceusd\": 70999602.91419426,\n                    \"month_priceusd\": 0\n                },\n                \"identifier\": \"bsc~token~0x3EE2200Efb3400fAbB9AacF31297cBdD1d435D47\",\n                \"symbol\": \"ADA\",\n                \"address\": \"0x3EE2200Efb3400fAbB9AacF31297cBdD1d435D47\",\n                \"market_cap\": 373502034.83095956,\n                \"name\": \"Cardano Token\"\n            },\n            \"sort\": [\n                1646656700000,\n                373502034\n            ]\n        },\n        {\n            \"_index\": \"catalog_20210721\",\n            \"_type\": \"_doc\",\n            \"_id\": \"bsc~token~0x3920123482070C1a2dff73AaD695c60e7c6F6862\",\n            \"_score\": null,\n            \"_source\": {\n                \"price_usd\": 0.0520164681268798,\n                \"price_changes\": {\n                    \"day_priceusd\": 3913432.8687983695,\n                    \"week_priceusd\": 3494010.936860167,\n                    \"hour_priceusd\": 3913432.8687983695,\n                    \"month_priceusd\": 0\n                },\n                \"identifier\": \"bsc~token~0x3920123482070C1a2dff73AaD695c60e7c6F6862\",\n                \"symbol\": \"EULER\",\n                \"address\": \"0x3920123482070C1a2dff73AaD695c60e7c6F6862\",\n                \"market_cap\": 8658388.24917174,\n                \"name\": \"Euler.Tools\"\n            },\n            \"sort\": [\n                1646656700000,\n                8658388\n            ]\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "148ee94c-f963-4748-a2a2-384a16e0be87",
+								"exec": [
+									" const response = pm.response.json();\r",
+									"  \r",
+									"  pm.test(\"Status code is 200\", function() {\r",
+									"      pm.response.to.have.status(200);\r",
+									"  });\r",
+									"  \r",
+									"  pm.test(\"Payload has all properties\", () => {\r",
+									"     pm.expect(response[\"_index\"]).to.eql(\"catalog_20210721\");\r",
+									"     pm.expect(response[\"_type\"]).to.eql(\"_doc\");\r",
+									"     pm.expect(response[\"_id\"]).to.have.lengthOf(52);\r",
+									"     pm.expect(response[\"_version\"].toString()).to.have.lengthOf(5);\r",
+									"     pm.expect(response[\"_seq_no\"].toString()).to.have.lengthOf(8);\r",
+									"     pm.expect(response[\"_primary_term\"].toString()).to.have.lengthOf(2);\r",
+									"     pm.expect(response.found).to.eql(true);\r",
+									"     pm.expect(Object.keys(response[\"_source\"]).length).to.be.greaterThan(0);\r",
+									"  });\r",
+									"\r",
+									" \r",
+									"  \r",
+									"  \r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "71ae0bbf-7634-4711-afce-3bdd56661f04",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "f31e31e4-eefa-458f-acce-05a78b413c75",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUri}}/{{network}}/tokens/:token?fields\\[\\]=price_usd",
+							"host": [
+								"{{baseUri}}"
+							],
+							"path": [
+								"{{network}}",
+								"tokens",
+								":token"
+							],
+							"query": [
+								{
+									"key": "fields\\[\\]",
+									"value": "price_usd",
+									"description": "(Required) Currency"
+								}
+							],
+							"variable": [
+								{
+									"key": "token",
+									"value": "0x3920123482070C1a2dff73AaD695c60e7c6F6862"
+								}
+							]
+						},
+						"description": "Retrieves token details given a token address"
+					},
+					"response": [
+						{
+							"id": "d318798b-158d-4c58-a515-21bc359099ad",
+							"name": "Object containing token details",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUri}}/tokens/:token?fields[]=price_usd",
+									"host": [
+										"{{baseUri}}"
+									],
+									"path": [
+										"tokens",
+										":token"
+									],
+									"query": [
+										{
+											"key": "fields[]",
+											"value": "price_usd"
+										}
+									],
+									"variable": [
+										{
+											"key": "token",
+											"value": "0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c",
+											"description": "(Required) Token address"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n    \"_index\": \"catalog_20210721\",\n    \"_type\": \"_doc\",\n    \"_id\": \"bsc~token~0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c\",\n    \"_version\": 21126,\n    \"_seq_no\": 52994750,\n    \"_primary_term\": 13,\n    \"found\": true,\n    \"_source\": {\n        \"price_usd\": 44261.71361070749,\n        \"identifier\": \"bsc~token~0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c\",\n        \"symbol\": \"BTCB\",\n        \"chain\": \"bsc\",\n        \"address\": \"0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c\",\n        \"total_supply\": 85501,\n        \"kind\": \"token\",\n        \"totalSupply\": 80501,\n        \"update_date\": 1646226647000,\n        \"price_bnb\": \"107.57168201466517\",\n        \"price_changes\": {\n            \"day_priceusd\": 6.5671297651871745,\n            \"week_priceusd\": 6.888346250409315,\n            \"hour_priceusd\": 6.5671297651871745,\n            \"month_priceusd\": 0\n        },\n        \"market_cap\": 4411657721.332781,\n        \"price\": 51597.73243977007,\n        \"decimals\": 18,\n        \"name\": \"BTCB Token\",\n        \"category\": \"token\",\n        \"readable_update_date\": \"2022-03-02T13:10:47.000Z\",\n        \"coin\": {\n            \"image\": {\n                \"small\": \"https://assets.coingecko.com/coins/images/14108/small/Binance-bitcoin.png?1617332330\",\n                \"large\": \"https://assets.coingecko.com/coins/images/14108/large/Binance-bitcoin.png?1617332330\",\n                \"thumb\": \"https://assets.coingecko.com/coins/images/14108/thumb/Binance-bitcoin.png?1617332330\"\n            },\n            \"community_data\": {\n                \"twitter_followers\": 0,\n                \"telegram_channel_user_count\": null,\n                \"facebook_likes\": null,\n                \"reddit_subscribers\": 0,\n                \"reddit_average_posts_48h\": 0,\n                \"reddit_average_comments_48h\": 0,\n                \"reddit_accounts_active_48h\": 0\n            },\n            \"coin_id\": \"binance-bitcoin\",\n            \"asset_platform_id\": \"binance-smart-chain\",\n            \"public_notice\": null,\n            \"description\": \"Pegged tokens such as BTCB, are 100% backed by the native coin in reserve, which is Bitcoin (BTC) in BTCB’s case.\",\n            \"tickers\": [\n                {\n                    \"last_fetch_at\": \"2021-06-21T12:22:37+00:00\",\n                    \"is_anomaly\": false,\n                    \"last\": 0.060155215657155,\n                    \"last_traded_at\": \"2021-06-21T12:22:37+00:00\",\n                    \"coin_id\": \"ethereum\",\n                    \"converted_volume\": {\n                        \"btc\": 152.742,\n                        \"usd\": 4954003,\n                        \"eth\": 2524\n                    },\n                    \"target_coin_id\": \"binance-bitcoin\",\n                    \"is_stale\": false,\n                    \"target\": \"BTCB\",\n                    \"market\": {\n                        \"identifier\": \"pancakeswap\",\n                        \"name\": \"PancakeSwap (v2)\",\n                        \"has_trading_incentive\": false\n                    },\n                    \"volume\": 2551.01721943594,\n                    \"bid_ask_spread_percentage\": 0.602713,\n                    \"trade_url\": \"https://exchange.pancakeswap.finance/#/swap?outputCurrency=0x2170ed0880ac9a755fd29b2688956bd959f933f8\",\n                    \"converted_last\": {\n                        \"btc\": 0.99533949,\n                        \"usd\": 32283,\n                        \"eth\": 16.445106\n                    },\n                    \"token_info_url\": null,\n                    \"trust_score\": \"green\",\n                    \"base\": \"0X2170ED0880AC9A755FD29B2688956BD959F933F8\",\n                    \"timestamp\": \"2021-06-21T12:22:37+00:00\"\n                },\n                {\n                    \"last_fetch_at\": \"2021-06-21T11:03:40+00:00\",\n                    \"is_anomaly\": false,\n                    \"last\": 32471.8862449659,\n                    \"last_traded_at\": \"2021-06-21T11:03:40+00:00\",\n                    \"coin_id\": \"binance-bitcoin\",\n                    \"converted_volume\": {\n                        \"btc\": 733.733,\n                        \"usd\": 23913790,\n                        \"eth\": 12227\n                    },\n                    \"target_coin_id\": \"binance-usd\",\n                    \"is_stale\": false,\n                    \"target\": \"BUSD\",\n                    \"market\": {\n                        \"identifier\": \"pancakeswap\",\n                        \"name\": \"PancakeSwap (v2)\",\n                        \"has_trading_incentive\": false\n                    },\n                    \"volume\": 739.416390801336,\n                    \"bid_ask_spread_percentage\": 0.602713,\n                    \"trade_url\": \"https://exchange.pancakeswap.finance/#/swap?outputCurrency=0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c\",\n                    \"converted_last\": {\n                        \"btc\": 0.99231304,\n                        \"usd\": 32341,\n                        \"eth\": 16.536326\n                    },\n                    \"token_info_url\": \"https://pancakeswap.info/tokens/0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c\",\n                    \"trust_score\": \"green\",\n                    \"base\": \"0X7130D2A12B9BCBFAE4F2634D864A1EE1CE3EAD9C\",\n                    \"timestamp\": \"2021-06-21T11:03:40+00:00\"\n                },\n                {\n                    \"last_fetch_at\": \"2021-06-21T12:04:45+00:00\",\n                    \"is_anomaly\": false,\n                    \"last\": 0.84661944647065,\n                    \"last_traded_at\": \"2021-06-21T12:04:45+00:00\",\n                    \"coin_id\": \"t-bitcoin\",\n                    \"converted_volume\": {\n                        \"btc\": 8.475062,\n                        \"usd\": 274040,\n                        \"eth\": 139.024\n                    },\n                    \"target_coin_id\": \"binance-bitcoin\",\n                    \"is_stale\": false,\n                    \"target\": \"BTCB\",\n                    \"market\": {\n                        \"identifier\": \"pancakeswap\",\n                        \"name\": \"PancakeSwap (v2)\",\n                        \"has_trading_incentive\": false\n                    },\n                    \"volume\": 10.1535848579999,\n                    \"bid_ask_spread_percentage\": 0.602724,\n                    \"trade_url\": \"https://exchange.pancakeswap.finance/#/swap?outputCurrency=0x2cd1075682b0fccaadd0ca629e138e64015ba11c\",\n                    \"converted_last\": {\n                        \"btc\": 0.98590538,\n                        \"usd\": 31879,\n                        \"eth\": 16.17268\n                    },\n                    \"token_info_url\": \"https://pancakeswap.info/tokens/0x2cd1075682b0fccaadd0ca629e138e64015ba11c\",\n                    \"trust_score\": \"green\",\n                    \"base\": \"0X2CD1075682B0FCCAADD0CA629E138E64015BA11C\",\n                    \"timestamp\": \"2021-06-21T12:04:45+00:00\"\n                },\n                {\n                    \"last_fetch_at\": \"2021-06-21T12:14:43+00:00\",\n                    \"is_anomaly\": false,\n                    \"last\": 107.530871383849,\n                    \"last_traded_at\": \"2021-06-21T12:14:43+00:00\",\n                    \"coin_id\": \"binance-bitcoin\",\n                    \"converted_volume\": {\n                        \"btc\": 66.287,\n                        \"usd\": 2151935,\n                        \"eth\": 1090\n                    },\n                    \"target_coin_id\": \"binancecoin\",\n                    \"is_stale\": false,\n                    \"target\": \"BNB\",\n                    \"market\": {\n                        \"identifier\": \"bakeryswap\",\n                        \"name\": \"Bakeryswap\",\n                        \"has_trading_incentive\": false\n                    },\n                    \"volume\": 66.0998642296781,\n                    \"bid_ask_spread_percentage\": 0.602727,\n                    \"trade_url\": \"https://www.bakeryswap.org/#/swap/0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c\",\n                    \"converted_last\": {\n                        \"btc\": 1.002833,\n                        \"usd\": 32556,\n                        \"eth\": 16.495942\n                    },\n                    \"token_info_url\": null,\n                    \"trust_score\": \"green\",\n                    \"base\": \"0X7130D2A12B9BCBFAE4F2634D864A1EE1CE3EAD9C\",\n                    \"timestamp\": \"2021-06-21T12:14:43+00:00\"\n                }\n            ],\n            \"platforms\": {\n                \"harmony-shard-0\": \"0x34224dcf981da7488fdd01c7fdd64e74cd55dcf7\",\n                \"binance-smart-chain\": \"0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c\"\n            },\n            \"additional_notices\": [],\n            \"links\": {\n                \"subreddit_url\": null,\n                \"blockchain_site\": [\n                    \"https://bscscan.com/address/0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c\",\n                    \"\",\n                    \"\",\n                    \"\",\n                    \"\"\n                ],\n                \"official_forum_url\": [\n                    \"\",\n                    \"\",\n                    \"\"\n                ],\n                \"telegram_channel_identifier\": \"\",\n                \"twitter_screen_name\": \"\",\n                \"repos_url\": {\n                    \"github\": [],\n                    \"bitbucket\": []\n                },\n                \"bitcointalk_thread_identifier\": null,\n                \"announcement_url\": [\n                    \"\",\n                    \"\"\n                ],\n                \"facebook_username\": \"\",\n                \"chat_url\": [\n                    \"\",\n                    \"\",\n                    \"\"\n                ],\n                \"homepage\": [\n                    \"\",\n                    \"\",\n                    \"\"\n                ]\n            },\n            \"categories\": [],\n            \"developer_data\": {\n                \"forks\": 0,\n                \"total_issues\": 0,\n                \"pull_request_contributors\": 0,\n                \"code_additions_deletions_4_weeks\": {\n                    \"additions\": null,\n                    \"deletions\": null\n                },\n                \"subscribers\": 0,\n                \"commit_count_4_weeks\": 0,\n                \"pull_requests_merged\": 0,\n                \"stars\": 0,\n                \"last_4_weeks_commit_activity_series\": [],\n                \"closed_issues\": 0\n            },\n            \"coingecko_price\": {\n                \"usd_market_cap\": 0,\n                \"bnb_24h_change\": -1.385177083159274,\n                \"bnb_24h_vol\": 411176.4083002917,\n                \"last_updated_at\": 1624278695,\n                \"usd\": 32392,\n                \"bnb\": 106.958,\n                \"bnb_market_cap\": 0,\n                \"usd_24h_vol\": 124524787.35552126,\n                \"usd_24h_change\": -4.3949431411943145\n            }\n        }\n    }\n}"
+						}
+					]
+				}
+			],
+			"id": "03fff170-ef5d-4d0e-8554-5bc22aa7fafc"
+		},
+		{
+			"name": "Marketplace",
+			"item": [
+				{
+					"name": "Single Sale",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "356bf811-bbbd-4631-8af2-c36947ef9874",
+								"exec": [
+									"const response = pm.response.json();\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Payload has all properties\", () => {\r",
+									"    pm.expect(response[\"_index\"]).to.eql(\"marketplace_01252022\");\r",
+									"     pm.expect(response[\"_type\"]).to.eql(\"_doc\");\r",
+									"     pm.expect(response[\"_id\"]).to.be.string;\r",
+									"     pm.expect(response[\"_seq_no\"].toString()).to.have.lengthOf(2);\r",
+									"     pm.expect(response[\"_primary_term\"].toString()).to.have.lengthOf(1);\r",
+									"     pm.expect(response.found).to.eql(true);\r",
+									"     pm.expect(response[\"_source\"].base_token_address).to.have.lengthOf(42);\r",
+									"     pm.expect(response[\"_source\"].seller_wallet).to.have.lengthOf(42);\r",
+									"     pm.expect(response[\"_source\"].identifier).to.be.string;\r",
+									"     pm.expect(response[\"_source\"].quote_token_name).to.be.string;\r",
+									"     pm.expect(response[\"_source\"].base_token_symbol).to.be.string;\r",
+									"     pm.expect(response[\"_source\"].update_date.toString()).to.have.lengthOf(13);\r",
+									"     pm.expect(response[\"_source\"].quote_token_address).to.have.lengthOf(42);\r",
+									"     pm.expect(response[\"_source\"].blockchain).to.be.string;\r",
+									"     pm.expect(response[\"_source\"].quote_token_symbol).to.be.string;\r",
+									"     pm.expect(response[\"_source\"].category).to.eql(\"token\");\r",
+									"     pm.expect(response[\"_source\"].base_token_name).to.eql(\"BNB\");\r",
+									"     \r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "a1556c92-e19b-4091-93e8-f255d15b7a1a",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUri}}/{{network}}/marketplace/121",
+							"host": [
+								"{{baseUri}}"
+							],
+							"path": [
+								"{{network}}",
+								"marketplace",
+								"121"
+							],
+							"variable": [
+								{
+									"id": "bfe2c0d3-3cfc-416a-822c-2476e31a7e6b",
+									"key": "identifier",
+									"value": "300",
+									"type": "any"
+								}
+							]
+						},
+						"description": "Returns details of a single sale given an identifier."
+					},
+					"response": [
+						{
+							"id": "72eee862-f589-464e-add5-26618e03b54d",
+							"name": "Object containing details of a single sale given an identifier",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUri}}/marketplace/:identifier",
+									"host": [
+										"{{baseUri}}"
+									],
+									"path": [
+										"marketplace",
+										":identifier"
+									],
+									"variable": [
+										{
+											"key": "identifier",
+											"value": "121"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n    \"_index\": \"marketplace_01252022\",\n    \"_type\": \"_doc\",\n    \"_id\": \"121\",\n    \"_version\": 2,\n    \"_seq_no\": 65,\n    \"_primary_term\": 1,\n    \"found\": true,\n    \"_source\": {\n        \"next_claim\": {},\n        \"seller_wallet\": \"0x16846c8930f849fd7b11a9b4b25dc35be22febc1\",\n        \"close_date\": 1646922341000,\n        \"quote_token_name\": \"Euler.Tools\",\n        \"base_token_id\": \"0\",\n        \"quote_token_id\": \"0\",\n        \"base_token_quantity\": 0.01,\n        \"quote_token_quantity\": 2,\n        \"create_date\": 1646775162000,\n        \"base_token_name\": \"BNB\",\n        \"base_token_address\": \"0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\",\n        \"identifier\": \"121\",\n        \"period\": \"0\",\n        \"purchases\": {\n            \"0xf319351f549a6757e5adbcb56b47a10872c64794\": [\n                {\n                    \"amountIn\": 2,\n                    \"amountOut\": 0.01,\n                    \"timestamp\": 1646922341000\n                }\n            ]\n        },\n        \"kind\": \"0\",\n        \"packages\": \"1\",\n        \"base_token_symbol\": \"BNB\",\n        \"update_date\": 1646775162000,\n        \"quote_token_address\": \"0x4e51d810015227fbe24aad99acf8cc82819e73ed\",\n        \"blockchain\": \"bsctest\",\n        \"quote_token_symbol\": \"EULER\",\n        \"claims\": {},\n        \"category\": \"token\",\n        \"ratio\": 0.005,\n        \"whitelisted_wallets\": null\n    }\n}"
+						}
+					],
+					"variable": [
+						{
+							"id": "bfe2c0d3-3cfc-416a-822c-2476e31a7e6b",
+							"key": "identifier",
+							"value": "300",
+							"type": "any"
+						}
+					]
+				},
+				{
+					"name": "Search Sales",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "964ed3db-2fa2-43e6-9853-a2da4ccead6c",
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Payload has all properties\", () => {\r",
+									"    for(i = 0; i < response.hits.length; i ++){\r",
+									"        pm.expect(response.hits[i][\"_index\"]).to.eql(\"marketplace_01252022\");\r",
+									"        pm.expect(response.hits[i][\"_type\"]).to.eql(\"_doc\");\r",
+									"        pm.expect(response.hits[i][\"_id\"]).to.be.string;\r",
+									"        pm.expect(response.hits[i][\"_score\"]).to.eql(null);\r",
+									"        pm.expect(response.hits[i][\"_source\"].base_token_address).to.have.lengthOf(42);\r",
+									"        pm.expect(response.hits[i][\"_source\"].seller_wallet).to.have.lengthOf(42);\r",
+									"        pm.expect(response.hits[i][\"_source\"].identifier).to.be.string;\r",
+									"        pm.expect(response.hits[i][\"_source\"].identifier).to.be.string;\r",
+									"        pm.expect(response.hits[i][\"_source\"].kind).to.be.string;\r",
+									"        pm.expect(response.hits[i][\"_source\"].quote_token_name).to.be.string;\r",
+									"        pm.expect(response.hits[i][\"_source\"].base_token_id).to.be.string;\r",
+									"        pm.expect(response.hits[i][\"_source\"].packages).to.be.string;\r",
+									"        pm.expect(response.hits[i][\"_source\"].base_token_symbol).to.be.string;\r",
+									"        pm.expect(response.hits[i][\"_source\"].quote_token_address).to.have.lengthOf(42);\r",
+									"        pm.expect(response.hits[i][\"_source\"].blockchain).to.eql(\"bsc\");\r",
+									"        pm.expect(response.hits[i][\"_source\"].quote_token_symbol).to.be.string;\r",
+									"        pm.expect(response.hits[i][\"_source\"].category).to.eql(\"token\");\r",
+									"        pm.expect(response.hits[i][\"_source\"].base_token_name).to.be.string;\r",
+									"    }\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "acf9393a-5faa-4ee1-8c67-234430e737b5",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "User-Agent",
+								"value": "Mozilla/5.0 (X11; Linux x86_64; rv:97.0) Gecko/20100101 Firefox/97.0"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json, text/plain, */*"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "es-AR,es;q=0.8,en-US;q=0.5,en;q=0.3"
+							},
+							{
+								"key": "Accept-Encoding",
+								"value": "gzip, deflate, br"
+							},
+							{
+								"key": "Authorization",
+								"value": "234FFnnweo$as"
+							},
+							{
+								"key": "Origin",
+								"value": "https://development.euler.tools"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							},
+							{
+								"key": "Referer",
+								"value": "https://development.euler.tools/"
+							},
+							{
+								"key": "Sec-Fetch-Dest",
+								"value": "empty"
+							},
+							{
+								"key": "Sec-Fetch-Mode",
+								"value": "cors"
+							},
+							{
+								"key": "Sec-Fetch-Site",
+								"value": "same-site"
+							},
+							{
+								"key": "If-None-Match",
+								"value": "W/\"3834-NvE892Xn4t86xhz9UBxKYB0i3qY\""
+							},
+							{
+								"key": "TE",
+								"value": "trailers"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"size\":16,\"from\":0,\"sort\":[{\"create_date\":{\"order\":\"desc\"}}],\"query\":{\"bool\":{\"must\":[{\"terms\":{\"kind\":[0,2]}},{\"terms\":{\"blockchain\":[\"bsc\"]}},{\"range\":{\"close_date\":{\"lte\":1}}}]}}}"
+						},
+						"url": {
+							"raw": "{{baseUri}}/{{network}}/marketplace",
+							"host": [
+								"{{baseUri}}"
+							],
+							"path": [
+								"{{network}}",
+								"marketplace"
+							]
+						},
+						"description": "Returns all sales in the network."
+					},
+					"response": [
+						{
+							"id": "11c9afbe-e5eb-4cfb-a1e4-1bea77498bf2",
+							"name": "Object containing all sales in the network",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "User-Agent",
+										"value": "Mozilla/5.0 (X11; Linux x86_64; rv:97.0) Gecko/20100101 Firefox/97.0"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json, text/plain, */*"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "es-AR,es;q=0.8,en-US;q=0.5,en;q=0.3"
+									},
+									{
+										"key": "Accept-Encoding",
+										"value": "gzip, deflate, br"
+									},
+									{
+										"key": "Authorization",
+										"value": "234FFnnweo$as"
+									},
+									{
+										"key": "Origin",
+										"value": "https://development.euler.tools"
+									},
+									{
+										"key": "Connection",
+										"value": "keep-alive"
+									},
+									{
+										"key": "Referer",
+										"value": "https://development.euler.tools/"
+									},
+									{
+										"key": "Sec-Fetch-Dest",
+										"value": "empty"
+									},
+									{
+										"key": "Sec-Fetch-Mode",
+										"value": "cors"
+									},
+									{
+										"key": "Sec-Fetch-Site",
+										"value": "same-site"
+									},
+									{
+										"key": "If-None-Match",
+										"value": "W/\"3834-NvE892Xn4t86xhz9UBxKYB0i3qY\""
+									},
+									{
+										"key": "TE",
+										"value": "trailers"
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"size\":16,\"from\":0,\"sort\":[{\"create_date\":{\"order\":\"desc\"}}],\"query\":{\"bool\":{\"must\":[{\"terms\":{\"kind\":[0,2]}},{\"terms\":{\"blockchain\":[\"bsc\"]}},{\"range\":{\"close_date\":{\"lte\":1}}}]}}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUri}}/marketplace",
+									"host": [
+										"{{baseUri}}"
+									],
+									"path": [
+										"marketplace"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Mon, 28 Feb 2022 19:51:31 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Server",
+									"value": "nginx/1.21.6"
+								},
+								{
+									"key": "X-DNS-Prefetch-Control",
+									"value": "off"
+								},
+								{
+									"key": "Expect-CT",
+									"value": "max-age=0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "SAMEORIGIN"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=15552000; includeSubDomains"
+								},
+								{
+									"key": "X-Download-Options",
+									"value": "noopen"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-Permitted-Cross-Domain-Policies",
+									"value": "none"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "no-referrer"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Allow",
+									"value": "GET,POST,PATCH,PUT,DELETE"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, Accept-Encoding"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"20ed-A2ib511Brtwta6tY1HA1psLdNhQ\""
+								},
+								{
+									"key": "Content-Encoding",
+									"value": "gzip"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n    \"total\": {\n        \"value\": 5,\n        \"relation\": \"eq\"\n    },\n    \"max_score\": null,\n    \"hits\": [\n        {\n            \"_index\": \"marketplace_01252022\",\n            \"_type\": \"_doc\",\n            \"_id\": \"59\",\n            \"_score\": null,\n            \"_source\": {\n                \"next_claim\": {},\n                \"seller_wallet\": \"0x4884a0409f5f3748a3dfd3fd662199cdc6b01b2b\",\n                \"close_date\": 0,\n                \"quote_token_name\": \"BUSD Token\",\n                \"base_token_id\": \"0\",\n                \"quote_token_id\": \"0\",\n                \"base_token_quantity\": 1000,\n                \"quote_token_quantity\": 35.5,\n                \"create_date\": 1657124571000,\n                \"base_token_name\": \"Euler.Tools\",\n                \"base_token_address\": \"0x3920123482070c1a2dff73aad695c60e7c6f6862\",\n                \"identifier\": \"59\",\n                \"period\": \"0\",\n                \"purchases\": {},\n                \"kind\": \"0\",\n                \"packages\": \"0\",\n                \"base_token_symbol\": \"EULER\",\n                \"update_date\": 1657124571000,\n                \"quote_token_address\": \"0xe9e7cea3dedca5984780bafc599bd69add087d56\",\n                \"blockchain\": \"bsc\",\n                \"quote_token_symbol\": \"BUSD\",\n                \"claims\": {},\n                \"category\": \"token\",\n                \"ratio\": 28.169014084507044,\n                \"whitelisted_wallets\": null\n            },\n            \"sort\": [\n                1657124571000\n            ]\n        },\n        {\n            \"_index\": \"marketplace_01252022\",\n            \"_type\": \"_doc\",\n            \"_id\": \"58\",\n            \"_score\": null,\n            \"_source\": {\n                \"next_claim\": {},\n                \"seller_wallet\": \"0x651d5260e1cc2719c63560dc286dfb87a387a638\",\n                \"close_date\": 0,\n                \"quote_token_name\": \"PancakeSwap Token\",\n                \"base_token_id\": \"0\",\n                \"quote_token_id\": \"0\",\n                \"base_token_quantity\": 0.1,\n                \"quote_token_quantity\": 100,\n                \"create_date\": 1655490052000,\n                \"base_token_name\": \"BNB\",\n                \"base_token_address\": \"0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\",\n                \"identifier\": \"58\",\n                \"period\": \"0\",\n                \"purchases\": {},\n                \"kind\": \"0\",\n                \"packages\": \"0\",\n                \"base_token_symbol\": \"BNB\",\n                \"update_date\": 1655490052000,\n                \"quote_token_address\": \"0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82\",\n                \"blockchain\": \"bsc\",\n                \"quote_token_symbol\": \"Cake\",\n                \"claims\": {},\n                \"category\": \"token\",\n                \"ratio\": 0.001,\n                \"whitelisted_wallets\": null\n            },\n            \"sort\": [\n                1655490052000\n            ]\n        },\n        {\n            \"_index\": \"marketplace_01252022\",\n            \"_type\": \"_doc\",\n            \"_id\": \"57\",\n            \"_score\": null,\n            \"_source\": {\n                \"next_claim\": {},\n                \"seller_wallet\": \"0x6ae2a9faa21ad96886b96d45d9927c7858292e72\",\n                \"close_date\": 0,\n                \"quote_token_name\": \"BUSD Token\",\n                \"base_token_id\": \"0\",\n                \"quote_token_id\": \"0\",\n                \"base_token_quantity\": 1000,\n                \"quote_token_quantity\": 1000,\n                \"create_date\": 1652850738000,\n                \"base_token_name\": \"Euler.Tools\",\n                \"base_token_address\": \"0x3920123482070c1a2dff73aad695c60e7c6f6862\",\n                \"identifier\": \"57\",\n                \"period\": \"0\",\n                \"purchases\": {},\n                \"kind\": \"0\",\n                \"packages\": \"0\",\n                \"base_token_symbol\": \"EULER\",\n                \"update_date\": 1652850738000,\n                \"quote_token_address\": \"0xe9e7cea3dedca5984780bafc599bd69add087d56\",\n                \"blockchain\": \"bsc\",\n                \"quote_token_symbol\": \"BUSD\",\n                \"claims\": {},\n                \"category\": \"token\",\n                \"ratio\": 1,\n                \"whitelisted_wallets\": null\n            },\n            \"sort\": [\n                1652850738000\n            ]\n        },\n        {\n            \"_index\": \"marketplace_01252022\",\n            \"_type\": \"_doc\",\n            \"_id\": \"51\",\n            \"_score\": null,\n            \"_source\": {\n                \"next_claim\": {},\n                \"seller_wallet\": \"0xde1d7d4fc3adc024953e80a28d33fc5968286a75\",\n                \"close_date\": 0,\n                \"quote_token_name\": \"BTCB Token\",\n                \"base_token_id\": \"0\",\n                \"quote_token_id\": \"0\",\n                \"base_token_quantity\": 0.001,\n                \"quote_token_quantity\": 0.001,\n                \"create_date\": 1648151134000,\n                \"base_token_name\": \"BNB\",\n                \"base_token_address\": \"0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\",\n                \"identifier\": \"51\",\n                \"period\": \"0\",\n                \"purchases\": {},\n                \"kind\": \"0\",\n                \"packages\": \"0\",\n                \"base_token_symbol\": \"BNB\",\n                \"update_date\": 1648151134000,\n                \"quote_token_address\": \"0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c\",\n                \"blockchain\": \"bsc\",\n                \"quote_token_symbol\": \"BTCB\",\n                \"claims\": {},\n                \"category\": \"token\",\n                \"ratio\": 1,\n                \"whitelisted_wallets\": null\n            },\n            \"sort\": [\n                1648151134000\n            ]\n        },\n        {\n            \"_index\": \"marketplace_01252022\",\n            \"_type\": \"_doc\",\n            \"_id\": \"22\",\n            \"_score\": null,\n            \"_source\": {\n                \"next_claim\": {},\n                \"seller_wallet\": \"0x8465b056a6d712e8789b03b7994c9d77ce61c756\",\n                \"close_date\": 0,\n                \"quote_token_name\": \"Wrapped BNB\",\n                \"base_token_id\": \"0\",\n                \"quote_token_id\": \"0\",\n                \"base_token_quantity\": 0.0000099,\n                \"quote_token_quantity\": 0.00001,\n                \"create_date\": 1647547321000,\n                \"base_token_name\": \"Euler.Tools\",\n                \"base_token_address\": \"0x3920123482070c1a2dff73aad695c60e7c6f6862\",\n                \"identifier\": \"22\",\n                \"period\": \"0\",\n                \"purchases\": {},\n                \"kind\": \"0\",\n                \"packages\": \"0\",\n                \"base_token_symbol\": \"EULER\",\n                \"update_date\": 1647547321000,\n                \"quote_token_address\": \"0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c\",\n                \"blockchain\": \"bsc\",\n                \"quote_token_symbol\": \"WBNB\",\n                \"claims\": {},\n                \"category\": \"token\",\n                \"ratio\": 0.9899999999999999,\n                \"whitelisted_wallets\": null\n            },\n            \"sort\": [\n                1647547321000\n            ]\n        }\n    ]\n}"
+						}
+					]
+				}
+			],
+			"id": "9358673b-dc3c-41a1-b84d-4c1c83d96ab6"
+		},
+		{
+			"name": "Subscriptions",
+			"item": [
+				{
+					"name": "Cognito",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "dc06c8b4-bdf3-44d4-9104-d81690f0cbb5",
+								"exec": [
+									"const response = pm.response.json();\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"let idToken = response.AuthenticationResult.IdToken\r",
+									"pm.environment.set(\"Bearer\", idToken);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "cea83009-1f98-4cb3-b09b-d6dda9286d8d",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "authority",
+								"value": "cognito-idp.us-east-1.amazonaws.com"
+							},
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "accept-language",
+								"value": "es-ES,es;q=0.9"
+							},
+							{
+								"key": "cache-control",
+								"value": "max-age=0"
+							},
+							{
+								"key": "content-type",
+								"value": "application/x-amz-json-1.1"
+							},
+							{
+								"key": "origin",
+								"value": "https://app.euler.tools"
+							},
+							{
+								"key": "referer",
+								"value": "https://app.euler.tools/"
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "cross-site"
+							},
+							{
+								"key": "user-agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "x-amz-target",
+								"value": "AWSCognitoIdentityProviderService.InitiateAuth"
+							},
+							{
+								"key": "x-amz-user-agent",
+								"value": "aws-amplify/5.0.4 js"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"ClientId\":\"COGNITO_CLIENT_ID\",\"AuthFlow\":\"REFRESH_TOKEN_AUTH\",\"AuthParameters\":{\"REFRESH_TOKEN\":\"<redacted-jwt>.l-cqPz8_wbmaeaTorUmrd64dnq8E2hrzy-Tin32Ex-aZU1maKgfbjLN4PCTCbdH_7Nb1kStuxi8LzJnWw4YU2c0HdL6_qOzP5nONGD4iX1ilw_hYTvpOOLn1JsJkQG0gWpkVUT2QrZ2Kkyeodm8byO1NdexZ3UsE0LFOJ4dxn4mllBAMwxPSi15UxImyTFPdMTXtGPwW2I2-dRufJaNhysVchdO-RYRnngYZnACThuPWRRdz5rNLvfHsl_VdKTf6lwGpnxvKIHN9f-zKU0i_LFpuCKnAqtjhbIe4DunUMEl4XiYZ9UNOs7MXet1JWikcwf4G3im84KjhJCu4ZOxcEzj6VhT5NrkJAqVTV-p0Uo1LnW1bv6FcXigTK_Atsr4ldGp5pBFkgrSx3itqVD3YwB_ic1FrkTdAMwZUVblQX1auFqSqzlNA9Y0jTiPbujpeE9YWDQ6M2KyQbWe7AAvKC8DkDL-S41kMJSukCDYuV1nDwE1z_Vnto7Bc0R-ZXsvBGAwVEqjPcaYb4sAV1DzZpYskXdS_Y89QGcc8dxdo__rVyaZ25OzhzAHFSz7jPM1Tv-Er1iJWmeL3FYauztKBZ31DFXAUE6kSw0VPS5t22BxPoGUbDDBfQZevZlh2xolBqtWlmvayIO5SzYcT-k_gilSixXSyL-XtBKtql12VzUVSwQ4xd0caSfrVIAAkLShrd6-BtdY_kV_6EHLt20k9nzHUG3bbMDdmZIJcr14znC0qw8lYTOsZd11KDmeYddq37ZRL9p4b54Xhr6kfVTIBi0lUVViZnbdT1tdFdz5gl_n_DhZ7XZUx1mNt093jeK-8L09SOXIBwibJne3LY6_IUfjW7-Xnk6JRI81CwOgaW3JDd-oPjqjGyNGlnLQW-7zdibDf7hqsX6-POvPHUBy2RYRc6pUOzm8sHHNCOaHS4jZdRyZmpQlNmkSB8lf2QGWUEwKfyZA7M511pPZDKOcXWx6IRiNexKHpXE6jcB0upRS0J4K7O1-8jiBP1C3ywxUV0n9QQ6GMrwP0zQmIJsZKccw0MF3p2JTL94eoED8VvH5hLQiZ1C5avTzoemIoM_uQ73eRbd8avfak0UUuISLCLA8-8N0wqSYS8rVND2aLMU2wBKbHumolWbtpmhQW7cOT26xWjD-q-BO3IqNHyanQFal6cyx3jNy3yIfNRDbp7UJBqLGt46bk7o8WeRfNgtlHRlf1lisQEWUK8MbwzErxuSwnFxlJZkfl2B5x9wDR3_P3aJsO6wmDIQIRqAFUJlU1Tq0FWHLYVsM_blfvxSJER5szCz4YO6KIjFsuA1R3JqtUYgFDO-nbHGN3UcLy.LDyq1V5k2M_stPaNHSZbBQ\",\"DEVICE_KEY\":null}}"
+						},
+						"url": {
+							"raw": "https://cognito-idp.us-east-1.amazonaws.com/cognito",
+							"protocol": "https",
+							"host": [
+								"cognito-idp",
+								"us-east-1",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"cognito"
+							]
+						},
+						"description": "Aws Cognito"
+					},
+					"response": [
+						{
+							"id": "8ddc60a5-c14f-4912-9cfc-2ac93c886356",
+							"name": "Cognito",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "authority",
+										"value": "cognito-idp.us-east-1.amazonaws.com"
+									},
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "accept-language",
+										"value": "es-ES,es;q=0.9"
+									},
+									{
+										"key": "cache-control",
+										"value": "max-age=0"
+									},
+									{
+										"key": "content-type",
+										"value": "application/x-amz-json-1.1"
+									},
+									{
+										"key": "origin",
+										"value": "https://app.euler.tools"
+									},
+									{
+										"key": "referer",
+										"value": "https://app.euler.tools/"
+									},
+									{
+										"key": "sec-ch-ua-mobile",
+										"value": "?0"
+									},
+									{
+										"key": "sec-ch-ua-platform",
+										"value": "\"Windows\""
+									},
+									{
+										"key": "sec-fetch-dest",
+										"value": "empty"
+									},
+									{
+										"key": "sec-fetch-mode",
+										"value": "cors"
+									},
+									{
+										"key": "sec-fetch-site",
+										"value": "cross-site"
+									},
+									{
+										"key": "user-agent",
+										"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36"
+									},
+									{
+										"key": "x-amz-target",
+										"value": "AWSCognitoIdentityProviderService.InitiateAuth"
+									},
+									{
+										"key": "x-amz-user-agent",
+										"value": "aws-amplify/5.0.4 js"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"ClientId\":\"COGNITO_CLIENT_ID\",\"AuthFlow\":\"REFRESH_TOKEN_AUTH\",\"AuthParameters\":{\"REFRESH_TOKEN\":\"<redacted-jwt>.l-cqPz8_wbmaeaTorUmrd64dnq8E2hrzy-Tin32Ex-aZU1maKgfbjLN4PCTCbdH_7Nb1kStuxi8LzJnWw4YU2c0HdL6_qOzP5nONGD4iX1ilw_hYTvpOOLn1JsJkQG0gWpkVUT2QrZ2Kkyeodm8byO1NdexZ3UsE0LFOJ4dxn4mllBAMwxPSi15UxImyTFPdMTXtGPwW2I2-dRufJaNhysVchdO-RYRnngYZnACThuPWRRdz5rNLvfHsl_VdKTf6lwGpnxvKIHN9f-zKU0i_LFpuCKnAqtjhbIe4DunUMEl4XiYZ9UNOs7MXet1JWikcwf4G3im84KjhJCu4ZOxcEzj6VhT5NrkJAqVTV-p0Uo1LnW1bv6FcXigTK_Atsr4ldGp5pBFkgrSx3itqVD3YwB_ic1FrkTdAMwZUVblQX1auFqSqzlNA9Y0jTiPbujpeE9YWDQ6M2KyQbWe7AAvKC8DkDL-S41kMJSukCDYuV1nDwE1z_Vnto7Bc0R-ZXsvBGAwVEqjPcaYb4sAV1DzZpYskXdS_Y89QGcc8dxdo__rVyaZ25OzhzAHFSz7jPM1Tv-Er1iJWmeL3FYauztKBZ31DFXAUE6kSw0VPS5t22BxPoGUbDDBfQZevZlh2xolBqtWlmvayIO5SzYcT-k_gilSixXSyL-XtBKtql12VzUVSwQ4xd0caSfrVIAAkLShrd6-BtdY_kV_6EHLt20k9nzHUG3bbMDdmZIJcr14znC0qw8lYTOsZd11KDmeYddq37ZRL9p4b54Xhr6kfVTIBi0lUVViZnbdT1tdFdz5gl_n_DhZ7XZUx1mNt093jeK-8L09SOXIBwibJne3LY6_IUfjW7-Xnk6JRI81CwOgaW3JDd-oPjqjGyNGlnLQW-7zdibDf7hqsX6-POvPHUBy2RYRc6pUOzm8sHHNCOaHS4jZdRyZmpQlNmkSB8lf2QGWUEwKfyZA7M511pPZDKOcXWx6IRiNexKHpXE6jcB0upRS0J4K7O1-8jiBP1C3ywxUV0n9QQ6GMrwP0zQmIJsZKccw0MF3p2JTL94eoED8VvH5hLQiZ1C5avTzoemIoM_uQ73eRbd8avfak0UUuISLCLA8-8N0wqSYS8rVND2aLMU2wBKbHumolWbtpmhQW7cOT26xWjD-q-BO3IqNHyanQFal6cyx3jNy3yIfNRDbp7UJBqLGt46bk7o8WeRfNgtlHRlf1lisQEWUK8MbwzErxuSwnFxlJZkfl2B5x9wDR3_P3aJsO6wmDIQIRqAFUJlU1Tq0FWHLYVsM_blfvxSJER5szCz4YO6KIjFsuA1R3JqtUYgFDO-nbHGN3UcLy.LDyq1V5k2M_stPaNHSZbBQ\",\"DEVICE_KEY\":null}}"
+								},
+								"url": {
+									"raw": "https://cognito-idp.us-east-1.amazonaws.com/cognito",
+									"protocol": "https",
+									"host": [
+										"cognito-idp",
+										"us-east-1",
+										"amazonaws",
+										"com"
+									],
+									"path": [
+										"cognito"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/x-amz-json-1.1"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n    \"AuthenticationResult\": {\n        \"AccessToken\": \"<redacted-jwt>\",\n        \"ExpiresIn\": 3600,\n        \"IdToken\": \"<redacted-jwt>\",\n        \"TokenType\": \"Bearer\"\n    },\n    \"ChallengeParameters\": {}\n}"
+						}
+					]
+				},
+				{
+					"name": "Subscriptions",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ff6276dd-9467-4baa-b65b-5bd7363f082a",
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"   pm.test(\"Payload has all properties\", () => {\r",
+									"    for(i = 0; i < response.length; i ++){\r",
+									"    pm.expect(response[i].active).to.eql(true);\r",
+									"    pm.expect(response[i].created_at).to.have.lengthOf(24);\r",
+									"    pm.expect(response[i].identifier).to.be.string;\r",
+									"    pm.expect(response[i].details.alerts).to.be.string;\r",
+									"    pm.expect(response[i].details.staking.portfolioEntities.toNumber()).to.be.greaterThan(0);\r",
+									"    pm.expect(response[i].name).to.be.string;\r",
+									"    }\r",
+									"    });   \r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "acdeb636-dd8d-4551-a2f8-22dfd7786bcf",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUri}}/{{network}}/subscription_settings",
+							"host": [
+								"{{baseUri}}"
+							],
+							"path": [
+								"{{network}}",
+								"subscription_settings"
+							]
+						},
+						"description": "Returns all subscription tiers"
+					},
+					"response": [
+						{
+							"id": "8618cb41-dcda-41e3-8e9a-2d75d833b8ad",
+							"name": "Array containing subscription settings",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUri}}/subscription_settings",
+									"host": [
+										"{{baseUri}}"
+									],
+									"path": [
+										"subscription_settings"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "[\n    {\n        \"active\": true,\n        \"created_at\": \"2021-06-13T02:00:47.287Z\",\n        \"identifier\": \"free\",\n        \"user_sub\": \"system\",\n        \"details\": {\n            \"alerts\": false,\n            \"portfolios\": \"1\",\n            \"staking\": {\n                \"portfolioEntities\": \"50\",\n                \"portfolios\": \"3\"\n            },\n            \"wallets\": \"3\",\n            \"portfolioEntities\": \"20\",\n            \"notifications\": {\n                \"wallet\": false\n            }\n        },\n        \"name\": \"free\"\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "Profiles",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "dddaa2d6-eac7-4433-a3e5-ef8d2d1db74e",
+								"exec": [
+									"const response = pm.response.json();\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Data has all properties\", () => {\r",
+									"    pm.expect(response.user_sub).to.have.lengthOf(36);\r",
+									"    pm.expect(response.identifier).to.have.lengthOf(36);\r",
+									"    pm.expect(response.subscription.created_at).to.have.lengthOf(24);\r",
+									"    pm.expect(response.subscription.identifier).to.have.lengthOf(36);\r",
+									"    pm.expect(response.subscription.subscription).to.have.lengthOf(4);\r",
+									"    pm.expect(response.subscription.status).to.eql(\"confirmed\");\r",
+									"    pm.expect(response.subscription.permissions.portfolios).to.be.string;\r",
+									"    pm.expect(response.subscription.permissions.staking.portfolios).to.be.string;\r",
+									"    pm.expect(response.subscription.permissions.staking.portfolioEntities).to.eql(\"50\");\r",
+									"    pm.expect(response.subscription.permissions.alerts).to.eql(false);\r",
+									"    pm.expect(response.subscription.permissions.notifications.wallet).to.eql(false);\r",
+									"    pm.expect(response.subscription.name).to.eql(\"free\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "ba4e28b0-d56f-4d32-a0d1-5ca5765bd1b8",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "be718bb5-5c24-4c6e-bf80-11369223df9f",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{Bearer}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUri}}/{{network}}/accounts/me",
+							"host": [
+								"{{baseUri}}"
+							],
+							"path": [
+								"{{network}}",
+								"accounts",
+								"me"
+							]
+						},
+						"description": "Returns account details."
+					},
+					"response": [
+						{
+							"id": "e2cca0dc-a23f-4409-96ef-57089b5e0cfb",
+							"name": "Object containing account information",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUri}}/{{network}}/accounts/me",
+									"host": [
+										"{{baseUri}}"
+									],
+									"path": [
+										"{{network}}",
+										"accounts",
+										"me"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n    \"user_sub\": \"18a4d00f-17ac-4f02-bd89-d3e4a671af63\",\n    \"identifier\": \"8dffaa18-46a2-4858-a82d-f74edd53e855\",\n    \"subscription\": {\n        \"created_at\": \"2022-02-23T13:34:29.661Z\",\n        \"identifier\": \"4208cc9c-db93-4ec0-87bd-7cbf1db0219a\",\n        \"subscription\": \"877cfea9-bf77-4e71-9c6a-00e45c3226fb\",\n        \"status\": \"confirmed\",\n        \"user_sub\": \"18a4d00f-17ac-4f02-bd89-d3e4a671af63\",\n        \"details\": {},\n        \"permissions\": {\n            \"portfolios\": 1,\n            \"staking\": {\n                \"portfolios\": 3,\n                \"portfolioEntities\": 50\n            },\n            \"alerts\": false,\n            \"wallets\": 3,\n            \"portfolioEntities\": 20,\n            \"notifications\": {\n                \"wallet\": false\n            }\n        },\n        \"name\": \"free\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Pools",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7becc274-fd90-43d7-9464-61f9472e6c39",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "4f1dc0c5-2008-487e-b4de-890dc5475ae5",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true,
+						"disabledSystemHeaders": {
+							"user-agent": true,
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "authority",
+								"value": "catalog.prod.euler.tools"
+							},
+							{
+								"key": "accept",
+								"value": "application/json, text/plain, */*"
+							},
+							{
+								"key": "accept-language",
+								"value": "es-ES,es;q=0.9"
+							},
+							{
+								"key": "authorization",
+								"value": "234FFnnweo$as"
+							},
+							{
+								"key": "if-none-match",
+								"value": "W/\"136-558bl8ctwzKZVjtsrNVsL03Il68\""
+							},
+							{
+								"key": "origin",
+								"value": "https://euler.tools"
+							},
+							{
+								"key": "referer",
+								"value": "https://euler.tools/"
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-site"
+							},
+							{
+								"key": "user-agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36"
+							}
+						],
+						"url": {
+							"raw": "{{baseUri}}/{{network}}/pools/:poolAddress",
+							"host": [
+								"{{baseUri}}"
+							],
+							"path": [
+								"{{network}}",
+								"pools",
+								":poolAddress"
+							],
+							"variable": [
+								{
+									"id": "75a02478-6cb0-4ea8-80f4-9e386b789e79",
+									"key": "poolAddress",
+									"value": "0xda98731d7Ca75bbf22FD1251d8B1dC6053018129"
+								}
+							]
+						},
+						"description": "Ethereum Node"
+					},
+					"response": [
+						{
+							"id": "a776f6e2-e46d-4af7-89f1-7b4da421723b",
+							"name": "Pools",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "authority",
+										"value": "catalog.prod.euler.tools"
+									},
+									{
+										"key": "accept",
+										"value": "application/json, text/plain, */*"
+									},
+									{
+										"key": "accept-language",
+										"value": "es-ES,es;q=0.9"
+									},
+									{
+										"key": "authorization",
+										"value": "234FFnnweo$as"
+									},
+									{
+										"key": "if-none-match",
+										"value": "W/\"136-558bl8ctwzKZVjtsrNVsL03Il68\""
+									},
+									{
+										"key": "origin",
+										"value": "https://euler.tools"
+									},
+									{
+										"key": "referer",
+										"value": "https://euler.tools/"
+									},
+									{
+										"key": "sec-ch-ua-mobile",
+										"value": "?0"
+									},
+									{
+										"key": "sec-ch-ua-platform",
+										"value": "\"Windows\""
+									},
+									{
+										"key": "sec-fetch-dest",
+										"value": "empty"
+									},
+									{
+										"key": "sec-fetch-mode",
+										"value": "cors"
+									},
+									{
+										"key": "sec-fetch-site",
+										"value": "same-site"
+									},
+									{
+										"key": "user-agent",
+										"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36"
+									}
+								],
+								"url": {
+									"raw": "{{baseUri}}/{{network}}/pools/:poolAddress",
+									"host": [
+										"{{baseUri}}"
+									],
+									"path": [
+										"{{network}}",
+										"pools",
+										":poolAddress"
+									],
+									"variable": [
+										{
+											"key": "poolAddress",
+											"value": "0xda98731d7Ca75bbf22FD1251d8B1dC6053018129"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n    \"poolAddress\": \"0xda98731d7Ca75bbf22FD1251d8B1dC6053018129\",\n    \"token1\": {\n        \"address\": \"0x3920123482070C1a2dff73AaD695c60e7c6F6862\",\n        \"balance\": 1052233.6743842643\n    },\n    \"token2\": {\n        \"address\": \"0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56\",\n        \"balance\": 22541.094680073435\n    },\n    \"LPBalance\": 0.018911825316195004,\n    \"price\": 0.021422137714100255\n}"
+						}
+					]
+				},
+				{
+					"name": "Settings",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1d50136d-1aa4-4c64-a473-24edc08d0663",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "629e7de0-c5ce-4900-a896-ca4d4a78e183",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true,
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "authority",
+								"value": "catalog.prod.euler.tools"
+							},
+							{
+								"key": "accept-language",
+								"value": "es-ES,es;q=0.9"
+							},
+							{
+								"key": "if-none-match",
+								"value": "W/\"100c-9pcVjwvt8pd6/2kWfS5X96CyEzM\""
+							},
+							{
+								"key": "origin",
+								"value": "https://euler.tools"
+							},
+							{
+								"key": "referer",
+								"value": "https://euler.tools/"
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-site"
+							},
+							{
+								"key": "user-agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36"
+							}
+						],
+						"url": {
+							"raw": "{{baseUri}}/{{network}}/settings",
+							"host": [
+								"{{baseUri}}"
+							],
+							"path": [
+								"{{network}}",
+								"settings"
+							]
+						},
+						"description": "Token Settings"
+					},
+					"response": [
+						{
+							"id": "a0e3eb90-113f-4675-b084-a5be3d9d561a",
+							"name": "Settings",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "authority",
+										"value": "catalog.prod.euler.tools"
+									},
+									{
+										"key": "accept",
+										"value": "application/json, text/plain, */*",
+										"disabled": true
+									},
+									{
+										"key": "accept-language",
+										"value": "es-ES,es;q=0.9"
+									},
+									{
+										"key": "authorization",
+										"value": "234FFnnweo$as",
+										"disabled": true
+									},
+									{
+										"key": "if-none-match",
+										"value": "W/\"100c-9pcVjwvt8pd6/2kWfS5X96CyEzM\""
+									},
+									{
+										"key": "origin",
+										"value": "https://euler.tools"
+									},
+									{
+										"key": "referer",
+										"value": "https://euler.tools/"
+									},
+									{
+										"key": "sec-ch-ua",
+										"value": "\".Not/A)Brand\";v=\"99\", \"Google Chrome\";v=\"103\", \"Chromium\";v=\"103\""
+									},
+									{
+										"key": "sec-ch-ua-mobile",
+										"value": "?0"
+									},
+									{
+										"key": "sec-ch-ua-platform",
+										"value": "\"Windows\""
+									},
+									{
+										"key": "sec-fetch-dest",
+										"value": "empty"
+									},
+									{
+										"key": "sec-fetch-mode",
+										"value": "cors"
+									},
+									{
+										"key": "sec-fetch-site",
+										"value": "same-site"
+									},
+									{
+										"key": "user-agent",
+										"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36"
+									}
+								],
+								"url": {
+									"raw": "{{baseUri}}/{{network}}/settings",
+									"host": [
+										"{{baseUri}}"
+									],
+									"path": [
+										"{{network}}",
+										"settings"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/x-amz-json-1.1"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n    \"aws\": {\n        \"region\": \"us-east-1\",\n        \"cognito\": {\n            \"region\": \"us-east-1\",\n            \"pool_id\": \"COGNITO_USER_POOL_ID\",\n            \"client_id\": \"COGNITO_CLIENT_ID\"\n        }\n    },\n    \"gtm\": {\n        \"id\": \"GTM-P58NGC3\"\n    },\n    \"urls\": {\n        \"api\": \"https://catalog.prod.euler.tools\",\n        \"private_api\": \"https://catalog.prod.euler.tools\",\n        \"ws\": \"wss://catalog.prod.euler.tools/bsc\",\n        \"nft_api\": \"https://nft.api.prod.euler.tools\",\n        \"directory_api\": \"https://directory.api.prod.euler.tools\",\n        \"app\": \"https://app.prod.euler.tools\"\n    },\n    \"external_links\": {\n        \"pancakeSwap\": \"https://pancakeswap.finance/swap?\",\n        \"pancakeSwapv1\": \"https://v1exchange.pancakeswap.finance/#/swap?\",\n        \"mdex\": \"https://bsc.mdex.com/#/swap?\",\n        \"unisave\": \"https://app.unisave.exchange/#/swap?\",\n        \"biswap\": \"https://exchange.biswap.org/#/swap?\",\n        \"apeswap\": \"https://app.apeswap.finance/swap?\",\n        \"alitaswap\": \"https://exchange.alita.finance/#/swap?\",\n        \"wardenswap\": \"https://www.wardenswap.finance/#/best-rate-swap?\",\n        \"babyswap\": \"https://exchange.babyswap.finance/#/swap?\",\n        \"bscswap\": \"https://trade.bscswap.com/#/swap?\",\n        \"bakeryswap\": \"https://www.bakeryswap.org/#/swap?\"\n    },\n    \"chain\": {\n        \"bsc\": {\n            \"chain_id\": 56,\n            \"rpc\": \"https://bsc-dataseed.binance.org/\",\n            \"explorer\": \"https://euler.tools/bsc\",\n            \"chain_token_address\": \"0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\",\n            \"chain_token_symbol\": \"BNB\",\n            \"chain_token_name\": \"Build and Build\",\n            \"chain_wrapper_token_address\": \"0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c\",\n            \"chain_wrapper_token_symbol\": \"WBNB\",\n            \"tokens\": {\n                \"euler\": {\n                    \"symbol\": \"EULER\",\n                    \"address\": \"0x3920123482070c1a2dff73aad695c60e7c6f6862\",\n                    \"total_supply\": 100000000,\n                    \"tvl\": [\n                        {\n                            \"name\": \"staking\",\n                            \"address\": \"0xb18fab4c6f054e734ea169561787cc87928f54ee\"\n                        },\n                        {\n                            \"name\": \"pancakeV2Liquidity\",\n                            \"address\": \"0x09907AA171cD131Eba5AcbAEEC4991d66A21294F\"\n                        }\n                    ]\n                },\n                \"bnb\": {\n                    \"symbol\": \"WBNB\",\n                    \"address\": \"0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c\"\n                },\n                \"eth\": {\n                    \"symbol\": \"ETH\",\n                    \"address\": \"0x2170ed0880ac9a755fd29b2688956bd959f933f8\"\n                },\n                \"btc\": {\n                    \"symbol\": \"BTCB\",\n                    \"address\": \"0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c\"\n                },\n                \"stable\": {\n                    \"symbol\": \"BUSD\",\n                    \"address\": \"0xe9e7cea3dedca5984780bafc599bd69add087d56\"\n                }\n            },\n            \"company_wallet\": \"0xdaabecacdd888dcf68ff1f2d9202e74aba0601bd\",\n            \"products\": {\n                \"marketplace\": \"0x89c7a3fcd89fc3b80da5b0629f0a644480117f35\",\n                \"staking\": \"0xb18fab4c6f054e734ea169561787cc87928f54ee\",\n                \"dex_agregator\": \"0xa9faccb02bef6cfdb2a411cb5f79f3e596362526\",\n                \"token\": \"0xc7190522df188816736cf62fe11ae619ca1cf73c\",\n                \"locker\": \"0x20d5f439ea2918e7aa9f518a438fdc6407104fd1\",\n                \"manager_tax\": \"0x564b5ae80d27009fdb80ab05220f78b0968d755f\"\n            }\n        },\n        \"eth\": {\n            \"chain_id\": 1,\n            \"rpc\": \"https://eth.nodes.prod.euler.tools/rpc\",\n            \"explorer\": \"https://euler.tools/eth\",\n            \"chain_token_address\": \"0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\",\n            \"chain_token_symbol\": \"ETH\",\n            \"chain_token_name\": \"Ethereum\",\n            \"chain_wrapper_token_address\": \"0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2\",\n            \"chain_wrapper_token_symbol\": \"WETH\",\n            \"tokens\": {\n                \"bnb\": {\n                    \"symbol\": \"BNB\",\n                    \"address\": \"0xb8c77482e45f1f44de1745f52c74426c631bdd52\"\n                },\n                \"eth\": {\n                    \"symbol\": \"WETH\",\n                    \"address\": \"0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2\"\n                },\n                \"btc\": {\n                    \"symbol\": \"WBTC\",\n                    \"address\": \"0x2260fac5e5542a773aa44fbcfedf7c193bc2c599\"\n                },\n                \"stable\": {\n                    \"symbol\": \"USDT\",\n                    \"address\": \"0x2260fac5e5542a773aa44fbcfedf7c193bc2c599\"\n                }\n            },\n            \"company_wallet\": \"0xdaabecacdd888dcf68ff1f2d9202e74aba0601bd\",\n            \"products\": {}\n        },\n        \"bsctest\": {\n            \"chain_id\": 97,\n            \"rpc\": \"https://bsc-testnet-rpc.publicnode.com\",\n            \"explorer\": \"https://testnet.bscscan.com\",\n            \"chain_token_address\": \"0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\",\n            \"chain_token_symbol\": \"BNB\",\n            \"chain_token_name\": \"Build and Build\",\n            \"chain_wrapper_token_address\": \"0xae13d989dac2f0debff460ac112a837c89baa7cd\",\n            \"chain_wrapper_token_symbol\": \"WBNB\",\n            \"tokens\": {\n                \"euler\": {\n                    \"symbol\": \"EULER\",\n                    \"address\": \"0x4e51d810015227fbe24aad99acf8cc82819e73ed\"\n                },\n                \"bnb\": {\n                    \"symbol\": \"WBNB\",\n                    \"address\": \"0xae13d989dac2f0debff460ac112a837c89baa7cd\"\n                },\n                \"eth\": {\n                    \"symbol\": \"ETH\",\n                    \"address\": \"0x8babbb98678facc7342735486c851abd7a0d17ca\"\n                },\n                \"stable\": {\n                    \"symbol\": \"USDT\",\n                    \"address\": \"0x7ef95a0fee0dd31b22626fa2e10ee6a223f8a684\"\n                }\n            },\n            \"company_wallet\": \"0xdaabecacdd888dcf68ff1f2d9202e74aba0601bd\",\n            \"products\": {\n                \"marketplace\": \"0xb8bdb88ab7ca5f86b9b89be395c4dade3df0a85c\",\n                \"staking\": \"0x79ae145bcd504a13c8e76cf2ee7397088be1c4cc\",\n                \"dex_agregator\": \"0x37f3c9533852fe37c486be29013817140935701b\",\n                \"locker\": \"0x19ce890967d8e1b9f747dc8a6a56943ded26a3ae\",\n                \"manager_tax\": \"0x182efdded72aca92dc7e7fb886028246199a1190\",\n                \"token\": \"0x82cff851b5097438f3a78ced7774fb1b4473157c\"\n            }\n        },\n        \"polygon\": {\n            \"chain_id\": 137,\n            \"rpc\": \"https://polygon-rpc.com\",\n            \"explorer\": \"https://polygonscan.com\",\n            \"chain_token_address\": \"0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\",\n            \"chain_token_symbol\": \"MATIC\",\n            \"chain_token_name\": \"Polygon\",\n            \"chain_wrapper_token_address\": \"0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270\",\n            \"chain_wrapper_token_symbol\": \"WMATIC\",\n            \"tokens\": {},\n            \"company_wallet\": \"0xdaabecacdd888dcf68ff1f2d9202e74aba0601bd\",\n            \"products\": {\n                \"token\": \"0xc7190522df188816736cf62fe11ae619ca1cf73c\",\n                \"manager_tax\": \"0x89c7a3fcd89fc3b80da5b0629f0a644480117f35\"\n            }\n        }\n    },\n    \"features\": {\n        \"marketplaceV2Enabled\": true,\n        \"marketsDisabled\": true,\n        \"profilesDisabled\": true,\n        \"nftDisabled\": true\n    }\n}"
+						}
+					]
+				}
+			],
+			"id": "6b1c8813-8915-4937-a59c-8cbcb1f4a1a3"
+		},
+		{
+			"name": "Portfolios",
+			"item": [
+				{
+					"name": "Creates a portfolio",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "851f82fc-2952-477b-8e94-a9310fd567f4",
+								"exec": [
+									"const response = pm.response.json();\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"pm.test(\"Data has all properties\", () => {\r",
+									"    pm.expect(response.name).to.be.string;\r",
+									"    pm.expect(response.created_at).to.have.lengthOf(24);\r",
+									"    pm.expect(response.identifier).to.have.lengthOf(36);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "fad6e61d-7638-43fc-adcf-2a631ef7df44",
+								"exec": [
+									"pm.test(\"Body raw is present\", () => {\r",
+									"    pm.expect(pm.request.body.raw).to.not.be.empty;\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "c472466c-d292-47ab-93cf-881efee3760a",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"description": "(Required) Server",
+								"key": "origin",
+								"value": "https://euler.tools"
+							},
+							{
+								"description": "(Required) Site",
+								"key": "sec-fetch-site",
+								"value": "same-site"
+							},
+							{
+								"description": "(Required) Mode",
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"description": "(Required) Referer",
+								"key": "referer",
+								"value": "https://euler.tools/"
+							},
+							{
+								"description": "(Required) ",
+								"key": "accept-language",
+								"value": "es-ES,es;q=0.9"
+							},
+							{
+								"key": "authorization",
+								"value": "{{Bearer}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"name\": \"portfolio1\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUri}}/{{network}}/portfolios",
+							"host": [
+								"{{baseUri}}"
+							],
+							"path": [
+								"{{network}}",
+								"portfolios"
+							]
+						},
+						"description": "Creates a new portfolio with the given name."
+					},
+					"response": [
+						{
+							"id": "16035911-84aa-4d92-9247-afe7f78bb7fb",
+							"name": "Object containing portfolio information",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "(Required) Server",
+										"key": "origin",
+										"value": "https://euler.tools"
+									},
+									{
+										"description": "(Required) Site",
+										"key": "sec-fetch-site",
+										"value": "same-site"
+									},
+									{
+										"description": "(Required) Mode",
+										"key": "sec-fetch-mode",
+										"value": "cors"
+									},
+									{
+										"description": "(Required) Referer",
+										"key": "referer",
+										"value": "https://euler.tools/"
+									},
+									{
+										"description": "(Required) ",
+										"key": "accept-language",
+										"value": "es-ES,es;q=0.9"
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"name\": \"portfolio1\"}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUri}}/portfolios",
+									"host": [
+										"{{baseUri}}"
+									],
+									"path": [
+										"portfolios"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n    \"name\": \"portfolio\",\n    \"created_at\": \"2022-03-02T17:25:04.441Z\",\n    \"identifier\": \"858e8877-5e67-469b-bc70-f60519b06974\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Deletes a portfolio",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2939d672-00bd-4f1c-94da-128da6ce82d6",
+								"exec": [
+									"const response = pm.response.json();\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Data has all properties\", () => {\r",
+									"    pm.expect(response.$metadata.httpStatusCode).to.eql(200);\r",
+									"    pm.expect(response.$metadata.requestId).to.have.lengthOf(52);\r",
+									"    pm.expect(response.$metadata.attempts).to.be.greaterThan(0);\r",
+									"    pm.expect(response.$metadata.totalRetryDelay).to.be.greaterThan(-1);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "79ca3103-1002-433e-86c6-29d66fd9f79f",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "1f5f69a2-1da6-4831-8273-6c0ab8a76b63",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"description": "(Required) Domain",
+								"key": "authority",
+								"value": "catalog.prod.euler.tools"
+							},
+							{
+								"description": "(Required) Server",
+								"key": "origin",
+								"value": "https://euler.tools"
+							},
+							{
+								"description": "(Required) Site",
+								"key": "sec-fetch-site",
+								"value": "same-site"
+							},
+							{
+								"description": "(Required) sec-fetch-site",
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"description": "(Required) Referer",
+								"key": "referer",
+								"value": "https://euler.tools/"
+							},
+							{
+								"description": "(Required) ",
+								"key": "accept-language",
+								"value": "es-ES,es;q=0.9"
+							},
+							{
+								"key": "authorization",
+								"value": "{{Bearer}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUri}}/{{network}}/portfolios/0bff352b-1789-46cf-9b74-941d9d53ab5c",
+							"host": [
+								"{{baseUri}}"
+							],
+							"path": [
+								"{{network}}",
+								"portfolios",
+								"0bff352b-1789-46cf-9b74-941d9d53ab5c"
+							],
+							"variable": [
+								{
+									"id": "6efc41f3-1aa8-4950-ba76-6044d6d1f73d",
+									"key": "id",
+									"value": "43e82635-de5e-4441-858d-4be09b9e66a1",
+									"type": "any",
+									"description": "(Required) Portfolio identifier"
+								}
+							]
+						},
+						"description": "Deletes a portfolio with the given portfolio identifier."
+					},
+					"response": [
+						{
+							"id": "aab7d246-f618-41ab-9732-e9494cccbb97",
+							"name": "Object with metadata information",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"description": "(Required) Domain",
+										"key": "authority",
+										"value": "bsc.catalog.prod.euler.tools"
+									},
+									{
+										"description": "(Required) Accepted formats",
+										"key": "accept",
+										"value": "application/json, text/plain, */*"
+									},
+									{
+										"description": "(Required) Server",
+										"key": "origin",
+										"value": "https://euler.tools"
+									},
+									{
+										"description": "(Required) Site",
+										"key": "sec-fetch-site",
+										"value": "same-site"
+									},
+									{
+										"description": "(Required) sec-fetch-site",
+										"key": "sec-fetch-dest",
+										"value": "empty"
+									},
+									{
+										"description": "(Required) Referer",
+										"key": "referer",
+										"value": "https://euler.tools/"
+									},
+									{
+										"description": "(Required) ",
+										"key": "accept-language",
+										"value": "es-ES,es;q=0.9"
+									}
+								],
+								"url": {
+									"raw": "{{baseUri}}/portfolios/:id",
+									"host": [
+										"{{baseUri}}"
+									],
+									"path": [
+										"portfolios",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "49b5985b-f95f-4869-9c25-e952ccb4624a"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n    \"$metadata\": {\n        \"httpStatusCode\": 200,\n        \"requestId\": \"434VB5TPIBBETK624UJQHCMBTVVV4KQNSO5AEMVJF66Q9ASUAAJG\",\n        \"attempts\": 1,\n        \"totalRetryDelay\": 0\n    }\n}"
+						}
+					],
+					"variable": [
+						{
+							"id": "6efc41f3-1aa8-4950-ba76-6044d6d1f73d",
+							"key": "id",
+							"value": "43e82635-de5e-4441-858d-4be09b9e66a1",
+							"type": "any",
+							"description": "(Required) Portfolio identifier"
+						}
+					]
+				},
+				{
+					"name": "Get portfolios",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c0ccaa0e-a58d-4df3-a634-71fd855627c9",
+								"exec": [
+									"const response = pm.response.json();\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"let len = response.length;\r",
+									"let current = pm.collectionVariables.get(\"Portfolio_Length\");\r",
+									"\r",
+									"if(response.length > 0){\r",
+									"\r",
+									"pm.test(\"Data has all properties\", () => {\r",
+									"    \r",
+									"    for(i = 0; i < response.length; i ++){\r",
+									"    pm.expect(response[i].created_at || response[i].updated_at).to.have.lengthOf(24);\r",
+									"    pm.expect(response[i].name).to.be.string;\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									"if(len > current){ \r",
+									"\r",
+									"/*pm.test(\"Portfolio was succesfully created\", () => {\r",
+									"        pm.expect(len).to.be.greaterThan(current);\r",
+									"        pm.collectionVariables.set(\"Portfolio_Length\", len);\r",
+									"    });*/\r",
+									" }\r",
+									"\r",
+									"else if(len < current){\r",
+									"\r",
+									"pm.test(\"Portfolio was succesfully deleted\", () => {\r",
+									"        pm.expect(len).to.be.lessThan(current);\r",
+									"        pm.collectionVariables.set(\"Portfolio_Length\", len);\r",
+									"    });    \r",
+									" }\r",
+									"}  \r",
+									"console.log(len);\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"  \r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "4c746b52-7221-4d51-8719-52ec4eed6a48",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"description": "(Required) Server",
+								"key": "origin",
+								"value": "https://euler.tools"
+							},
+							{
+								"description": "(Required) Site",
+								"key": "sec-fetch-site",
+								"value": "same-site"
+							},
+							{
+								"description": "(Required) Mode",
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"description": "(Required) Referer",
+								"key": "referer",
+								"value": "https://euler.tools/"
+							},
+							{
+								"description": "(Required) Language",
+								"key": "accept-language",
+								"value": "es-ES,es;q=0.9"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "authorization",
+								"value": "{{Bearer}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUri}}/{{network}}/portfolios",
+							"host": [
+								"{{baseUri}}"
+							],
+							"path": [
+								"{{network}}",
+								"portfolios"
+							]
+						},
+						"description": "Retrieves portfolios of an account user."
+					},
+					"response": [
+						{
+							"id": "d297badf-32ea-45d3-aec5-2adf2010ccad",
+							"name": "Get portfolios",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "(Required) Server",
+										"key": "origin",
+										"value": "https://euler.tools"
+									},
+									{
+										"description": "(Required) Site",
+										"key": "sec-fetch-site",
+										"value": "same-site"
+									},
+									{
+										"description": "(Required) Mode",
+										"key": "sec-fetch-mode",
+										"value": "cors"
+									},
+									{
+										"description": "(Required) Referer",
+										"key": "referer",
+										"value": "https://euler.tools/"
+									},
+									{
+										"description": "(Required) Language",
+										"key": "accept-language",
+										"value": "es-ES,es;q=0.9"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "authorization",
+										"value": "{{Bearer}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUri}}/portfolios",
+									"host": [
+										"{{baseUri}}"
+									],
+									"path": [
+										"portfolios"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [
+								{
+									"expires": "Invalid Date"
+								}
+							],
+							"responseTime": null,
+							"body": "\n[\n    {\n        \"user_sub\": \"18a4d00f-17ac-4f02-bd89-d3e4a671af63\",\n        \"created_at\": \"2022-02-24T14:56:32.704Z\",\n        \"name\": \"portfolio\",\n        \"identifier\": \"74929ee6-7a01-403c-b5bc-04ea777212c6\"\n    }\n]\n"
+						}
+					]
+				},
+				{
+					"name": "Updates a portfolio",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "18986b58-6f0b-4d40-909d-dc1c4e5048a5",
+								"exec": [
+									"const response = pm.response.json();\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Data has all properties\", () => {\r",
+									"    pm.expect(response.updated_at || response.created_at).to.have.lengthOf(24);\r",
+									"    //pm.expect(response.user_sub).to.have.lengthOf(36);\r",
+									"    //pm.expect(response.identifier).to.have.lengthOf(36);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "0c0addf4-f618-4261-a69a-633eb4e85fb2",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "d2af3a14-d814-4ae5-842c-7d002c6bad34",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"description": "(Required) Domain",
+								"key": "authority",
+								"value": "bsc.catalog.prod.euler.tools"
+							},
+							{
+								"description": "(Required) Server",
+								"key": "origin",
+								"value": "https://euler.tools"
+							},
+							{
+								"description": "(Required) Site",
+								"key": "sec-fetch-site",
+								"value": "same-site"
+							},
+							{
+								"description": "(Required) sec-fetch-site",
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"description": "(Required) Referer",
+								"key": "referer",
+								"value": "https://euler.tools/"
+							},
+							{
+								"description": "(Required) ",
+								"key": "accept-language",
+								"value": "es-ES,es;q=0.9"
+							},
+							{
+								"key": "authorization",
+								"value": "{{Bearer}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"name\": \"new_portfolio\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUri}}/{{network}}/portfolios/:id",
+							"host": [
+								"{{baseUri}}"
+							],
+							"path": [
+								"{{network}}",
+								"portfolios",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "identifier",
+									"value": "43e82635-de5e-4441-858d-4be09b9e66a1",
+									"description": "(Required) Wallet identifier",
+									"id": "5700ba41-5545-4641-b804-578adbc3c1d9",
+									"type": "any"
+								},
+								{
+									"value": null,
+									"key": "id"
+								}
+							]
+						},
+						"description": "Updates a portfolio by the given portfolio identifier."
+					},
+					"response": [
+						{
+							"id": "7b0aa729-e5cd-4d11-9e66-c411ab45f07d",
+							"name": "Object with updates details",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"description": "(Required) Domain",
+										"key": "authority",
+										"value": "bsc.catalog.prod.euler.tools"
+									},
+									{
+										"description": "(Required) Accepted formats",
+										"key": "accept",
+										"value": "application/json, text/plain, */*"
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"description": "(Required) Type",
+										"type": "text"
+									},
+									{
+										"description": "(Required) Server",
+										"key": "origin",
+										"value": "https://euler.tools"
+									},
+									{
+										"description": "(Required) Site",
+										"key": "sec-fetch-site",
+										"value": "same-site"
+									},
+									{
+										"description": "(Required) sec-fetch-site",
+										"key": "sec-fetch-dest",
+										"value": "empty"
+									},
+									{
+										"description": "(Required) Referer",
+										"key": "referer",
+										"value": "https://euler.tools/"
+									},
+									{
+										"description": "(Required) ",
+										"key": "accept-language",
+										"value": "es-ES,es;q=0.9"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"name\": \"new_portfolio\"}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUri}}/portfolios/:id",
+									"host": [
+										"{{baseUri}}"
+									],
+									"path": [
+										"portfolios",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "e7c3973c-3d03-4de2-b38c-7696867db1ec"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n    \"updated_at\": \"2022-03-02T19:06:33.176Z\",\n    \"user_sub\": \"18a4d00f-17ac-4f02-bd89-d3e4a671af63\",\n    \"name\": \"PortfolioTest\",\n    \"identifier\": \"49b5985b-f95f-4869-9c25-e952ccb4624a\"\n}"
+						}
+					],
+					"variable": [
+						{
+							"id": "5700ba41-5545-4641-b804-578adbc3c1d9",
+							"key": "identifier",
+							"value": "43e82635-de5e-4441-858d-4be09b9e66a1",
+							"type": "any",
+							"description": "(Required) Wallet identifier"
+						}
+					]
+				}
+			],
+			"id": "10e7ed3c-dd73-49f7-b819-262fe3cef4fe"
+		},
+		{
+			"name": "Wallets",
+			"item": [
+				{
+					"name": "Get wallets",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "db6dcd92-49ae-4f0b-8dc4-7481642c6f9f",
+								"exec": [
+									"const response = pm.response.json();\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Data has all properties\", () => {\r",
+									"    for(i = 0; i < response.length; i ++){\r",
+									"    pm.expect(response[i].user_sub).to.have.lengthOf(36);\r",
+									"    pm.expect(response[i].created_at || response[i].updated_at).to.have.lengthOf(24);\r",
+									"    pm.expect(response[i].address).to.have.lengthOf(42);\r",
+									"    pm.expect(response[i].name).to.be.string;\r",
+									"    pm.expect(response[i].identifier).to.have.lengthOf(36);\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"let len = response.length;\r",
+									"let current = pm.collectionVariables.get(\"Wallet_Length\");\r",
+									"\r",
+									"if(len > current){\r",
+									"\r",
+									"/*pm.test(\"Wallet was succesfully created\", () => {\r",
+									"    pm.expect(len).to.be.greaterThan(current);\r",
+									"    pm.collectionVariables.set(\"Wallet_Length\", len);\r",
+									"});*/\r",
+									"}\r",
+									"\r",
+									"else if(len < current){\r",
+									"\r",
+									"pm.test(\"Wallet was succesfully deleted\", () => {\r",
+									"    pm.expect(len).to.be.lessThan(current);\r",
+									"    pm.collectionVariables.set(\"Wallet_Length\", len);\r",
+									"});    \r",
+									"}\r",
+									"console.log(len);\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "dc6e421c-fd5f-4a84-baee-8602969340b6",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "917b1b2b-a884-45c3-9d34-991d5732f3cd",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{Bearer}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUri}}/{{network}}/wallets",
+							"host": [
+								"{{baseUri}}"
+							],
+							"path": [
+								"{{network}}",
+								"wallets"
+							],
+							"variable": [
+								{
+									"id": "1238be2f-898d-47f1-9ccb-38bd661b6057",
+									"key": "walletAddress",
+									"value": "0x3920123482070C1a2dff73AaD695c60e7c6F6862",
+									"type": "any",
+									"description": "(Required) Wallet Address"
+								}
+							]
+						},
+						"description": "Returns wallets information."
+					},
+					"response": [
+						{
+							"id": "7b4647eb-fb95-4d44-88ab-5392ee636c57",
+							"name": "Array containing wallets details",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUri}}/wallets",
+									"host": [
+										"{{baseUri}}"
+									],
+									"path": [
+										"wallets"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "[\n  {\n    \"user_sub\": \"18a4d00f-17ac-4f02-bd89-d3e4a671af63\",\n    \"created_at\": \"2022-02-25T17:54:09.683Z\",\n    \"address\": \"0xE7c5F631457e38cAa5d006e10936CDBDF41d3273\",\n    \"name\": \"mywallet20\",\n    \"identifier\": \"559d24d1-1502-44a5-b4a0-6ee62a9af58f\"\n  }\n]\n"
+						}
+					],
+					"variable": [
+						{
+							"id": "1238be2f-898d-47f1-9ccb-38bd661b6057",
+							"key": "walletAddress",
+							"value": "0x3920123482070C1a2dff73AaD695c60e7c6F6862",
+							"type": "any",
+							"description": "(Required) Wallet Address"
+						}
+					]
+				},
+				{
+					"name": "Creates a wallet",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "27e57229-8e42-4e76-aae2-af28d6d8c2ba",
+								"exec": [
+									"const response = pm.response.json();\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"pm.test(\"Payload has all properties\", () => {\r",
+									"    pm.expect(response.address).to.have.lengthOf(42);\r",
+									"    pm.expect(response.name).to.have.lengthOf(7);\r",
+									"    pm.expect(response.created_at).to.have.lengthOf(24);\r",
+									"    pm.expect(response.identifier).to.have.lengthOf(36);\r",
+									"});\r",
+									"\r",
+									"current = pm.collectionVariables.get(\"Wallet_Length\");\r",
+									"console.log(current);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "5ee1348c-ca05-405c-8895-84f0d0e85dbd",
+								"exec": [
+									"pm.test(\"Body raw is present\", () => {\r",
+									"    pm.expect(pm.request.body.raw).to.not.be.empty;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "38117747-333e-41aa-bf4f-5412efb76a9a",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"description": "(Required) Domain",
+								"key": "authority",
+								"value": "bsc.catalog.prod.euler.tools"
+							},
+							{
+								"description": "(Required) Server",
+								"key": "origin",
+								"value": "application/json, text/plain, */*"
+							},
+							{
+								"description": "(Required) Site",
+								"key": "sec-fetch-site",
+								"value": "same-site"
+							},
+							{
+								"description": "(Required) sec-fetch-site",
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"description": "(Required) Referer",
+								"key": "referer",
+								"value": "https://euler.tools/"
+							},
+							{
+								"key": "authorization",
+								"value": "{{Bearer}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"address\":\"0xE7c5F631457e38cAa5d006e10936CDBDF41d3273\",\"name\":\"Wallet1\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUri}}/{{network}}/wallets",
+							"host": [
+								"{{baseUri}}"
+							],
+							"path": [
+								"{{network}}",
+								"wallets"
+							]
+						},
+						"description": "Creates a new wallet with given name and address."
+					},
+					"response": [
+						{
+							"id": "dabaf2c4-6d64-4391-8110-cbce80d027e3",
+							"name": "Object containing wallet cration details",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "(Required) Domain",
+										"key": "authority",
+										"value": "bsc.catalog.prod.euler.tools"
+									},
+									{
+										"description": "(Required) Accepted formats",
+										"key": "accept",
+										"value": "application/json, text/plain, */*"
+									},
+									{
+										"description": "(Required) Type",
+										"key": "content-type",
+										"value": "application/json"
+									},
+									{
+										"description": "(Required) Server",
+										"key": "origin",
+										"value": "https://euler.tools"
+									},
+									{
+										"description": "(Required) Site",
+										"key": "sec-fetch-site",
+										"value": "same-site"
+									},
+									{
+										"description": "(Required) sec-fetch-site",
+										"key": "sec-fetch-dest",
+										"value": "empty"
+									},
+									{
+										"description": "(Required) Referer",
+										"key": "referer",
+										"value": "https://euler.tools/"
+									}
+								],
+								"url": {
+									"raw": "{{baseUri}}/wallets",
+									"host": [
+										"{{baseUri}}"
+									],
+									"path": [
+										"wallets"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n    \"address\": \"0xE7c5F631457e38cAa5d006e10936CDBDF41d3273\",\n    \"name\": \"Wallet3\",\n    \"created_at\": \"2022-03-02T17:50:18.959Z\",\n    \"identifier\": \"4235ed2b-d8a4-4e51-99db-a5c077e0d254\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Deletes a wallet",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "41a73f50-9119-4caf-a5f9-c96e0baecf73",
+								"exec": [
+									"const response = pm.response.json();\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Data has all properties\", () => {\r",
+									"    pm.expect(response.$metadata.httpStatusCode).to.eql(200);\r",
+									"    pm.expect(response.$metadata.requestId).to.have.lengthOf(52);\r",
+									"    pm.expect(response.$metadata.attempts).to.be.greaterThan(0);\r",
+									"    pm.expect(response.$metadata.totalRetryDelay).to.be.greaterThan(-1);\r",
+									"});\r",
+									"\r",
+									"current = pm.collectionVariables.get(\"Wallet_Length\");\r",
+									"console.log(current);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "38ef7db3-5835-4099-befb-bf14c6792405",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"description": "(Required) Domain",
+								"key": "authority",
+								"value": "bsc.catalog.prod.euler.tools"
+							},
+							{
+								"description": "(Required) Server",
+								"key": "origin",
+								"value": "https://euler.tools"
+							},
+							{
+								"description": "(Required) Site",
+								"key": "sec-fetch-site",
+								"value": "same-site"
+							},
+							{
+								"description": "(Required) sec-fetch-site",
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"description": "(Required) Referer",
+								"key": "referer",
+								"value": "https://euler.tools/"
+							},
+							{
+								"key": "authorization",
+								"value": "{{Bearer}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUri}}/{{network}}/wallets/:id",
+							"host": [
+								"{{baseUri}}"
+							],
+							"path": [
+								"{{network}}",
+								"wallets",
+								":id"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "7c01e113-20c7-40ef-902d-2d11ea17e253",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"id": "d438e5fc-67fa-4300-93c1-0b10a29c0107",
+									"key": "id",
+									"value": "ba4b79ea-541e-4612-93ce-fd0994f171e1",
+									"type": "any",
+									"description": "(Required) identifier"
+								}
+							]
+						},
+						"description": "Deletes a wallet by the given identifier."
+					},
+					"response": [
+						{
+							"id": "9d224576-cc07-42df-97e4-1998ffd7dccd",
+							"name": "Array containing wallets details",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"description": "(Required) Domain",
+										"key": "authority",
+										"value": "bsc.catalog.prod.euler.tools"
+									},
+									{
+										"description": "(Required) Accepted formats",
+										"key": "accept",
+										"value": "application/json, text/plain, */*"
+									},
+									{
+										"description": "(Required) Type",
+										"key": "content-type",
+										"value": "application/json"
+									},
+									{
+										"description": "(Required) Server",
+										"key": "origin",
+										"value": "https://euler.tools"
+									},
+									{
+										"description": "(Required) Site",
+										"key": "sec-fetch-site",
+										"value": "same-site"
+									},
+									{
+										"description": "(Required) sec-fetch-site",
+										"key": "sec-fetch-dest",
+										"value": "empty"
+									},
+									{
+										"description": "(Required) Referer",
+										"key": "referer",
+										"value": "https://euler.tools/"
+									}
+								],
+								"url": {
+									"raw": "{{baseUri}}/wallets/:id",
+									"host": [
+										"{{baseUri}}"
+									],
+									"path": [
+										"wallets",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "ba4b79ea-541e-4612-93ce-fd0994f171e1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n    \"$metadata\": {\n        \"httpStatusCode\": 200,\n        \"requestId\": \"PGPT2I4RB12JM38TPUBI54ULO7VV4KQNSO5AEMVJF66Q9ASUAAJG\",\n        \"attempts\": 1,\n        \"totalRetryDelay\": 0\n    }\n}"
+						}
+					],
+					"variable": [
+						{
+							"id": "d438e5fc-67fa-4300-93c1-0b10a29c0107",
+							"key": "id",
+							"value": "ba4b79ea-541e-4612-93ce-fd0994f171e1",
+							"type": "any",
+							"description": "(Required) identifier"
+						}
+					]
+				},
+				{
+					"name": "Updates a wallet",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "b841c259-f6bc-4cc6-a67e-142f875bcf62",
+								"exec": [
+									"let name = \"Wallet1\";\r",
+									"pm.collectionVariables.set(\"New_wallet_name\", name);\r",
+									"pm.test(\"Body raw is present\", () => {\r",
+									"    pm.expect(pm.request.body.raw).to.not.be.empty;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "ef8e96c3-a3e3-46e7-a53f-ec25f04e699c",
+								"exec": [
+									"const response = pm.response.json();\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Data has all properties\", () => {\r",
+									"    pm.expect(response.updated_at).to.have.lengthOf(24);\r",
+									"    pm.expect(response.identifier).to.be.string;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "dd7291e7-2989-4ff4-81a1-aac43681dddc",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"description": "(Required) Domain",
+								"key": "authority",
+								"value": "bsc.catalog.prod.euler.tools"
+							},
+							{
+								"description": "(Required) Server",
+								"key": "origin",
+								"value": "https://euler.tools"
+							},
+							{
+								"description": "(Required) Site",
+								"key": "sec-fetch-site",
+								"value": "same-site"
+							},
+							{
+								"description": "(Required) fetch",
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"description": "(Required) Referer",
+								"key": "referer",
+								"value": "https://euler.tools/"
+							},
+							{
+								"description": "(Required) ",
+								"key": "accept-language",
+								"value": "es-ES,es;q=0.9"
+							},
+							{
+								"key": "authorization",
+								"value": "{{Bearer}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"address\": \"0xE7c5F631457e38cAa5d006e10936CDBDF41d3273\",\"name\": \"New_wallet\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUri}}/{{network}}/wallets/:id",
+							"host": [
+								"{{baseUri}}"
+							],
+							"path": [
+								"{{network}}",
+								"wallets",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "f16b5204-a40a-4c52-b8dd-dafb8f2ba28d"
+								}
+							]
+						},
+						"description": "Updates an existing wallet by the given wallet identifier."
+					},
+					"response": [
+						{
+							"id": "9fc2ddbd-6e60-4a03-82a0-5547b3b69421",
+							"name": "Object with updated wallet deatils",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"description": "(Required) Domain",
+										"key": "authority",
+										"value": "bsc.catalog.prod.euler.tools"
+									},
+									{
+										"description": "(Required) Type",
+										"key": "content-type",
+										"value": "application/json"
+									},
+									{
+										"description": "(Required) Server",
+										"key": "origin",
+										"value": "https://euler.tools"
+									},
+									{
+										"description": "(Required) Site",
+										"key": "sec-fetch-site",
+										"value": "same-site"
+									},
+									{
+										"description": "(Required) fetch",
+										"key": "sec-fetch-dest",
+										"value": "empty"
+									},
+									{
+										"description": "(Required) Referer",
+										"key": "referer",
+										"value": "https://euler.tools/"
+									},
+									{
+										"description": "(Required) ",
+										"key": "accept-language",
+										"value": "es-ES,es;q=0.9"
+									}
+								],
+								"url": {
+									"raw": "{{baseUri}}/wallets/:id",
+									"host": [
+										"{{baseUri}}"
+									],
+									"path": [
+										"wallets",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "f16b5204-a40a-4c52-b8dd-dafb8f2ba28d"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n    \"address\": \"0xE7c5F631457e38cAa5d006e10936CDBDF41d3273\",\n    \"name\": \"Wallet1\",\n    \"updated_at\": \"2022-03-02T17:57:49.500Z\",\n    \"identifier\": \"baae0cde-117f-45ed-afa5-56307e03201c\"\n}"
+						}
+					]
+				}
+			],
+			"id": "bdd299c5-f30c-49c2-a914-6fa5cdccb68a"
+		},
+		{
+			"name": "Addresses",
+			"item": [
+				{
+					"name": "Addresses",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "90b896bb-7533-49cd-8874-0a56cb76d9ba",
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Payload has all properties\", () => {\r",
+									"    for(i = 0; i < response.tokens.length; i ++){\r",
+									"        if(i == 10 || i == 11){\r",
+									"            continue;\r",
+									"        }\r",
+									"        else{\r",
+									"        pm.expect(response.tokens[i].name).to.have.lengthOf(42); \r",
+									"        pm.expect(response.tokens[i].quantity).to.be.greaterThan(-1); \r",
+									"        pm.expect(response.tokens[i].token[\"_id\"]).to.have.lengthOf(52);\r",
+									"        pm.expect(response.tokens[i].token[\"_source\"].symbol).to.be.string;\r",
+									"        }\r",
+									"        \r",
+									"    }\r",
+									"});    \r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "594f8daf-e62a-4412-ba22-bfe8ac785144",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUri}}/{{network}}/addresses/:address",
+							"host": [
+								"{{baseUri}}"
+							],
+							"path": [
+								"{{network}}",
+								"addresses",
+								":address"
+							],
+							"variable": [
+								{
+									"key": "address",
+									"value": "0x3920123482070C1a2dff73AaD695c60e7c6F6862",
+									"description": "(Required) The address to retrieve tokens details"
+								}
+							]
+						},
+						"description": "Returns all tokens related to a specific address"
+					},
+					"response": [
+						{
+							"id": "096fdaea-cfa3-4f7b-909e-840b8960e654",
+							"name": "Object containing tokens details",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUri}}/addresses/:address",
+									"host": [
+										"{{baseUri}}"
+									],
+									"path": [
+										"addresses",
+										":address"
+									],
+									"variable": [
+										{
+											"key": "address",
+											"value": "0x3920123482070C1a2dff73AaD695c60e7c6F6862",
+											"description": "(Required) The address to retrieve tokens details"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n    \"tokens\": [\n        {\n            \"name\": \"0x0Ad0D5610A19FD0Fb41274051d986F217746f5D2\",\n            \"quantity\": 1000,\n            \"token\": {\n                \"_index\": \"catalog_20210721\",\n                \"_type\": \"_doc\",\n                \"_id\": \"bsc~token~0x0Ad0D5610A19FD0Fb41274051d986F217746f5D2\",\n                \"_version\": 8,\n                \"_seq_no\": 38655110,\n                \"_primary_term\": 14,\n                \"found\": true,\n                \"_source\": {\n                    \"price_usd\": 1.3497667220014e-7,\n                    \"identifier\": \"bsc~token~0x0Ad0D5610A19FD0Fb41274051d986F217746f5D2\",\n                    \"symbol\": \"PIGI\",\n                    \"address\": \"0x0Ad0D5610A19FD0Fb41274051d986F217746f5D2\",\n                    \"name\": \"PIGI\"\n                }\n            }\n        },\n        {\n            \"name\": \"0x108f5f2b2d68f4075d5753caF41dA293DD4bC2B5\",\n            \"quantity\": 1046.4887327377492,\n            \"token\": {\n                \"_index\": \"catalog_20210721\",\n                \"_type\": \"_doc\",\n                \"_id\": \"bsc~token~0x108f5f2b2d68f4075d5753caF41dA293DD4bC2B5\",\n                \"_version\": 19,\n                \"_seq_no\": 52771935,\n                \"_primary_term\": 13,\n                \"found\": true,\n                \"_source\": {\n                    \"price_usd\": 0.00003189755725471573,\n                    \"identifier\": \"bsc~token~0x108f5f2b2d68f4075d5753caF41dA293DD4bC2B5\",\n                    \"symbol\": \"BAL\",\n                    \"address\": \"0x108f5f2b2d68f4075d5753caF41dA293DD4bC2B5\",\n                    \"name\": \"swap-bal.io\"\n                }\n            }\n        },\n        {\n            \"name\": \"0x1D2F0da169ceB9fC7B3144628dB156f3F6c60dBE\",\n            \"quantity\": 59.4823,\n            \"token\": {\n                \"_index\": \"catalog_20210721\",\n                \"_type\": \"_doc\",\n                \"_id\": \"bsc~token~0x1D2F0da169ceB9fC7B3144628dB156f3F6c60dBE\",\n                \"_version\": 428651,\n                \"_seq_no\": 48135616,\n                \"_primary_term\": 13,\n                \"found\": true,\n                \"_source\": {\n                    \"price_usd\": 0.7656549194091098,\n                    \"identifier\": \"bsc~token~0x1D2F0da169ceB9fC7B3144628dB156f3F6c60dBE\",\n                    \"symbol\": \"XRP\",\n                    \"address\": \"0x1D2F0da169ceB9fC7B3144628dB156f3F6c60dBE\",\n                    \"name\": \"XRP Token\"\n                }\n            }\n        },\n        {\n            \"name\": \"0x1fC1Bf23DC8DB822c744Dc34FE3659E34477f55c\",\n            \"quantity\": 1,\n            \"token\": {\n                \"_id\": \"bsc~token~0x1fC1Bf23DC8DB822c744Dc34FE3659E34477f55c\",\n                \"found\": false\n            }\n        },\n        {\n            \"name\": \"0x2538EB3dBbC1C2D2a1263fC3D822114C2989A692\",\n            \"quantity\": 2000,\n            \"token\": {\n                \"_index\": \"catalog_20210721\",\n                \"_type\": \"_doc\",\n                \"_id\": \"bsc~token~0x2538EB3dBbC1C2D2a1263fC3D822114C2989A692\",\n                \"_version\": 57,\n                \"_seq_no\": 38981639,\n                \"_primary_term\": 13,\n                \"found\": true,\n                \"_source\": {\n                    \"price_usd\": 0.00005893346735686968,\n                    \"identifier\": \"bsc~token~0x2538EB3dBbC1C2D2a1263fC3D822114C2989A692\",\n                    \"symbol\": \"ACD\",\n                    \"address\": \"0x2538EB3dBbC1C2D2a1263fC3D822114C2989A692\",\n                    \"name\": \"ACDswap.com\"\n                }\n            }\n        },\n        {\n            \"name\": \"0x3920123482070C1a2dff73AaD695c60e7c6F6862\",\n            \"quantity\": 753.3024425384895,\n            \"token\": {\n                \"_index\": \"catalog_20210721\",\n                \"_type\": \"_doc\",\n                \"_id\": \"bsc~token~0x3920123482070C1a2dff73AaD695c60e7c6F6862\",\n                \"_version\": 16370,\n                \"_seq_no\": 53358662,\n                \"_primary_term\": 13,\n                \"found\": true,\n                \"_source\": {\n                    \"price_usd\": 0.0557479619527946,\n                    \"identifier\": \"bsc~token~0x3920123482070C1a2dff73AaD695c60e7c6F6862\",\n                    \"symbol\": \"EULER\",\n                    \"address\": \"0x3920123482070C1a2dff73AaD695c60e7c6F6862\",\n                    \"name\": \"Euler.Tools\"\n                }\n            }\n        },\n        {\n            \"name\": \"0x55d398326f99059fF775485246999027B3197955\",\n            \"quantity\": 21263.81741662,\n            \"token\": {\n                \"_index\": \"catalog_20210721\",\n                \"_type\": \"_doc\",\n                \"_id\": \"bsc~token~0x55d398326f99059fF775485246999027B3197955\",\n                \"_version\": 18012,\n                \"_seq_no\": 1474602,\n                \"_primary_term\": 6,\n                \"found\": true,\n                \"_source\": {\n                    \"price_usd\": 1.0065354025624953,\n                    \"identifier\": \"bsc~token~0x55d398326f99059fF775485246999027B3197955\",\n                    \"symbol\": \"USDT\",\n                    \"address\": \"0x55d398326f99059fF775485246999027B3197955\",\n                    \"name\": \"Tether USD\"\n                }\n            }\n        },\n        {\n            \"name\": \"0x7Cb2f28505E733F60C0db208AfaA321c792F6Cf4\",\n            \"quantity\": 0.5461993,\n            \"token\": {\n                \"_index\": \"catalog_20210721\",\n                \"_type\": \"_doc\",\n                \"_id\": \"bsc~token~0x7Cb2f28505E733F60C0db208AfaA321c792F6Cf4\",\n                \"_version\": 42,\n                \"_seq_no\": 24900546,\n                \"_primary_term\": 11,\n                \"found\": true,\n                \"_source\": {\n                    \"price_usd\": 0.31873557065916175,\n                    \"identifier\": \"bsc~token~0x7Cb2f28505E733F60C0db208AfaA321c792F6Cf4\",\n                    \"symbol\": \"OPERAND\",\n                    \"address\": \"0x7Cb2f28505E733F60C0db208AfaA321c792F6Cf4\",\n                    \"name\": \"Operand\"\n                }\n            }\n        },\n        {\n            \"name\": \"0x8076C74C5e3F5852037F31Ff0093Eeb8c8ADd8D3\",\n            \"quantity\": 8708110.110393565,\n            \"token\": {\n                \"_index\": \"catalog_20210721\",\n                \"_type\": \"_doc\",\n                \"_id\": \"bsc~token~0x8076C74C5e3F5852037F31Ff0093Eeb8c8ADd8D3\",\n                \"_version\": 745795,\n                \"_seq_no\": 53001803,\n                \"_primary_term\": 13,\n                \"found\": true,\n                \"_source\": {\n                    \"price_usd\": 5.3693788019212e-7,\n                    \"identifier\": \"bsc~token~0x8076C74C5e3F5852037F31Ff0093Eeb8c8ADd8D3\",\n                    \"symbol\": \"SAFEMOON\",\n                    \"address\": \"0x8076C74C5e3F5852037F31Ff0093Eeb8c8ADd8D3\",\n                    \"name\": \"SafeMoon\"\n                }\n            }\n        },\n        {\n            \"name\": \"0xA58950F05FeA2277d2608748412bf9F802eA4901\",\n            \"quantity\": 500000,\n            \"token\": {\n                \"_index\": \"catalog_20210721\",\n                \"_type\": \"_doc\",\n                \"_id\": \"bsc~token~0xA58950F05FeA2277d2608748412bf9F802eA4901\",\n                \"_version\": 192620,\n                \"_seq_no\": 53011474,\n                \"_primary_term\": 13,\n                \"found\": true,\n                \"_source\": {\n                    \"price_usd\": 1.609422998327e-8,\n                    \"identifier\": \"bsc~token~0xA58950F05FeA2277d2608748412bf9F802eA4901\",\n                    \"symbol\": \"WSG\",\n                    \"address\": \"0xA58950F05FeA2277d2608748412bf9F802eA4901\",\n                    \"name\": \"Wall Street Games\"\n                }\n            }\n        },\n        {\n            \"name\": \"0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c\",\n            \"quantity\": 0,\n            \"token\": {\n                \"_index\": \"catalog_20210721\",\n                \"_type\": \"_doc\",\n                \"_id\": \"bsc~token~0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c\",\n                \"_version\": 5949757,\n                \"_seq_no\": 49888447,\n                \"_primary_term\": 13,\n                \"found\": true,\n                \"_source\": {\n                    \"price_usd\": 407.38216611630753,\n                    \"identifier\": \"bsc~token~0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c\",\n                    \"symbol\": \"WBNB\",\n                    \"address\": \"0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c\",\n                    \"name\": \"Wrapped BNB\"\n                }\n            }\n        }\n    ],\n    \"total\": null,\n    \"totalBNB\": null\n}"
+						}
+					]
+				}
+			],
+			"id": "8c7731fa-a4b6-49b1-bacc-9183175af9f4"
+		},
+		{
+			"name": "Transactions",
+			"item": [
+				{
+					"name": "Transactions",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "683ae33d-2c8a-4d3e-894a-239375f43e05",
+								"exec": [
+									"const response = pm.response.json();\r",
+									"let len = 3;\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Data has all properties\", () => {\r",
+									"    for(i = 0; i < response.data.length; i ++){\r",
+									"        pm.expect(response.data[i].hash).to.have.lengthOf(66);\r",
+									"        pm.expect(response.data[i].nonce).to.be.string;\r",
+									"        pm.expect(response.data[i].transaction_index).to.be.string;\r",
+									"        pm.expect(response.data[i].from_address).to.have.lengthOf(42);\r",
+									"        pm.expect(response.data[i].to_address).to.have.lengthOf(42);\r",
+									"        pm.expect(response.data[i].gas.toNumber()).to.be.greaterThan(-1);\r",
+									"        pm.expect(response.data[i].gas_price.toNumber()).to.be.greaterThan(0);\r",
+									"        pm.expect(response.data[i].receipt_cumulative_gas_used).to.eql(null);\r",
+									"        pm.expect(response.data[i].receipt_gas_used).to.eql(null);\r",
+									"        pm.expect(response.data[i].receipt_contract_address).to.eql(null);\r",
+									"        pm.expect(response.data[i].receipt_root).to.eql(null);\r",
+									"        pm.expect(response.data[i].receipt_status).to.be.string;\r",
+									"        pm.expect(response.data[i].block_timestamp).to.have.lengthOf(24);\r",
+									"        pm.expect(response.data[i].block_number).to.have.lengthOf(8);\r",
+									"        pm.expect(response.data[i].block_hash).to.have.lengthOf(66);\r",
+									"}\r",
+									"});   \r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "a1f2fa8f-dfc8-421e-8d4c-8f5358077126",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUri}}/{{network}}/transactions?$or[from_address]=0x3920123482070c1a2dff73aad695c60e7c6f6862&$or[to_address]=0x06012c8cf97bead5deae237070f9587f8e7a266d&$sort[block_timestamp]=-1%20%20%20%20%20%20&$limit=16&$skip=0",
+							"host": [
+								"{{baseUri}}"
+							],
+							"path": [
+								"{{network}}",
+								"transactions"
+							],
+							"query": [
+								{
+									"key": "$or[from_address]",
+									"value": "0x3920123482070c1a2dff73aad695c60e7c6f6862",
+									"description": "(Required) Sender"
+								},
+								{
+									"key": "$or[to_address]",
+									"value": "0x06012c8cf97bead5deae237070f9587f8e7a266d",
+									"description": "(Required) Receiver"
+								},
+								{
+									"key": "$sort[block_timestamp]",
+									"value": "-1%20%20%20%20%20%20",
+									"description": "(Required) Block Timestamp"
+								},
+								{
+									"key": "$limit",
+									"value": "16",
+									"description": "(Required) Limit"
+								},
+								{
+									"key": "$skip",
+									"value": "0",
+									"description": "(Required) Skip"
+								}
+							]
+						},
+						"description": "Retrieves all transactions given a token address"
+					},
+					"response": [
+						{
+							"id": "e0caf693-12df-4bc3-a30b-938d4f7c7567",
+							"name": "Transactions",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUri}}/{{network}}/transactions?$or[from_address]=0x3920123482070c1a2dff73aad695c60e7c6f6862&$or[to_address]=0x06012c8cf97bead5deae237070f9587f8e7a266d&$sort[block_timestamp]=-1%20%20%20%20%20%20&$limit=16&$skip=0",
+									"host": [
+										"{{baseUri}}"
+									],
+									"path": [
+										"{{network}}",
+										"transactions"
+									],
+									"query": [
+										{
+											"key": "$or[from_address]",
+											"value": "0x3920123482070c1a2dff73aad695c60e7c6f6862",
+											"description": "(Required) Sender"
+										},
+										{
+											"key": "$or[to_address]",
+											"value": "0x06012c8cf97bead5deae237070f9587f8e7a266d",
+											"description": "(Required) Receiver"
+										},
+										{
+											"key": "$sort[block_timestamp]",
+											"value": "-1%20%20%20%20%20%20",
+											"description": "(Required) Block Timestamp"
+										},
+										{
+											"key": "$limit",
+											"value": "16",
+											"description": "(Required) Limit"
+										},
+										{
+											"key": "$skip",
+											"value": "0",
+											"description": "(Required) Skip"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n    \"total\": 82,\n    \"limit\": 16,\n    \"skip\": 0,\n    \"data\": [\n        {\n            \"hash\": \"0x6ead3425282e8a2bdba714afe81f97a7f11dd3330db0f6bb98795dd8211aa912\",\n            \"nonce\": \"3695\",\n            \"transaction_index\": \"149\",\n            \"from_address\": \"0x22cc5eabacac8e0607a79fdfd22ecc0f226e29e9\",\n            \"to_address\": \"0x06012c8cf97bead5deae237070f9587f8e7a266d\",\n            \"value\": \"0\",\n            \"gas\": \"24160\",\n            \"gas_price\": \"5000000000\",\n            \"input\": \"0x23b872dd00000000000000000000000022cc5eabacac8e0607a79fdfd22ecc0f226e29e9000000000000000000000000e052113bd7d7700d623414a0a4585bcae754e9d500000000000000000000000000000000000000000000000000000000000bb18e\",\n            \"receipt_cumulative_gas_used\": null,\n            \"receipt_gas_used\": null,\n            \"receipt_contract_address\": null,\n            \"receipt_root\": null,\n            \"receipt_status\": \"0\",\n            \"block_timestamp\": \"2021-12-02T23:56:26.000Z\",\n            \"block_number\": \"13144138\",\n            \"block_hash\": \"0xbce9637c60d9b046c28a0be69ffeefafe80a16c23cbcaa4b3074235e427ab0e5\"\n        },\n        {\n            \"hash\": \"0x4d3a4394ce7f97b0dc5de13d47dffabafa17b8be53a7e1d9d682b411279f7c57\",\n            \"nonce\": \"245\",\n            \"transaction_index\": \"447\",\n            \"from_address\": \"0x6166dd78e22c93ceb6d66de4051eef5afa2eccae\",\n            \"to_address\": \"0x06012c8cf97bead5deae237070f9587f8e7a266d\",\n            \"value\": \"0\",\n            \"gas\": \"24160\",\n            \"gas_price\": \"5000000000\",\n            \"input\": \"0x23b872dd0000000000000000000000006166dd78e22c93ceb6d66de4051eef5afa2eccae000000000000000000000000e052113bd7d7700d623414a0a4585bcae754e9d50000000000000000000000000000000000000000000000000000000000113e27\",\n            \"receipt_cumulative_gas_used\": null,\n            \"receipt_gas_used\": null,\n            \"receipt_contract_address\": null,\n            \"receipt_root\": null,\n            \"receipt_status\": \"0\",\n            \"block_timestamp\": \"2021-11-22T08:11:55.000Z\",\n            \"block_number\": \"12857083\",\n            \"block_hash\": \"0x0c1ca3f368132eada49197c2f2ac8e1773af957d2ccc3c09a70fbc3490c82ed5\"\n        },\n        {\n            \"hash\": \"0x9a9dc45896cdc465b33ea059da49d34ed319518f8d735df992b7c4ba69cd617b\",\n            \"nonce\": \"287\",\n            \"transaction_index\": \"71\",\n            \"from_address\": \"0x56c362a17d61a54fc1a0b8b2266dc39b3967c190\",\n            \"to_address\": \"0x06012c8cf97bead5deae237070f9587f8e7a266d\",\n            \"value\": \"0\",\n            \"gas\": \"32394\",\n            \"gas_price\": \"5000000000\",\n            \"input\": \"0x095ea7b300000000000000000000000088341d1a8f672d2780c8dc725902aae72f143b0c000000000000000000000000000000000000000000000000000000000019547c\",\n            \"receipt_cumulative_gas_used\": null,\n            \"receipt_gas_used\": null,\n            \"receipt_contract_address\": null,\n            \"receipt_root\": null,\n            \"receipt_status\": \"0\",\n            \"block_timestamp\": \"2021-11-09T00:51:23.000Z\",\n            \"block_number\": \"12488491\",\n            \"block_hash\": \"0x9aac4ba07057bd2a9e6cd5141797dc63df84ab716d6800a33d74ebf61df4c6a1\"\n        },\n        {\n            \"hash\": \"0x3ea222065b789401b20edc7126a657e904c76a0c513d26f33f2c8f6cb9e3f9c8\",\n            \"nonce\": \"3\",\n            \"transaction_index\": \"165\",\n            \"from_address\": \"0xf138b002f7f514936873081b9dfa56672cdae42b\",\n            \"to_address\": \"0x06012c8cf97bead5deae237070f9587f8e7a266d\",\n            \"value\": \"0\",\n            \"gas\": \"21596\",\n            \"gas_price\": \"5000000000\",\n            \"input\": \"0x095ea7b30000000000000000000000000ae4c5ec013ea16a6b187b5bcd0d9f8312ba0e9e00000000000000000000000000000000000000000000000000000000000bf691\",\n            \"receipt_cumulative_gas_used\": null,\n            \"receipt_gas_used\": null,\n            \"receipt_contract_address\": null,\n            \"receipt_root\": null,\n            \"receipt_status\": \"0\",\n            \"block_timestamp\": \"2021-10-28T19:40:08.000Z\",\n            \"block_number\": \"12172082\",\n            \"block_hash\": \"0xb2b339c6ff367ad125a2ff905530b4f0165dfb65eea4919e4f30c085ba5a9871\"\n        },\n        {\n            \"hash\": \"0x4806e26d4648be170fbd7aae07af33f47fcc975aad56c2203e0422d250f77b1f\",\n            \"nonce\": \"3\",\n            \"transaction_index\": \"77\",\n            \"from_address\": \"0x593189958b1337d9f35d46a2679bce1f427c7655\",\n            \"to_address\": \"0x06012c8cf97bead5deae237070f9587f8e7a266d\",\n            \"value\": \"91828540000000000\",\n            \"gas\": \"21000\",\n            \"gas_price\": \"5000000000\",\n            \"input\": \"0x\",\n            \"receipt_cumulative_gas_used\": null,\n            \"receipt_gas_used\": null,\n            \"receipt_contract_address\": null,\n            \"receipt_root\": null,\n            \"receipt_status\": \"0\",\n            \"block_timestamp\": \"2021-10-14T17:20:25.000Z\",\n            \"block_number\": \"11770803\",\n            \"block_hash\": \"0x91f6dd55d73cea72dba796e709520c3534e5cbf3302576f76f65e064ba913605\"\n        },\n        {\n            \"hash\": \"0x4a6bda427cfa54326962abe0f28a4c13f14429f4d9709e07ea8e687c729c7d90\",\n            \"nonce\": \"2\",\n            \"transaction_index\": \"77\",\n            \"from_address\": \"0x593189958b1337d9f35d46a2679bce1f427c7655\",\n            \"to_address\": \"0x06012c8cf97bead5deae237070f9587f8e7a266d\",\n            \"value\": \"0\",\n            \"gas\": \"21964\",\n            \"gas_price\": \"5000000000\",\n            \"input\": \"0x23b872dd000000000000000000000000593189958b1337d9f35d46a2679bce1f427c7655000000000000000000000000e052113bd7d7700d623414a0a4585bcae754e9d5000000000000000000000000000000000000000000000000000000000001f071\",\n            \"receipt_cumulative_gas_used\": null,\n            \"receipt_gas_used\": null,\n            \"receipt_contract_address\": null,\n            \"receipt_root\": null,\n            \"receipt_status\": \"0\",\n            \"block_timestamp\": \"2021-10-09T10:57:20.000Z\",\n            \"block_number\": \"11620949\",\n            \"block_hash\": \"0xa58a767ae1e0699299a1093c7d94e1323149b8953c724e21c57b72d8391d8846\"\n        },\n        {\n            \"hash\": \"0xf6e1fbbe1b4a2cffacfe039a2b019cb5be6dabb002304281560766b74a81ed60\",\n            \"nonce\": \"1\",\n            \"transaction_index\": \"164\",\n            \"from_address\": \"0x593189958b1337d9f35d46a2679bce1f427c7655\",\n            \"to_address\": \"0x06012c8cf97bead5deae237070f9587f8e7a266d\",\n            \"value\": \"0\",\n            \"gas\": \"21964\",\n            \"gas_price\": \"5000000000\",\n            \"input\": \"0x23b872dd000000000000000000000000593189958b1337d9f35d46a2679bce1f427c7655000000000000000000000000e052113bd7d7700d623414a0a4585bcae754e9d5000000000000000000000000000000000000000000000000000000000001ff24\",\n            \"receipt_cumulative_gas_used\": null,\n            \"receipt_gas_used\": null,\n            \"receipt_contract_address\": null,\n            \"receipt_root\": null,\n            \"receipt_status\": \"0\",\n            \"block_timestamp\": \"2021-10-09T10:50:02.000Z\",\n            \"block_number\": \"11620803\",\n            \"block_hash\": \"0xcfb0ac3f2fb6db3dec87f5721a9c17373b1da74692303959812e8b39fce9cb12\"\n        },\n        {\n            \"hash\": \"0xdfb2b77537b10ae563e22156ff2f19c748ac50f5722106be1ff7cf51fac9d5dd\",\n            \"nonce\": \"0\",\n            \"transaction_index\": \"264\",\n            \"from_address\": \"0x593189958b1337d9f35d46a2679bce1f427c7655\",\n            \"to_address\": \"0x06012c8cf97bead5deae237070f9587f8e7a266d\",\n            \"value\": \"0\",\n            \"gas\": \"21964\",\n            \"gas_price\": \"5000000000\",\n            \"input\": \"0x23b872dd000000000000000000000000593189958b1337d9f35d46a2679bce1f427c7655000000000000000000000000e052113bd7d7700d623414a0a4585bcae754e9d5000000000000000000000000000000000000000000000000000000000001ff24\",\n            \"receipt_cumulative_gas_used\": null,\n            \"receipt_gas_used\": null,\n            \"receipt_contract_address\": null,\n            \"receipt_root\": null,\n            \"receipt_status\": \"0\",\n            \"block_timestamp\": \"2021-10-09T10:41:15.000Z\",\n            \"block_number\": \"11620632\",\n            \"block_hash\": \"0x240928f93ca92a0094291e72b2a573e85c509eb0626ffc82630ff1fd55ef2da1\"\n        },\n        {\n            \"hash\": \"0x05e459a13acc7e3c74abbf1df516310e485472273f61a1a10409e837912a370c\",\n            \"nonce\": \"123\",\n            \"transaction_index\": \"69\",\n            \"from_address\": \"0x8cfa55076adf26f659bc49e36322bf793371bbe4\",\n            \"to_address\": \"0x06012c8cf97bead5deae237070f9587f8e7a266d\",\n            \"value\": \"0\",\n            \"gas\": \"21596\",\n            \"gas_price\": \"5000000000\",\n            \"input\": \"0xa9059cbb000000000000000000000000682d57889bfbeba0fcc4c9d4a536619e580933890000000000000000000000000000000000000000000000000000000000069d7a\",\n            \"receipt_cumulative_gas_used\": null,\n            \"receipt_gas_used\": null,\n            \"receipt_contract_address\": null,\n            \"receipt_root\": null,\n            \"receipt_status\": \"0\",\n            \"block_timestamp\": \"2021-10-08T08:03:29.000Z\",\n            \"block_number\": \"11588802\",\n            \"block_hash\": \"0xf5949f26df60bbf51da0d672bf790d1c6b02a79d767016742763bf4beae13579\"\n        },\n        {\n            \"hash\": \"0x2b41f02e906f8e748fbddc2a90151d4f612932e102849bdc2d4659c44054ee15\",\n            \"nonce\": \"766\",\n            \"transaction_index\": \"167\",\n            \"from_address\": \"0x70cfec09f9dfef2d0093f16f73e17b4066f0d3b9\",\n            \"to_address\": \"0x06012c8cf97bead5deae237070f9587f8e7a266d\",\n            \"value\": \"0\",\n            \"gas\": \"21596\",\n            \"gas_price\": \"5000000000\",\n            \"input\": \"0x095ea7b3000000000000000000000000d12998d712ae682b1d7d6f89bf32b23b90385e4600000000000000000000000000000000000000000000000000000000001ea56d\",\n            \"receipt_cumulative_gas_used\": null,\n            \"receipt_gas_used\": null,\n            \"receipt_contract_address\": null,\n            \"receipt_root\": null,\n            \"receipt_status\": \"0\",\n            \"block_timestamp\": \"2021-09-22T18:10:58.000Z\",\n            \"block_number\": \"11143058\",\n            \"block_hash\": \"0x7fb0cd0204cedf1d7a4dc02746e99fa997ec7b3f696c09497e899909a9dd08b3\"\n        },\n        {\n            \"hash\": \"0x2972241fa21943a19d32239265b05074405fe463765ca428a928043fd23acec2\",\n            \"nonce\": \"259\",\n            \"transaction_index\": \"197\",\n            \"from_address\": \"0x2f18f84ff15eb7f90c0c561a70c02d7004bae867\",\n            \"to_address\": \"0x06012c8cf97bead5deae237070f9587f8e7a266d\",\n            \"value\": \"0\",\n            \"gas\": \"21596\",\n            \"gas_price\": \"5000000000\",\n            \"input\": \"0x095ea7b3000000000000000000000000e55999545734a80f875ef749fa85868dac89b9a800000000000000000000000000000000000000000000000000000000001b3035\",\n            \"receipt_cumulative_gas_used\": null,\n            \"receipt_gas_used\": null,\n            \"receipt_contract_address\": null,\n            \"receipt_root\": null,\n            \"receipt_status\": \"0\",\n            \"block_timestamp\": \"2021-09-05T02:03:58.000Z\",\n            \"block_number\": \"10637379\",\n            \"block_hash\": \"0x1047dfd077dff4cd57ffd5504c9947f0d03b3b115742d245c4b40ad26fa60d82\"\n        },\n        {\n            \"hash\": \"0x0a962dba0500c7936e00e1ce1d3224f47f0304a2fed33df73e04fb6f9469b45e\",\n            \"nonce\": \"258\",\n            \"transaction_index\": \"196\",\n            \"from_address\": \"0x2f18f84ff15eb7f90c0c561a70c02d7004bae867\",\n            \"to_address\": \"0x06012c8cf97bead5deae237070f9587f8e7a266d\",\n            \"value\": \"0\",\n            \"gas\": \"50578\",\n            \"gas_price\": \"5000000000\",\n            \"input\": \"0x095ea7b3000000000000000000000000e55999545734a80f875ef749fa85868dac89b9a800000000000000000000000000000000000000000000000000000000001b3035\",\n            \"receipt_cumulative_gas_used\": null,\n            \"receipt_gas_used\": null,\n            \"receipt_contract_address\": null,\n            \"receipt_root\": null,\n            \"receipt_status\": \"0\",\n            \"block_timestamp\": \"2021-09-05T02:03:28.000Z\",\n            \"block_number\": \"10637369\",\n            \"block_hash\": \"0x484c7c65e866c69cacb386dd9de0db239de9cef74bca2c496aa9227d85d50ea1\"\n        },\n        {\n            \"hash\": \"0xe004dfa3463150dfb8460bc4d131b759dc3285f651de0f5c238fbe6bebbcc7e5\",\n            \"nonce\": \"256\",\n            \"transaction_index\": \"168\",\n            \"from_address\": \"0x2f18f84ff15eb7f90c0c561a70c02d7004bae867\",\n            \"to_address\": \"0x06012c8cf97bead5deae237070f9587f8e7a266d\",\n            \"value\": \"0\",\n            \"gas\": \"21596\",\n            \"gas_price\": \"5000000000\",\n            \"input\": \"0x095ea7b3000000000000000000000000e55999545734a80f875ef749fa85868dac89b9a800000000000000000000000000000000000000000000000000000000001b2ff9\",\n            \"receipt_cumulative_gas_used\": null,\n            \"receipt_gas_used\": null,\n            \"receipt_contract_address\": null,\n            \"receipt_root\": null,\n            \"receipt_status\": \"0\",\n            \"block_timestamp\": \"2021-09-05T01:46:07.000Z\",\n            \"block_number\": \"10637022\",\n            \"block_hash\": \"0xb98ab3a60fa0b7de24c98e837206e4e8cc7043bb2be108afd97d227873c95bef\"\n        },\n        {\n            \"hash\": \"0xd986bc912749442cd1e2afcb62dbaba642c25c1ef6f12d38c7f046754e9f773f\",\n            \"nonce\": \"254\",\n            \"transaction_index\": \"141\",\n            \"from_address\": \"0x2f18f84ff15eb7f90c0c561a70c02d7004bae867\",\n            \"to_address\": \"0x06012c8cf97bead5deae237070f9587f8e7a266d\",\n            \"value\": \"0\",\n            \"gas\": \"21596\",\n            \"gas_price\": \"5000000000\",\n            \"input\": \"0x095ea7b3000000000000000000000000e55999545734a80f875ef749fa85868dac89b9a800000000000000000000000000000000000000000000000000000000001554d0\",\n            \"receipt_cumulative_gas_used\": null,\n            \"receipt_gas_used\": null,\n            \"receipt_contract_address\": null,\n            \"receipt_root\": null,\n            \"receipt_status\": \"0\",\n            \"block_timestamp\": \"2021-09-05T01:25:34.000Z\",\n            \"block_number\": \"10636611\",\n            \"block_hash\": \"0xfe7939c9f787949c7d2aeef7f342a4592a147fe63d9ead1e1447a176101d238e\"\n        },\n        {\n            \"hash\": \"0x4061df16c41b23ad82cc2e19238085fa4f9d1f3786f4222353919dbd9403beef\",\n            \"nonce\": \"0\",\n            \"transaction_index\": \"160\",\n            \"from_address\": \"0xb8d5c91e71c4b7b8af3d1bcac166b1f48c8dd2ea\",\n            \"to_address\": \"0x06012c8cf97bead5deae237070f9587f8e7a266d\",\n            \"value\": \"0\",\n            \"gas\": \"21596\",\n            \"gas_price\": \"5000000000\",\n            \"input\": \"0x095ea7b3000000000000000000000000ac1ec9136766a1780551f045a89ab671f6d2bb840000000000000000000000000000000000000000000000000000000000143dcb\",\n            \"receipt_cumulative_gas_used\": null,\n            \"receipt_gas_used\": null,\n            \"receipt_contract_address\": null,\n            \"receipt_root\": null,\n            \"receipt_status\": \"0\",\n            \"block_timestamp\": \"2021-09-04T14:54:45.000Z\",\n            \"block_number\": \"10624121\",\n            \"block_hash\": \"0x1bbd38b3ebe57f55cbe4be7e42455085132418feb71de76f54df873e04b38b43\"\n        },\n        {\n            \"hash\": \"0xecfb612ee32411b7f2c9318dc115a87c8dc0d77ab0c8aa8aaea5a46facbab02b\",\n            \"nonce\": \"1398\",\n            \"transaction_index\": \"148\",\n            \"from_address\": \"0x6899f448072222c98e65ce3f29d9ccb92c739ad1\",\n            \"to_address\": \"0x06012c8cf97bead5deae237070f9587f8e7a266d\",\n            \"value\": \"0\",\n            \"gas\": \"21596\",\n            \"gas_price\": \"5000000000\",\n            \"input\": \"0x095ea7b300000000000000000000000076c4d8d73c9c493eb117fe4adc8dcee659f36cc700000000000000000000000000000000000000000000000000000000001ea0c7\",\n            \"receipt_cumulative_gas_used\": null,\n            \"receipt_gas_used\": null,\n            \"receipt_contract_address\": null,\n            \"receipt_root\": null,\n            \"receipt_status\": \"0\",\n            \"block_timestamp\": \"2021-09-03T18:51:57.000Z\",\n            \"block_number\": \"10600079\",\n            \"block_hash\": \"0x0ee24eff2b5ff89b19c6513f3f958c616b16c2261609e47b1a15ec4c713fa319\"\n        }\n    ]\n}"
+						}
+					]
+				}
+			],
+			"id": "e3aa64d6-946b-49c0-bc69-bc777f852f83"
+		},
+		{
+			"name": "Trades",
+			"item": [
+				{
+					"name": "Trades",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e1a61e7b-9173-48fa-8cad-9333124c6383",
+								"exec": [
+									"const response = pm.response.json();\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Data has all properties\", () => {\r",
+									"    for (i = 0; i < response.data.length; i++) {\r",
+									"        pm.expect(response.data[i].address).to.have.lengthOf(42);\r",
+									"        pm.expect(response.data[i].base_token).to.have.lengthOf(42);\r",
+									"        pm.expect(response.data[i].quote_token).to.have.lengthOf(42);\r",
+									"        pm.expect(response.data[i].transaction_hash).to.have.lengthOf(66);\r",
+									"        pm.expect(response.data[i].log_index).to.be.string;\r",
+									"        pm.expect(response.data[i].base_in).to.be.string;\r",
+									"        pm.expect(response.data[i].base_out).to.be.string;\r",
+									"        pm.expect(response.data[i].quote_in).to.have.lengthOf(52);\r",
+									"        pm.expect(response.data[i].quote_out).to.have.lengthOf(52);\r",
+									"        pm.expect(response.data[i].price_base).to.have.lengthOf(52);\r",
+									"        pm.expect(response.data[i].price_quote).to.have.lengthOf(63);\r",
+									"        pm.expect(response.data[i].price_bnb).to.have.lengthOf(52);\r",
+									"        pm.expect(response.data[i].price_usd).to.have.lengthOf(52);\r",
+									"        pm.expect(response.data[i].block_number).to.have.lengthOf(8);\r",
+									"        pm.expect(response.data[i].block_timestamp).to.have.lengthOf(24);\r",
+									"        pm.expect(response.data[i].volume).to.not.be.empty;\r",
+									"        pm.expect(response.data[i].factory).to.eql(null);\r",
+									"        pm.expect(response.data[i].base_price_usd).to.have.lengthOf(52);\r",
+									"        pm.expect(response.data[i].quote_price_usd).to.have.lengthOf(66);\r",
+									"        pm.expect(response.data[i].ratio).to.have.lengthOf(52);\r",
+									"}\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "b4172af7-2013-42e6-893b-41b4d1a0fa80",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUri}}/{{network}}/trades?address=0x31045e7023e6c388f9447e632a3f9eaff90393fa&block_timestamp[$gte]=2021-10-01T03:00:00.000Z&block_timestamp[$lte]=2021-12-31T03:00:00.000Z&volume[$gte]=10&$sort[block_timestamp]=-1&$limit=10&$skip=0",
+							"host": [
+								"{{baseUri}}"
+							],
+							"path": [
+								"{{network}}",
+								"trades"
+							],
+							"query": [
+								{
+									"key": "address",
+									"value": "0x31045e7023e6c388f9447e632a3f9eaff90393fa",
+									"description": "(Required) The address to retrieve trade information"
+								},
+								{
+									"key": "block_timestamp[$gte]",
+									"value": "2021-10-01T03:00:00.000Z",
+									"description": "(Required) timestamp"
+								},
+								{
+									"key": "block_timestamp[$lte]",
+									"value": "2021-12-31T03:00:00.000Z",
+									"description": "(Required) timestamp"
+								},
+								{
+									"key": "volume[$gte]",
+									"value": "10",
+									"description": "(Required) Volume"
+								},
+								{
+									"key": "$sort[block_timestamp]",
+									"value": "-1",
+									"description": "(Required) Sort"
+								},
+								{
+									"key": "$limit",
+									"value": "10",
+									"description": "(Required) Limit"
+								},
+								{
+									"key": "$skip",
+									"value": "0",
+									"description": "(Required) Skip"
+								}
+							]
+						},
+						"description": "Returns all trades of a specific token"
+					},
+					"response": [
+						{
+							"id": "48659530-2f9f-4184-b064-2c714dc2e983",
+							"name": "Array containig all trades information",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUri}}/trades?address=0x31045e7023e6c388f9447e632a3f9eaff90393fa&$sort=-1&$limit=10&$skip=0&block_timestamp[$gte]=2021-10-01T03:00:00.000Z&block_timestamp[$lte]=2021-12-31T03:00:00.000Z&volume[$gte]=0",
+									"host": [
+										"{{baseUri}}"
+									],
+									"path": [
+										"trades"
+									],
+									"query": [
+										{
+											"key": "address",
+											"value": "0x31045e7023e6c388f9447e632a3f9eaff90393fa"
+										},
+										{
+											"key": "$sort",
+											"value": "-1"
+										},
+										{
+											"key": "$limit",
+											"value": "10"
+										},
+										{
+											"key": "$skip",
+											"value": "0"
+										},
+										{
+											"key": "block_timestamp[$gte]",
+											"value": "2021-10-01T03:00:00.000Z"
+										},
+										{
+											"key": "block_timestamp[$lte]",
+											"value": "2021-12-31T03:00:00.000Z"
+										},
+										{
+											"key": "volume[$gte]",
+											"value": "0"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"responseTime": null,
+							"body": "{\n    \"total\": 440,\n    \"limit\": 10,\n    \"skip\": 0,\n    \"data\": [\n        {\n            \"address\": \"0x51dddb90f8ec85be147a4b7f9922bdba063ac07e\",\n            \"base_token\": \"0x31045e7023e6c388f9447e632a3f9eaff90393fa\",\n            \"quote_token\": \"0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c\",\n            \"transaction_hash\": \"0x6e0731acdf483a660d3140a9def02e42e3c4089a12b57b2990b0bf0b1b2eb9a4\",\n            \"log_index\": \"48\",\n            \"base_in\": \"285920091.35418170000000000000000000000000000000000000000000\",\n            \"base_out\": \"0.00000000000000000000000000000000000000000000000000\",\n            \"quote_in\": \"0.00000000000000000000000000000000000000000000000000\",\n            \"quote_out\": \"0.00046474655745459100000000000000000000000000000000\",\n            \"price_base\": \"0.00000000000162544211305140200000000000000000000000\",\n            \"price_quote\": \"615217233496.38390000000000000000000000000000000000000000000000\",\n            \"price_bnb\": \"0.00000000000162544211305140200000000000000000000000\",\n            \"price_usd\": \"0.00000000083885631632312350000000000000000000000000\",\n            \"block_number\": \"13918697\",\n            \"block_timestamp\": \"2021-12-30T05:29:48.000Z\",\n            \"volume\": \"0.23984587459613985000000000000000000000000000000000\",\n            \"factory\": null,\n            \"base_price_usd\": \"0.00000000083885631632312350000000000000000000000000\",\n            \"quote_price_usd\": \"317500609886658.90000000000000000000000000000000000000000000000000\",\n            \"ratio\": \"0.00000000000162544211305140200000000000000000000000\"\n        },\n        {\n            \"address\": \"0x1a9aa2a681b95112dc980edee56d23313a416ac8\",\n            \"base_token\": \"0x31045e7023e6c388f9447e632a3f9eaff90393fa\",\n            \"quote_token\": \"0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c\",\n            \"transaction_hash\": \"0x15eade2abe8d5eb792cfdea5a7cb4e1ba97b7a2cd6401a68f806d92f9dbbbf46\",\n            \"log_index\": \"1016\",\n            \"base_in\": \"4178859636.21411400000000000000000000000000000000000000000000\",\n            \"base_out\": \"0.00000000000000000000000000000000000000000000000000\",\n            \"quote_in\": \"0.00000000000000000000000000000000000000000000000000\",\n            \"quote_out\": \"0.00744655891561249300000000000000000000000000000000\",\n            \"price_base\": \"0.00000000000178195956884514750000000000000000000000\",\n            \"price_quote\": \"561179960243.47520000000000000000000000000000000000000000000000\",\n            \"price_bnb\": \"0.00000000000178195956884514750000000000000000000000\",\n            \"price_usd\": \"0.00000000091502093998618010000000000000000000000000\",\n            \"block_number\": \"13914846\",\n            \"block_timestamp\": \"2021-12-30T02:17:01.000Z\",\n            \"volume\": \"3.82374407239894550000000000000000000000000000000000\",\n            \"factory\": null,\n            \"base_price_usd\": \"0.00000000091502093998618010000000000000000000000000\",\n            \"quote_price_usd\": \"288161091699838.90000000000000000000000000000000000000000000000000\",\n            \"ratio\": \"0.00000000000178195956884514750000000000000000000000\"\n        },\n        {\n            \"address\": \"0x1a9aa2a681b95112dc980edee56d23313a416ac8\",\n            \"base_token\": \"0x31045e7023e6c388f9447e632a3f9eaff90393fa\",\n            \"quote_token\": \"0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c\",\n            \"transaction_hash\": \"0x72ac319a595386dd15e341c695944b122e47d8a89375e59e70f53612be26e4d3\",\n            \"log_index\": \"353\",\n            \"base_in\": \"11345389046.26648000000000000000000000000000000000000000000000\",\n            \"base_out\": \"0.00000000000000000000000000000000000000000000000000\",\n            \"quote_in\": \"0.00000000000000000000000000000000000000000000000000\",\n            \"quote_out\": \"0.02021826589686694000000000000000000000000000000000\",\n            \"price_base\": \"0.00000000000178206898101218770000000000000000000000\",\n            \"price_quote\": \"561145505956.79820000000000000000000000000000000000000000000000\",\n            \"price_bnb\": \"0.00000000000178206898101218770000000000000000000000\",\n            \"price_usd\": \"0.00000000092303132026635260000000000000000000000000\",\n            \"block_number\": \"13912931\",\n            \"block_timestamp\": \"2021-12-30T00:41:16.000Z\",\n            \"volume\": \"10.47214943031076300000000000000000000000000000000000\",\n            \"factory\": null,\n            \"base_price_usd\": \"0.00000000092303132026635260000000000000000000000000\",\n            \"quote_price_usd\": \"290648051643120.75000000000000000000000000000000000000000000000000\",\n            \"ratio\": \"0.00000000000178206898101218770000000000000000000000\"\n        },\n        {\n            \"address\": \"0x1a9aa2a681b95112dc980edee56d23313a416ac8\",\n            \"base_token\": \"0x31045e7023e6c388f9447e632a3f9eaff90393fa\",\n            \"quote_token\": \"0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c\",\n            \"transaction_hash\": \"0x1e537fed960fcab00db7cca0002677f49300bb901ba0bceab07f5cfc0cde0120\",\n            \"log_index\": \"468\",\n            \"base_in\": \"44198176990.09643000000000000000000000000000000000000000000000\",\n            \"base_out\": \"0.00000000000000000000000000000000000000000000000000\",\n            \"quote_in\": \"0.00000000000000000000000000000000000000000000000000\",\n            \"quote_out\": \"0.07878150844278077000000000000000000000000000000000\",\n            \"price_base\": \"0.00000000000178246058565794470000000000000000000000\",\n            \"price_quote\": \"561022222901.42720000000000000000000000000000000000000000000000\",\n            \"price_bnb\": \"0.00000000000178246058565794470000000000000000000000\",\n            \"price_usd\": \"0.00000000091667709140675790000000000000000000000000\",\n            \"block_number\": \"13912032\",\n            \"block_timestamp\": \"2021-12-29T23:56:19.000Z\",\n            \"volume\": \"40.51545632876268000000000000000000000000000000000000\",\n            \"factory\": null,\n            \"base_price_usd\": \"0.00000000091667709140675790000000000000000000000000\",\n            \"quote_price_usd\": \"288520387851383.40000000000000000000000000000000000000000000000000\",\n            \"ratio\": \"0.00000000000178246058565794470000000000000000000000\"\n        },\n        {\n            \"address\": \"0x51dddb90f8ec85be147a4b7f9922bdba063ac07e\",\n            \"base_token\": \"0x31045e7023e6c388f9447e632a3f9eaff90393fa\",\n            \"quote_token\": \"0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c\",\n            \"transaction_hash\": \"0x25d422b5ee76e83ea3cf6c509376c7c24e9eee614a9f6242cdab0425448cf54f\",\n            \"log_index\": \"210\",\n            \"base_in\": \"240489283.80011110000000000000000000000000000000000000000000\",\n            \"base_out\": \"0.00000000000000000000000000000000000000000000000000\",\n            \"quote_in\": \"0.00000000000000000000000000000000000000000000000000\",\n            \"quote_out\": \"0.00040530697180545100000000000000000000000000000000\",\n            \"price_base\": \"0.00000000000168534316956231800000000000000000000000\",\n            \"price_quote\": \"593350967363.93400000000000000000000000000000000000000000000000\",\n            \"price_bnb\": \"0.00000000000168534316956231800000000000000000000000\",\n            \"price_usd\": \"0.00000000090559418812652230000000000000000000000000\",\n            \"block_number\": \"13893229\",\n            \"block_timestamp\": \"2021-12-29T08:15:46.000Z\",\n            \"volume\": \"0.21778569771609038000000000000000000000000000000000\",\n            \"factory\": null,\n            \"base_price_usd\": \"0.00000000090559418812652230000000000000000000000000\",\n            \"quote_price_usd\": \"318828353339797.10000000000000000000000000000000000000000000000000\",\n            \"ratio\": \"0.00000000000168534316956231800000000000000000000000\"\n        },\n        {\n            \"address\": \"0x51dddb90f8ec85be147a4b7f9922bdba063ac07e\",\n            \"base_token\": \"0x31045e7023e6c388f9447e632a3f9eaff90393fa\",\n            \"quote_token\": \"0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c\",\n            \"transaction_hash\": \"0xfb0afd185ae4c1318ce99f397fa6d1bd169bc8c6804b169854f796bc6032e769\",\n            \"log_index\": \"68\",\n            \"base_in\": \"242932587.65478653000000000000000000000000000000000000000000\",\n            \"base_out\": \"0.00000000000000000000000000000000000000000000000000\",\n            \"quote_in\": \"0.00000000000000000000000000000000000000000000000000\",\n            \"quote_out\": \"0.00042352250708026400000000000000000000000000000000\",\n            \"price_base\": \"0.00000000000174337461749718180000000000000000000000\",\n            \"price_quote\": \"573600183209.97300000000000000000000000000000000000000000000000\",\n            \"price_bnb\": \"0.00000000000174337461749718180000000000000000000000\",\n            \"price_usd\": \"0.00000000093985993154562630000000000000000000000000\",\n            \"block_number\": \"13888886\",\n            \"block_timestamp\": \"2021-12-29T04:38:37.000Z\",\n            \"volume\": \"0.22832260520342950000000000000000000000000000000000\",\n            \"factory\": null,\n            \"base_price_usd\": \"0.00000000093985993154562630000000000000000000000000\",\n            \"quote_price_usd\": \"309230055041314.40000000000000000000000000000000000000000000000000\",\n            \"ratio\": \"0.00000000000174337461749718180000000000000000000000\"\n        },\n        {\n            \"address\": \"0x1a9aa2a681b95112dc980edee56d23313a416ac8\",\n            \"base_token\": \"0x31045e7023e6c388f9447e632a3f9eaff90393fa\",\n            \"quote_token\": \"0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c\",\n            \"transaction_hash\": \"0xd7aa39ac1baec84d328452cd952f9822e5587fc6d911c8f0ee8adf22eb249d5a\",\n            \"log_index\": \"275\",\n            \"base_in\": \"16344846685.36572600000000000000000000000000000000000000000000\",\n            \"base_out\": \"0.00000000000000000000000000000000000000000000000000\",\n            \"quote_in\": \"0.00000000000000000000000000000000000000000000000000\",\n            \"quote_out\": \"0.02914101648276320000000000000000000000000000000000\",\n            \"price_base\": \"0.00000000000178288711076467040000000000000000000000\",\n            \"price_quote\": \"560888007974.38350000000000000000000000000000000000000000000000\",\n            \"price_bnb\": \"0.00000000000178288711076467040000000000000000000000\",\n            \"price_usd\": \"0.00000000095616868891422550000000000000000000000000\",\n            \"block_number\": \"13882660\",\n            \"block_timestamp\": \"2021-12-28T23:26:31.000Z\",\n            \"volume\": \"15.62843062565017300000000000000000000000000000000000\",\n            \"factory\": null,\n            \"base_price_usd\": \"0.00000000095616868891422550000000000000000000000000\",\n            \"quote_price_usd\": \"300806230509210.60000000000000000000000000000000000000000000000000\",\n            \"ratio\": \"0.00000000000178288711076467040000000000000000000000\"\n        },\n        {\n            \"address\": \"0x1a9aa2a681b95112dc980edee56d23313a416ac8\",\n            \"base_token\": \"0x31045e7023e6c388f9447e632a3f9eaff90393fa\",\n            \"quote_token\": \"0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c\",\n            \"transaction_hash\": \"0xbe2eafb10298c5a748199ad63d1a5d4cd87530a04473fcd57613f7589830187c\",\n            \"log_index\": \"327\",\n            \"base_in\": \"12759361424.43445600000000000000000000000000000000000000000000\",\n            \"base_out\": \"0.00000000000000000000000000000000000000000000000000\",\n            \"quote_in\": \"0.00000000000000000000000000000000000000000000000000\",\n            \"quote_out\": \"0.02275111883176990000000000000000000000000000000000\",\n            \"price_base\": \"0.00000000000178309227828604420000000000000000000000\",\n            \"price_quote\": \"560823470651.34880000000000000000000000000000000000000000000000\",\n            \"price_bnb\": \"0.00000000000178309227828604420000000000000000000000\",\n            \"price_usd\": \"0.00000000097683305925217400000000000000000000000000\",\n            \"block_number\": \"13795012\",\n            \"block_timestamp\": \"2021-12-25T22:16:41.000Z\",\n            \"volume\": \"12.46376605433448500000000000000000000000000000000000\",\n            \"factory\": null,\n            \"base_price_usd\": \"0.00000000097683305925217400000000000000000000000000\",\n            \"quote_price_usd\": \"307236430334030.94000000000000000000000000000000000000000000000000\",\n            \"ratio\": \"0.00000000000178309227828604420000000000000000000000\"\n        },\n        {\n            \"address\": \"0x1a9aa2a681b95112dc980edee56d23313a416ac8\",\n            \"base_token\": \"0x31045e7023e6c388f9447e632a3f9eaff90393fa\",\n            \"quote_token\": \"0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c\",\n            \"transaction_hash\": \"0x9ba424b02515e4f1989833e25d19c7a4452d35c5089c5d831b5675308a1c9f9c\",\n            \"log_index\": \"241\",\n            \"base_in\": \"3485790596.28617860000000000000000000000000000000000000000000\",\n            \"base_out\": \"0.00000000000000000000000000000000000000000000000000\",\n            \"quote_in\": \"0.00000000000000000000000000000000000000000000000000\",\n            \"quote_out\": \"0.00621669319522930400000000000000000000000000000000\",\n            \"price_base\": \"0.00000000000178343851229981390000000000000000000000\",\n            \"price_quote\": \"560714593244.07030000000000000000000000000000000000000000000000\",\n            \"price_bnb\": \"0.00000000000178343851229981390000000000000000000000\",\n            \"price_usd\": \"0.00000000095603863135894700000000000000000000000000\",\n            \"block_number\": \"13705122\",\n            \"block_timestamp\": \"2021-12-22T19:17:53.000Z\",\n            \"volume\": \"3.33255047087732550000000000000000000000000000000000\",\n            \"factory\": null,\n            \"base_price_usd\": \"0.00000000095603863135894700000000000000000000000000\",\n            \"quote_price_usd\": \"300579363185766.94000000000000000000000000000000000000000000000000\",\n            \"ratio\": \"0.00000000000178343851229981390000000000000000000000\"\n        },\n        {\n            \"address\": \"0x1a9aa2a681b95112dc980edee56d23313a416ac8\",\n            \"base_token\": \"0x31045e7023e6c388f9447e632a3f9eaff90393fa\",\n            \"quote_token\": \"0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c\",\n            \"transaction_hash\": \"0x57bf57559944e3e98b99dc69a0fda7d7719a2bd5f3f8a2d8dccbf2678ecb82ef\",\n            \"log_index\": \"470\",\n            \"base_in\": \"1024455055.42552590000000000000000000000000000000000000000000\",\n            \"base_out\": \"0.00000000000000000000000000000000000000000000000000\",\n            \"quote_in\": \"0.00000000000000000000000000000000000000000000000000\",\n            \"quote_out\": \"0.00182708517107033300000000000000000000000000000000\",\n            \"price_base\": \"0.00000000000178347030589001310000000000000000000000\",\n            \"price_quote\": \"560704597490.32130000000000000000000000000000000000000000000000\",\n            \"price_bnb\": \"0.00000000000178347030589001310000000000000000000000\",\n            \"price_usd\": \"0.00000000094307347694192370000000000000000000000000\",\n            \"block_number\": \"13698649\",\n            \"block_timestamp\": \"2021-12-22T13:53:16.000Z\",\n            \"volume\": \"0.96613639109088190000000000000000000000000000000000\",\n            \"factory\": null,\n            \"base_price_usd\": \"0.00000000094307347694192370000000000000000000000000\",\n            \"quote_price_usd\": \"296492536234651.20000000000000000000000000000000000000000000000000\",\n            \"ratio\": \"0.00000000000178347030589001310000000000000000000000\"\n        }\n    ]\n}"
+						}
+					]
+				}
+			],
+			"id": "c82ba720-21e5-4ac5-861c-e886a167b6e7"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "5fe7077d-992a-4b81-b16c-aa513f925640",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "f8b3f115-3305-4c76-bb09-3e00481fa9dc",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "36a4a75d-e3fb-4054-b254-1bffe8596c18",
+			"key": "baseUrl",
+			"value": "localhost:3000",
+			"type": "string"
+		},
+		{
+			"id": "68aaec93-5385-469f-8fb4-1b4972812749",
+			"key": "Portfolio_Length",
+			"value": ""
+		},
+		{
+			"id": "7027ec00-928d-43d8-a24e-15f97f4e6f2b",
+			"key": "Wallet_Length",
+			"value": ""
+		},
+		{
+			"id": "61465f9d-bd1a-4bc4-8516-e4d6ebd11272",
+			"key": "New_name",
+			"value": ""
+		},
+		{
+			"id": "2f1ad178-62d0-4b2e-848d-6ef4b004b6fe",
+			"key": "New_wallet_name",
+			"value": ""
+		}
+	]
+}

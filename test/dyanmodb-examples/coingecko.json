@@ -1,0 +1,298 @@
+{
+    "identifier": {
+      "S": "coingecko~euler-tools"
+    },
+    "update_date": {
+      "N": "1659677870"
+    },
+    "additional_notices": {
+      "L": []
+    },
+    "asset_platform_id": {
+      "S": "binance-smart-chain"
+    },
+    "block_time_in_minutes": {
+      "N": "0"
+    },
+    "categories": {
+      "L": []
+    },
+    "coingecko_rank": {
+      "N": "2853"
+    },
+    "coingecko_score": {
+      "N": "13.035"
+    },
+    "community_data": {
+      "M": {
+        "facebook_likes": {
+          "NULL": true
+        },
+        "reddit_accounts_active_48h": {
+          "N": "0"
+        },
+        "reddit_average_comments_48h": {
+          "N": "0"
+        },
+        "reddit_average_posts_48h": {
+          "N": "0"
+        },
+        "reddit_subscribers": {
+          "N": "0"
+        },
+        "telegram_channel_user_count": {
+          "N": "3831"
+        },
+        "twitter_followers": {
+          "N": "17619"
+        }
+      }
+    },
+    "community_score": {
+      "N": "8.998"
+    },
+    "contract_address": {
+      "S": "0x3920123482070c1a2dff73aad695c60e7c6f6862"
+    },
+    "country_origin": {
+      "S": "ES"
+    },
+    "description": {
+      "S": "Euler.Tools is a new way to understand the blockchain. We are translating the complex architecture into delightful and reusable data representations that should provide insight on the transactions. Starting with our Euler explorer, and moving towards a trading interface, we will introduce a smooth user experience focused on explaining the blockchain. Backed by a utility token that can be used both for payments or liquidity mining, we will create a deflationary mechanism by buying back tokens and burning them."
+    },
+    "developer_data": {
+      "M": {
+        "closed_issues": {
+          "N": "0"
+        },
+        "code_additions_deletions_4_weeks": {
+          "M": {
+            "additions": {
+              "NULL": true
+            },
+            "deletions": {
+              "NULL": true
+            }
+          }
+        },
+        "commit_count_4_weeks": {
+          "N": "0"
+        },
+        "forks": {
+          "N": "0"
+        },
+        "last_4_weeks_commit_activity_series": {
+          "L": []
+        },
+        "pull_requests_merged": {
+          "N": "0"
+        },
+        "pull_request_contributors": {
+          "N": "0"
+        },
+        "stars": {
+          "N": "0"
+        },
+        "subscribers": {
+          "N": "0"
+        },
+        "total_issues": {
+          "N": "0"
+        }
+      }
+    },
+    "developer_score": {
+      "N": "0"
+    },
+    "genesis_date": {
+      "NULL": true
+    },
+    "hashing_algorithm": {
+      "NULL": true
+    },
+    "id": {
+      "S": "euler-tools"
+    },
+    "image": {
+      "M": {
+        "large": {
+          "S": "https://assets.coingecko.com/coins/images/14677/large/euler_logo.png?1617705515"
+        },
+        "small": {
+          "S": "https://assets.coingecko.com/coins/images/14677/small/euler_logo.png?1617705515"
+        },
+        "thumb": {
+          "S": "https://assets.coingecko.com/coins/images/14677/thumb/euler_logo.png?1617705515"
+        }
+      }
+    },
+    "last_updated": {
+      "S": "2022-08-05T05:37:49.833Z"
+    },
+    "links": {
+      "M": {
+        "announcement_url": {
+          "L": [
+            {
+              "S": "https://medium.com/@euler.tools"
+            },
+            {
+              "NULL": true
+            }
+          ]
+        },
+        "bitcointalk_thread_identifier": {
+          "NULL": true
+        },
+        "blockchain_site": {
+          "L": [
+            {
+              "S": "https://bscscan.com/token/0x3920123482070c1a2dff73aad695c60e7c6f6862"
+            },
+            {
+              "NULL": true
+            },
+            {
+              "NULL": true
+            },
+            {
+              "NULL": true
+            },
+            {
+              "NULL": true
+            },
+            {
+              "NULL": true
+            },
+            {
+              "NULL": true
+            },
+            {
+              "NULL": true
+            },
+            {
+              "NULL": true
+            },
+            {
+              "NULL": true
+            }
+          ]
+        },
+        "chat_url": {
+          "L": [
+            {
+              "NULL": true
+            },
+            {
+              "NULL": true
+            },
+            {
+              "NULL": true
+            }
+          ]
+        },
+        "facebook_username": {
+          "NULL": true
+        },
+        "homepage": {
+          "L": [
+            {
+              "S": "https://euler.tools"
+            },
+            {
+              "NULL": true
+            },
+            {
+              "NULL": true
+            }
+          ]
+        },
+        "official_forum_url": {
+          "L": [
+            {
+              "NULL": true
+            },
+            {
+              "NULL": true
+            },
+            {
+              "NULL": true
+            }
+          ]
+        },
+        "repos_url": {
+          "M": {
+            "bitbucket": {
+              "L": []
+            },
+            "github": {
+              "L": [
+                {
+                  "S": "https://github.com/eulertools"
+                }
+              ]
+            }
+          }
+        },
+        "subreddit_url": {
+          "NULL": true
+        },
+        "telegram_channel_identifier": {
+          "S": "eulertools"
+        },
+        "twitter_screen_name": {
+          "S": "eulertools"
+        }
+      }
+    },
+    "liquidity_score": {
+      "N": "1"
+    },
+    "localization": {
+      "S": "Euler Tools"
+    },
+    "market_cap_rank": {
+      "N": "1578"
+    },
+    "name": {
+      "S": "Euler Tools"
+    },
+    "platforms": {
+      "M": {
+        "binance-smart-chain": {
+          "S": "0x3920123482070c1a2dff73aad695c60e7c6f6862"
+        }
+      }
+    },
+    "public_interest_score": {
+      "N": "0.001"
+    },
+    "public_interest_stats": {
+      "M": {
+        "alexa_rank": {
+          "NULL": true
+        },
+        "bing_matches": {
+          "NULL": true
+        }
+      }
+    },
+    "public_notice": {
+      "NULL": true
+    },
+    "sentiment_votes_down_percentage": {
+      "N": "50"
+    },
+    "sentiment_votes_up_percentage": {
+      "N": "50"
+    },
+    "source": {
+      "S": "coingecko"
+    },
+    "status_updates": {
+      "L": []
+    },
+    "symbol": {
+      "S": "euler"
+    }
+  }

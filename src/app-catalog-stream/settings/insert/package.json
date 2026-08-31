@@ -1,0 +1,17 @@
+{
+  "name": "coingecko-sqs-handler",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@sentry/serverless": "^6.16.1",
+    "aws-sdk": "^2.1058.0",
+    "axios": "^0.24.0",
+    "@types/aws-lambda": "^8.10.109"
+  }
+}

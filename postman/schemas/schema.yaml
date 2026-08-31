@@ -1,0 +1,3421 @@
+openapi: 3.0.0
+info:
+  version: '1.0.0'
+  title: 'App Euler Tools'
+servers:
+  - url: 'localhost:3000'
+tags:
+  - name: Tokens
+  - name: Marketplace
+  - name: Subscriptions
+  - name: Portfolios
+  - name: Wallets
+  - name: Addresses
+  - name: Transactions
+  - name: Trades
+paths:
+  /bsc/tokens:
+    post:
+      summary: 'All Tokens'
+      operationId: getAllTokens
+      description: 'Returns all tokens available in the network,currently, BNB and Ethereum are the availables networks.'
+      tags:
+        - Tokens
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: object
+                  example: {
+   "query": {
+      "bool": {
+         "must": [
+            {
+               "terms": {
+                  "category": [
+                     "token"
+                  ]
+               }
+            },
+            {
+               "exists": {
+                  "field": "coin"
+               }
+            }
+         ]
+      }
+   },
+   "size": 16,
+   "from": 0,
+   "sort": [
+      {
+         "update_date": {
+            "order": "desc"
+         }
+      },
+      {
+         "market_cap": {
+            "order": "desc"
+         }
+      }
+   ],
+   "_source": [
+      "name",
+      "symbol",
+      "address",
+      "price_usd",
+      "price_changes",
+      "market_cap",
+      "identifier"
+   ]
+}
+      responses:
+        '200':
+          description: 'Object containing all tokens available.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tokens'
+  /bsc/tokens/{token}:
+    get:
+      summary: 'Token'
+      operationId: getToken
+      description: 'Retrieves token details given a token address'
+      tags:
+        - Tokens
+      parameters:
+        - name: token
+          in: path
+          description: 'Token address to retrieve the most current data'
+          required: true
+          schema:
+            type: string
+            example: "0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c"
+        - name: fields\[\] 
+          in: query
+          description: 'Currency'
+          required: true
+          schema:
+             type: string
+             example: "price_usd"
+      responses:
+        '200':
+          description: 'Object containing most current data of a given token address'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/token'      
+  /bsc/transactions:
+    get:
+      summary: 'Transactions'
+      operationId: getTransactions
+      description: 'Retrieves all transactions given a token address'
+      tags:
+        - Transactions
+      parameters:
+        - name: $or[from_address]
+          in: query
+          description: 'Sender address'
+          required: true
+          schema:
+            type: string
+            example: "0x3920123482070c1a2dff73aad695c60e7c6f6862"
+        - name: $or[to_address]
+          in: query
+          description: 'Receiver address'
+          required: true
+          schema:
+            type: string
+            example: "0x06012c8cf97bead5deae237070f9587f8e7a266d"
+        - name: $sort[block_timestamp]
+          in: query
+          description: 'Block Timestamp'
+          required: true
+          schema:
+            type: string
+            example: "-1%20%20%20%20%20%20"
+        - name: $limit
+          in: query
+          description: 'The limit to retrieve data'
+          required: true
+          schema:
+            type: integer
+            format: int32
+            example: 16
+        - name: $skip
+          in: query
+          description: 'The number of skipped results'
+          required: true
+          schema:
+            type: integer
+            format: int32
+            example: 0
+      responses:
+        '200':
+          description: 'Object containing all transactions of a given token address.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/transactions'
+  /bsc/addresses/{address}:
+    get:
+      summary: 'Addresses'
+      operationId: getAddress
+      description: 'Returns all tokens related to a specific address'
+      tags:
+        - Address
+      parameters:
+        - name: address
+          in: path
+          description: 'The address to retrieve data'
+          required: true
+          schema:
+            type: string
+            example: "0x3920123482070C1a2dff73AaD695c60e7c6F6862"
+      responses:
+        '200':
+          description: 'Object containing tokens related to a specific address.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/addresses'
+  /bsc/marketplace/{identifier}:
+    get:
+      summary: 'Single Sale'
+      description: Returns details of a single sale given an identifier.
+      operationId: getSingleSale
+      tags:
+        - Marketplace
+      parameters:
+        - name: identifier
+          in: path
+          description: "Sale ID"
+          required: true
+          schema:
+            type: string
+            example: "121"
+      responses:
+        '200':
+          description: 'Object containing details of a single sale given an identifier'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/singular_sale'
+  /bsc/subscription_settings:
+    get:
+      summary: 'Subscriptions'
+      description: Returns all subscription tiers
+      operationId: getSubscriptions
+      tags:
+        - Subscriptions
+      responses:
+        '200':
+          description: 'Array containing subscription settings'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscriptions'
+  /bsc/accounts/me:
+    get:
+      summary: 'Profiles'
+      description: Returns account details.
+      operationId: getProfiles
+      tags:
+        - Subscriptions
+      responses:
+        '200':
+          description: 'Object containing account information'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profiles'
+  /bsc/portfolios:
+    post:
+      summary: 'Creates a portfolio'
+      description: Creates a new portfolio with the given name.
+      operationId: createPortfolio
+      tags:
+        - Portfolios
+      parameters:
+        - name: origin
+          in: header
+          description: "Server"
+          required: true
+          schema:
+            type: string
+            example: https://euler.tools
+        - name: sec-fetch-site
+          in: header
+          description: "Site"
+          required: true
+          schema:
+            type: string
+            example: same-site
+        - name: sec-fetch-mode
+          in: header
+          description: "Mode"
+          required: true
+          schema:
+            type: string
+            example: cors
+        - name: referer
+          in: header
+          description: "Referer"
+          required: true
+          schema:
+            type: string
+            example: https://euler.tools/
+        - name: accept-language
+          in: header
+          description: "Language"
+          required: true
+          schema:
+            type: string
+            example: es-ES,es;q=0.9
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: object
+                  example: {"name": "portfolio1"}
+      responses:
+        '201':
+          description: 'Object containing information of a new portfolio'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Portfolios'
+    get:
+      summary: 'Get portfolios'
+      description: Retrieves portfolios of an account user.
+      operationId: getPortfolios
+      tags:
+        - Portfolios
+      parameters:
+        - name: origin
+          in: header
+          description: "Server"
+          required: true
+          schema:
+            type: string
+            example: https://euler.tools
+        - name: sec-fetch-site
+          in: header
+          description: "Site"
+          required: true
+          schema:
+            type: string
+            example: same-site
+        - name: sec-fetch-mode
+          in: header
+          description: "Mode"
+          required: true
+          schema:
+            type: string
+            example: cors
+        - name: referer
+          in: header
+          description: "Referer"
+          required: true
+          schema:
+            type: string
+            example: https://euler.tools/
+        - name: accept-language
+          in: header
+          description: "Language"
+          required: true
+          schema:
+            type: string
+            example: es-ES,es;q=0.9
+        - name: authorization
+          in: header
+          description: "Bearer token"
+          required: true
+          schema:
+            type: string
+            example: eyJraWQiOiI5TU9ScXNlMDhhY1N0S25KVXFTV1RZc0hIMUhnWlJ2ZFRkM3k5eFlEZ1wvMD0iLC
+      responses:
+        '200':
+          description: 'Object containing portfolios of a account user'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Get_portfolios'
+  /bsc/wallets:
+    post:
+      summary: 'Creates a wallet'
+      description: Creates a new wallet with given name and address.
+      operationId: createWallet
+      tags:
+        - Wallets
+      parameters:
+        - name: authority
+          in: header
+          description: "Domain"
+          required: true
+          schema:
+            type: string
+            example: bsc.catalog.prod.euler.tools
+        - name: accept
+          in: header
+          description: "Accepted formats"
+          required: true
+          schema:
+            type: string
+            example: "application/json, text/plain, */*"
+        - name: content-type
+          in: header
+          description: "Type"
+          required: true
+          schema:
+            type: string
+            example: application/json
+        - name: origin
+          in: header
+          description: "Server"
+          required: true
+          schema:
+            type: string
+            example: https://euler.tools
+        - name: sec-fetch-site
+          in: header
+          description: "Site"
+          required: true
+          schema:
+            type: string
+            example: same-site
+        - name: sec-fetch-dest
+          in: header
+          description: "sec-fetch-site"
+          required: true
+          schema:
+            type: string
+            example: empty
+        - name: referer
+          in: header
+          description: "Referer"
+          required: true
+          schema:
+            type: string
+            example: https://euler.tools/
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: object
+                  example: {
+   "address": "0xE7c5F631457e38cAa5d006e10936CDBDF41d3273",
+   "name": "Wallet1"
+}
+      responses:
+        '200':
+          description: 'Object containing details of a new wallet'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/wallets'
+    get:
+      summary: 'Get wallets'
+      description: Returns wallets information.
+      operationId: getWallet
+      tags:
+        - Wallets
+      responses:
+        '200':
+          description: 'Array containing wallets details'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Wallet'
+  /bsc/wallets/{id}:
+    delete:
+      summary: 'Deletes a wallet'
+      description: Deletes a wallet by the given identifier.
+      operationId: deleteWallet
+      tags:
+        - Wallets
+      parameters:
+        - name: id
+          in: path
+          description: "identifier"
+          required: true
+          schema:
+            type: string
+            example: ba4b79ea-541e-4612-93ce-fd0994f171e1
+        - name: authority
+          in: header
+          description: "Domain"
+          required: true
+          schema:
+            type: string
+            example: bsc.catalog.prod.euler.tools
+        - name: accept
+          in: header
+          description: "Accepted formats"
+          required: true
+          schema:
+            type: string
+            example: "application/json, text/plain, */*"
+        - name: content-type
+          in: header
+          description: "Type"
+          required: true
+          schema:
+            type: string
+            example: application/json
+        - name: origin
+          in: header
+          description: "Server"
+          required: true
+          schema:
+            type: string
+            example: https://euler.tools
+        - name: sec-fetch-site
+          in: header
+          description: "Site"
+          required: true
+          schema:
+            type: string
+            example: same-site
+        - name: sec-fetch-dest
+          in: header
+          description: "sec-fetch-site"
+          required: true
+          schema:
+            type: string
+            example: empty
+        - name: referer
+          in: header
+          description: "Referer"
+          required: true
+          schema:
+            type: string
+            example: https://euler.tools/
+      responses:
+        '200':
+          description: 'Object with metadata information'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/wallet_delete'
+    put:
+      summary: 'Updates a wallet'
+      description: Updates an existing wallet by the given wallet identifier.
+      operationId: updatesWallet
+      tags:
+        - Wallets
+      parameters:
+        - name: id
+          in: path
+          description: "Wallet identifier"
+          required: true
+          schema:
+            type: string
+            example: "43e82635-de5e-4441-858d-4be09b9e66a1"
+        - name: authority
+          in: header
+          description: "Domain"
+          required: true
+          schema:
+            type: string
+            example: "bsc.catalog.prod.euler.tools"
+        - name: content-type
+          in: header
+          description: "Type"
+          required: true
+          schema:
+            type: string
+            example: "application/json"
+        - name: origin
+          in: header
+          description: "Server"
+          required: true
+          schema:
+            type: string
+            example: "https://euler.tools"
+        - name: sec-fetch-site
+          in: header
+          description: "Site"
+          required: true
+          schema:
+            type: string
+            example: "same-site"
+        - name: sec-fetch-dest
+          in: header
+          description: "fetch"
+          required: true
+          schema:
+            type: string
+            example: "empty"
+        - name: referer
+          in: header
+          description: "Referer"
+          required: true
+          schema:
+            type: string
+            example: "https://euler.tools/"
+        - name: accept-language
+          in: header
+          description: ""
+          required: true
+          schema:
+            type: string
+            example: "es-ES,es;q=0.9"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: object
+                  example: {
+   "address": "0xE7c5F631457e38cAa5d006e10936CDBDF41d3273",
+   "name": "New_wallet"
+}
+      responses:
+        '200':
+          description: 'Object with updated wallet details'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/wallet_update'
+  /bsc/trades:
+    get:
+      summary: 'Trades'
+      operationId: getTrades
+      description: 'Returns all trades of a specific token'
+      tags:
+        - App
+      parameters:
+        - name: address
+          in: query
+          description: "The address to retrieve trade information"
+          required: true
+          schema:
+            type: string
+            example: "0x31045e7023e6c388f9447e632a3f9eaff90393fa"
+        - name: $sort[block_timestamp]
+          in: query
+          description: "Sort"
+          required: true
+          schema:
+            type: integer
+            format: int32
+            example: -1
+        - name: $limit
+          in: query
+          description: "The limit to retrieve data"
+          required: true
+          schema:
+            type: integer
+            format: int32
+            example: 10
+        - name: $skip
+          in: query
+          description: "The number of skipped results"
+          required: true
+          schema:
+            type: integer
+            format: int32
+            example: 0
+        - name: block_timestamp[$gte]
+          in: query
+          description: "Block timestamp"
+          required: true
+          schema:
+            type: string
+            example: "2021-10-01T03:00:00.000Z"
+        - name: block_timestamp[$lte]
+          in: query
+          description: "Block timestamp"
+          required: true
+          schema:
+            type: string
+            example: "2021-12-31T03:00:00.000Z"
+        - name: volume[$gte]
+          in: query
+          description: "Volume"
+          required: true
+          schema:
+            type: integer
+            format: int32
+            example: 0
+      responses:
+        '200':
+          description: 'Array containig all trades information'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/App_trades'
+  /bsc/portfolios/{id}:
+    put:
+      summary: 'Updates a portfolio'
+      description: Updates a portfolio by the given portfolio identifier.
+      operationId: updatePortfolio
+      tags:
+        - Portfolios
+      parameters:
+        - name: id
+          in: path
+          description: "Portfolio identifier"
+          required: true
+          schema:
+            type: string
+            example: "43e82635-de5e-4441-858d-4be09b9e66a1"
+        - name: authority
+          in: header
+          description: "Domain"
+          required: true
+          schema:
+            type: string
+            example: "bsc.catalog.prod.euler.tools"
+        - name: accept
+          in: header
+          description: "Accepted formats"
+          required: true
+          schema:
+            type: string
+            example: "application/json, text/plain, */*"
+        - name: content-type
+          in: header
+          description: "Type"
+          required: true
+          schema:
+            type: string
+            example: "application/json"
+        - name: origin
+          in: header
+          description: "Server"
+          required: true
+          schema:
+            type: string
+            example: "https://euler.tools"
+        - name: sec-fetch-site
+          in: header
+          description: "Site"
+          required: true
+          schema:
+            type: string
+            example: "same-site"
+        - name: sec-fetch-dest
+          in: header
+          description: "fetch"
+          required: true
+          schema:
+            type: string
+            example: "empty"
+        - name: referer
+          in: header
+          description: "Referer"
+          required: true
+          schema:
+            type: string
+            example: "https://euler.tools/"
+        - name: accept-language
+          in: header
+          description: ""
+          required: true
+          schema:
+            type: string
+            example: "es-ES,es;q=0.9"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: object
+                  example: {"name": "new_portfolio"}
+      responses:
+        '200':
+          description: 'Object with updates details of a specific portfolio.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/portfolios_update'
+    delete:
+      summary: 'Deletes a portfolio'
+      description: Deletes a portfolio with the given portfolio identifier.
+      operationId: deletePortfolio
+      tags:
+        - Portfolios
+      parameters:
+        - name: id
+          in: path
+          description: "Portfolio id"
+          required: true
+          schema:
+            type: string
+            example: "43e82635-de5e-4441-858d-4be09b9e66a1"
+        - name: authority
+          in: header
+          description: "Domain"
+          required: true
+          schema:
+            type: string
+            example: cognito-idp.us-east-1.amazonaws.com
+        - name: accept
+          in: header
+          description: "Accepted formats"
+          required: true
+          schema:
+            type: string
+            example:  "*/*"
+        - name: origin
+          in: header
+          description: "Server"
+          required: true
+          schema:
+            type: string
+            example: "https://euler.tools"
+        - name: sec-fetch-site
+          in: header
+          description: "Site"
+          required: true
+          schema:
+            type: string
+            example: "same-site"
+        - name: sec-fetch-dest
+          in: header
+          description: "fetch"
+          required: true
+          schema:
+            type: string
+            example: "empty"
+        - name: referer
+          in: header
+          description: "Referer"
+          required: true
+          schema:
+            type: string
+            example: "https://euler.tools/"
+        - name: accept-language
+          in: header
+          description: ""
+          required: true
+          schema:
+            type: string
+            example: "es-ES,es;q=0.9"
+      responses:
+        '200':
+          description: 'Object with metadata information'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/portfolios_delete'
+  /bsc/marketplace:
+    post:
+      summary: 'Search Sales'
+      description: Returns all sales in the network.
+      operationId: getSales
+      tags:
+        - Marketplace
+      parameters:
+        - name: User-Agent
+          in: header
+          description: "User-Agent"
+          required: true
+          schema:
+            type: string
+            example: Mozilla/5.0 (X11; Linux x86_64; rv:97.0) Gecko/20100101 Firefox/97.0 
+        - name: Accept
+          in: header
+          description: "Accepted formats"
+          required: true
+          schema:
+            type: string
+            example: "application/json, text/plain, */*"
+        - name: Accept-Language
+          in: header
+          description: "Language"
+          required: true
+          schema:
+            type: string
+            example: es-ES,es;q=0.9
+        - name: Accept-Encoding
+          in: header
+          description: "Encoding"
+          required: true
+          schema:
+            type: string
+            example: gzip, deflate, br
+        - name: Authorization
+          in: header
+          description: "Auth"
+          required: true
+          schema:
+            type: string
+            example: 234FFnnweo$as
+        - name: Origin
+          in: header
+          description: "Server"
+          required: true
+          schema:
+            type: string
+            example: https://development.euler.tools
+        - name: Connection
+          in: header
+          description: "Connection"
+          required: true
+          schema:
+            type: string
+            example: keep-alive
+        - name: Referer
+          in: header
+          description: "Referer"
+          required: true
+          schema:
+            type: string
+            example: https://development.euler.tools/
+        - name: Sec-Fetch-Dest
+          in: header
+          description: "Dest"
+          required: true
+          schema:
+            type: string
+            example: empty
+        - name: Sec-Fetch-Mode
+          in: header
+          description: "Mode"
+          required: true
+          schema:
+            type: string
+            example: cors
+        - name: Sec-Fetch-Site
+          in: header
+          description: "Site"
+          required: true
+          schema:
+            type: string
+            example: same-site
+        - name: If-None-Match
+          in: header
+          description: "If-None-Match"
+          required: true
+          schema:
+            type: string
+            example: W/"3834-NvE892Xn4t86xhz9UBxKYB0i3qY"
+        - name: TE
+          in: header
+          description: "trailers"
+          required: true
+          schema:
+            type: string
+            example: trailers
+        - name: content-type
+          in: header
+          description: "Type"
+          required: true
+          schema:
+            type: string
+            example: application/json
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: object
+                  example: {
+   "size": 16,
+   "from": 0,
+   "sort": [
+      {
+         "create_date": {
+            "order": "desc"
+         }
+      }
+   ],
+   "query": {
+      "bool": {
+         "must": [
+            {
+               "terms": {
+                  "kind": [
+                     0,
+                     2
+                  ]
+               }
+            },
+            {
+               "terms": {
+                  "blockchain": [
+                     "bsc"
+                  ]
+               }
+            },
+            {
+               "range": {
+                  "close_date": {
+                     "lte": 1
+                  }
+               }
+            }
+         ]
+      }
+   }
+}
+      responses:
+        '200':
+          description: 'Object containing all sales in the network'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/sales'
+  /bsc/pools/{poolAddress}:
+    get:
+      summary: 'Pools'
+      operationId: getPool
+      description: 'Ethereum Node'
+      tags:
+        - Subscriptions
+      parameters:
+        - name: poolAddress
+          in: path
+          description: "Pool address"
+          required: true
+          schema:
+            type: string
+            example: "0xda98731d7Ca75bbf22FD1251d8B1dC6053018129"
+        - name: authority
+          in: header
+          description: "Domain"
+          required: true
+          schema:
+            type: string
+            example: bsc.catalog.prod.euler.tools
+        - name: accept-language
+          in: header
+          description: "Language"
+          required: true
+          schema:
+            type: string
+            example: es-ES,es;q=0.9
+        - name: if-none-match
+          in: header
+          description: "If-None-Match"
+          required: true
+          schema:
+            type: string
+            example: W/"136-558bl8ctwzKZVjtsrNVsL03Il68"
+        - name: origin
+          in: header
+          description: "Server"
+          required: true
+          schema:
+            type: string
+            example: https://euler.tools
+        - name: referer
+          in: header
+          description: "Referer"
+          required: true
+          schema:
+            type: string
+            example: https://euler.tools/
+        - name: sec-ch-ua-mobile
+          in: header
+          description: "Mode"
+          required: true
+          schema:
+            type: string
+            example: ?0
+        - name: sec-ch-ua-platform
+          in: header
+          description: "Mode"
+          required: true
+          schema:
+            type: string
+            example: "Windows"
+        - name: sec-fetch-dest
+          in: header
+          description: "sec-fetch-site"
+          required: true
+          schema:
+            type: string
+            example: empty
+        - name: sec-fetch-mode
+          in: header
+          description: "Mode"
+          required: true
+          schema:
+            type: string
+            example: cors
+        - name: sec-fetch-site
+          in: header
+          description: "Site"
+          required: true
+          schema:
+            type: string
+            example: same-site
+        - name: user-agent
+          in: header
+          description: "User-Agent"
+          required: true
+          schema:
+            type: string
+            example: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36
+      responses:
+        '200':
+          description: 'Object containing pool addresses'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/pools'
+  /cognito:
+    post:
+      summary: 'Cognito'
+      operationId: getAwsCognito
+      description: 'Aws Cognito'
+      tags:
+        - Subscriptions
+      parameters:
+        - name: authority
+          in: header
+          description: "Domain"
+          required: true
+          schema:
+            type: string
+            example: cognito-idp.us-east-1.amazonaws.com
+        - name: accept-language
+          in: header
+          description: "Language"
+          required: true
+          schema:
+            type: string
+            example: es-ES,es;q=0.9
+        - name: cache-control
+          in: header
+          description: "Cache"
+          required: true
+          schema:
+            type: string
+            example: max-age=0
+        - name: origin
+          in: header
+          description: "Server"
+          required: true
+          schema:
+            type: string
+            example: https://euler.tools
+        - name: referer
+          in: header
+          description: "Referer"
+          required: true
+          schema:
+            type: string
+            example: https://euler.tools/
+        - name: sec-ch-ua-mobile
+          in: header
+          description: "Mode"
+          required: true
+          schema:
+            type: string
+            example: ?0
+        - name: sec-ch-ua-platform
+          in: header
+          description: "Mode"
+          required: true
+          schema:
+            type: string
+            example: "Windows"
+        - name: sec-fetch-dest
+          in: header
+          description: "sec-fetch-site"
+          required: true
+          schema:
+            type: string
+            example: empty
+        - name: sec-fetch-mode
+          in: header
+          description: "Mode"
+          required: true
+          schema:
+            type: string
+            example: cors
+        - name: sec-fetch-site
+          in: header
+          description: "Site"
+          required: true
+          schema:
+            type: string
+            example: cross-site
+        - name: x-amz-target
+          in: header
+          description: "Site"
+          required: true
+          schema:
+            type: string
+            example: AWSCognitoIdentityProviderService.InitiateAuth
+        - name: x-amz-user-agent
+          in: header
+          description: "Site"
+          required: true
+          schema:
+            type: string
+            example: aws-amplify/5.0.4 js
+        - name: user-agent
+          in: header
+          description: "User-Agent"
+          required: true
+          schema:
+            type: string
+            example: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36
+      responses:
+        '200':
+          description: 'Object containing access tokens'
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/cognito'
+  /bsc/settings:
+    get:
+      summary: 'Settings'
+      operationId: getSettings
+      description: 'Token Settings'
+      tags:
+        - Subscriptions
+      parameters:
+        - name: authority
+          in: header
+          description: "Domain"
+          required: true
+          schema:
+            type: string
+            example: bsc.catalog.prod.euler.tools
+        - name: accept-language
+          in: header
+          description: "Language"
+          required: true
+          schema:
+            type: string
+            example: es-ES,es;q=0.9
+        - name: if-none-match
+          in: header
+          description: "If-None-Match"
+          required: true
+          schema:
+            type: string
+            example: W/"100c-9pcVjwvt8pd6/2kWfS5X96CyEzM"
+        - name: origin
+          in: header
+          description: "Server"
+          required: true
+          schema:
+            type: string
+            example: https://euler.tools
+        - name: referer
+          in: header
+          description: "Referer"
+          required: true
+          schema:
+            type: string
+            example: https://euler.tools/
+        - name: sec-ch-ua-mobile
+          in: header
+          description: "Mode"
+          required: true
+          schema:
+            type: string
+            example: ?0
+        - name: sec-ch-ua-platform
+          in: header
+          description: "Mode"
+          required: true
+          schema:
+            type: string
+            example: "Windows"
+        - name: sec-fetch-dest
+          in: header
+          description: "sec-fetch-site"
+          required: true
+          schema:
+            type: string
+            example: empty
+        - name: sec-fetch-mode
+          in: header
+          description: "Mode"
+          required: true
+          schema:
+            type: string
+            example: cors
+        - name: sec-fetch-site
+          in: header
+          description: "Site"
+          required: true
+          schema:
+            type: string
+            example: same-site
+        - name: user-agent
+          in: header
+          description: "User-Agent"
+          required: true
+          schema:
+            type: string
+            example: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36
+      responses:
+        '200':
+          description: 'Object containing token settings'
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/settings'
+components:
+  schemas:
+    tokens:
+      type: object
+      properties:
+        "total":
+           type: object
+           example: {
+           "value": 544,
+           "relation": "eq"
+        }
+        "max_score": 
+           type: string
+           format: nullable
+           example: null
+        "hits":
+          type: array
+          items: 
+            type: object
+            example: [
+        {
+            "_index": "catalog_20210721",
+            "_type": "_doc",
+            "_id": "bsc~token~0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
+            "_score": null,
+            "_source": {
+                "price_usd": 375.369914827909,
+                "price_changes": {
+                    "day_priceusd": 0,
+                    "week_priceusd": 0,
+                    "hour_priceusd": 0,
+                    "month_priceusd": 0
+                },
+                "identifier": "bsc~token~0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
+                "symbol": "WBNB",
+                "address": "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
+                "market_cap": 3738152342.147282,
+                "name": "Wrapped BNB"
+            },
+            "sort": [
+                1646656850000,
+                3738152342
+            ]
+        },
+        {
+            "_index": "catalog_20210721",
+            "_type": "_doc",
+            "_id": "bsc~token~0x843D4a358471547f51534e3e51fae91cb4Dc3F28",
+            "_score": null,
+            "_source": {
+                "price_usd": 0.000045074851923121,
+                "price_changes": {
+                    "day_priceusd": 6422676429.804539,
+                    "week_priceusd": 6428180367.255179,
+                    "hour_priceusd": 6422676429.804539,
+                    "month_priceusd": 0
+                },
+                "identifier": "bsc~token~0x843D4a358471547f51534e3e51fae91cb4Dc3F28",
+                "symbol": "lowb",
+                "address": "0x843D4a358471547f51534e3e51fae91cb4Dc3F28",
+                "market_cap": 3125393.6875748727,
+                "name": "loser coin"
+            },
+            "sort": [
+                1646656847000,
+                3125393
+            ]
+        },
+        {
+            "_index": "catalog_20210721",
+            "_type": "_doc",
+            "_id": "bsc~token~0x4BD17003473389A42DAF6a0a729f6Fdb328BbBd7",
+            "_score": null,
+            "_source": {
+                "price_usd": 0.9062615406126265,
+                "price_changes": {
+                    "day_priceusd": 341777.3555536457,
+                    "week_priceusd": 362636.9842195405,
+                    "hour_priceusd": 719336725026.8403,
+                    "month_priceusd": 0
+                },
+                "identifier": "bsc~token~0x4BD17003473389A42DAF6a0a729f6Fdb328BbBd7",
+                "symbol": "VAI",
+                "address": "0x4BD17003473389A42DAF6a0a729f6Fdb328BbBd7",
+                "market_cap": 186862725.67453542,
+                "name": "VAI Stablecoin"
+            },
+            "sort": [
+                1646656841000,
+                186862725
+            ]
+        },
+        {
+            "_index": "catalog_20210721",
+            "_type": "_doc",
+            "_id": "bsc~token~0xd32d01A43c869EdcD1117C640fBDcfCFD97d9d65",
+            "_score": null,
+            "_source": {
+                "price_usd": 1.4056718519664113,
+                "price_changes": {
+                    "day_priceusd": 286635.9618700099,
+                    "week_priceusd": 0,
+                    "hour_priceusd": 286635.9618700099,
+                    "month_priceusd": 0
+                },
+                "identifier": "bsc~token~0xd32d01A43c869EdcD1117C640fBDcfCFD97d9d65",
+                "symbol": "NMX",
+                "address": "0xd32d01A43c869EdcD1117C640fBDcfCFD97d9d65",
+                "market_cap": 32869335.380848803,
+                "name": "Nominex"
+            },
+            "sort": [
+                1646656835000,
+                32869335
+            ]
+        },
+        {
+            "_index": "catalog_20210721",
+            "_type": "_doc",
+            "_id": "bsc~token~0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82",
+            "_score": null,
+            "_source": {
+                "price_usd": 6.097153460217973,
+                "price_changes": {
+                    "day_priceusd": 28550.003003947266,
+                    "week_priceusd": 28426.907919303652,
+                    "hour_priceusd": 57248.766309145445,
+                    "month_priceusd": 0
+                },
+                "identifier": "bsc~token~0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82",
+                "symbol": "Cake",
+                "address": "0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82",
+                "market_cap": 5539410351.396955,
+                "name": "PancakeSwap Token"
+            },
+            "sort": [
+                1646656832000,
+                5539410351
+            ]
+        },
+        {
+            "_index": "catalog_20210721",
+            "_type": "_doc",
+            "_id": "bsc~token~0x762539b45A1dCcE3D36d080F74d1AED37844b878",
+            "_score": null,
+            "_source": {
+                "price_usd": 0.017700269575519057,
+                "price_changes": {
+                    "day_priceusd": 5944295027.15391,
+                    "week_priceusd": 7316430.311742028,
+                    "hour_priceusd": 8195576.7026345,
+                    "month_priceusd": 0
+                },
+                "identifier": "bsc~token~0x762539b45A1dCcE3D36d080F74d1AED37844b878",
+                "symbol": "LINA",
+                "address": "0x762539b45A1dCcE3D36d080F74d1AED37844b878",
+                "market_cap": 361516707.3955287,
+                "name": "Linear Token"
+            },
+            "sort": [
+                1646656814000,
+                361516707
+            ]
+        },
+        {
+            "_index": "catalog_20210721",
+            "_type": "_doc",
+            "_id": "bsc~token~0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c",
+            "_score": null,
+            "_source": {
+                "price_usd": 38545.222743909726,
+                "price_changes": {
+                    "day_priceusd": 6.5671297651871745,
+                    "week_priceusd": 6.888346250409315,
+                    "hour_priceusd": 6.5671297651871745,
+                    "month_priceusd": 0
+                },
+                "identifier": "bsc~token~0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c",
+                "symbol": "BTCB",
+                "address": "0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c",
+                "market_cap": 4411657721.332781,
+                "name": "BTCB Token"
+            },
+            "sort": [
+                1646656811000,
+                4411657721
+            ]
+        },
+        {
+            "_index": "catalog_20210721",
+            "_type": "_doc",
+            "_id": "bsc~token~0xcF6BB5389c92Bdda8a3747Ddb454cB7a64626C63",
+            "_score": null,
+            "_source": {
+                "price_usd": 8.668263915121397,
+                "price_changes": {
+                    "day_priceusd": 18819.891527791086,
+                    "week_priceusd": 20580.198796291013,
+                    "hour_priceusd": 2226901.39971336,
+                    "month_priceusd": 0
+                },
+                "identifier": "bsc~token~0xcF6BB5389c92Bdda8a3747Ddb454cB7a64626C63",
+                "symbol": "XVS",
+                "address": "0xcF6BB5389c92Bdda8a3747Ddb454cB7a64626C63",
+                "market_cap": 499909156.1012144,
+                "name": "Venus"
+            },
+            "sort": [
+                1646656757000,
+                499909156
+            ]
+        },
+        {
+            "_index": "catalog_20210721",
+            "_type": "_doc",
+            "_id": "bsc~token~0x8b303d5BbfBbf46F1a4d9741E491e06986894e18",
+            "_score": null,
+            "_source": {
+                "price_usd": 0.11196208422487211,
+                "price_changes": {
+                    "day_priceusd": 1493927.590991633,
+                    "week_priceusd": 1582612.7044410168,
+                    "hour_priceusd": 1493927.590991633,
+                    "month_priceusd": 0
+                },
+                "identifier": "bsc~token~0x8b303d5BbfBbf46F1a4d9741E491e06986894e18",
+                "symbol": "WOOP",
+                "address": "0x8b303d5BbfBbf46F1a4d9741E491e06986894e18",
+                "market_cap": 238472883.3841733,
+                "name": "Woonkly Power"
+            },
+            "sort": [
+                1646656745000,
+                238472883
+            ]
+        },
+        {
+            "_index": "catalog_20210721",
+            "_type": "_doc",
+            "_id": "bsc~token~0x07663837218A003e66310a01596af4bf4e44623D",
+            "_score": null,
+            "_source": {
+                "price_usd": 0.9679946171467149,
+                "price_changes": {
+                    "day_priceusd": 300202.4462712145,
+                    "week_priceusd": 336042.3348807344,
+                    "hour_priceusd": 300202.4462712145,
+                    "month_priceusd": 0
+                },
+                "identifier": "bsc~token~0x07663837218A003e66310a01596af4bf4e44623D",
+                "symbol": "rUSD",
+                "address": "0x07663837218A003e66310a01596af4bf4e44623D",
+                "market_cap": 5155732.57904765,
+                "name": "rUSD"
+            },
+            "sort": [
+                1646656739000,
+                5155732
+            ]
+        },
+        {
+            "_index": "catalog_20210721",
+            "_type": "_doc",
+            "_id": "bsc~token~0x8263CD1601FE73C066bf49cc09841f35348e3be0",
+            "_score": null,
+            "_source": {
+                "price_usd": 0.0625923000836591,
+                "price_changes": {
+                    "day_priceusd": 1975488.928008739,
+                    "week_priceusd": 2261028.0192403095,
+                    "hour_priceusd": 1975488.928008739,
+                    "month_priceusd": 0
+                },
+                "identifier": "bsc~token~0x8263CD1601FE73C066bf49cc09841f35348e3be0",
+                "symbol": "ALU",
+                "address": "0x8263CD1601FE73C066bf49cc09841f35348e3be0",
+                "market_cap": 190588143.16472295,
+                "name": "Altura"
+            },
+            "sort": [
+                1646656730000,
+                190588143
+            ]
+        },
+        {
+            "_index": "catalog_20210721",
+            "_type": "_doc",
+            "_id": "bsc~token~0x1D2F0da169ceB9fC7B3144628dB156f3F6c60dBE",
+            "_score": null,
+            "_source": {
+                "price_usd": 0.7457753414454305,
+                "price_changes": {
+                    "day_priceusd": 388265.56194602733,
+                    "week_priceusd": 413732.77842778567,
+                    "hour_priceusd": 388265.56194602733,
+                    "month_priceusd": 0
+                },
+                "identifier": "bsc~token~0x1D2F0da169ceB9fC7B3144628dB156f3F6c60dBE",
+                "symbol": "XRP",
+                "address": "0x1D2F0da169ceB9fC7B3144628dB156f3F6c60dBE",
+                "market_cap": 165349174.51206073,
+                "name": "XRP Token"
+            },
+            "sort": [
+                1646656724000,
+                165349174
+            ]
+        },
+        {
+            "_index": "catalog_20210721",
+            "_type": "_doc",
+            "_id": "bsc~token~0x6a6Ccf15B38DA4b5B0eF4C8fe9FefCB472A893F9",
+            "_score": null,
+            "_source": {
+                "price_usd": 0.028302578413210842,
+                "price_changes": {
+                    "day_priceusd": 1791360130.5009696,
+                    "week_priceusd": 434252.5754215748,
+                    "hour_priceusd": 2337754.0318121426,
+                    "month_priceusd": 0
+                },
+                "identifier": "bsc~token~0x6a6Ccf15B38DA4b5B0eF4C8fe9FefCB472A893F9",
+                "symbol": "MNST",
+                "address": "0x6a6Ccf15B38DA4b5B0eF4C8fe9FefCB472A893F9",
+                "market_cap": 24735802.195460457,
+                "name": "MoonStarter.net"
+            },
+            "sort": [
+                1646656712000,
+                24735802
+            ]
+        },
+        {
+            "_index": "catalog_20210721",
+            "_type": "_doc",
+            "_id": "bsc~token~0x603c7f932ED1fc6575303D8Fb018fDCBb0f39a95",
+            "_score": null,
+            "_source": {
+                "price_usd": 0.3184991068507596,
+                "price_changes": {
+                    "day_priceusd": 280377.7913010387,
+                    "week_priceusd": 268215.04874161625,
+                    "hour_priceusd": 1.836896776847402e+23,
+                    "month_priceusd": 0
+                },
+                "identifier": "bsc~token~0x603c7f932ED1fc6575303D8Fb018fDCBb0f39a95",
+                "symbol": "BANANA",
+                "address": "0x603c7f932ED1fc6575303D8Fb018fDCBb0f39a95",
+                "market_cap": 71191492.86335154,
+                "name": "ApeSwapFinance Banana"
+            },
+            "sort": [
+                1646656703000,
+                71191492
+            ]
+        },
+        {
+            "_index": "catalog_20210721",
+            "_type": "_doc",
+            "_id": "bsc~token~0x3EE2200Efb3400fAbB9AacF31297cBdD1d435D47",
+            "_score": null,
+            "_source": {
+                "price_usd": 0.8255735666298606,
+                "price_changes": {
+                    "day_priceusd": 257529.4178484101,
+                    "week_priceusd": 244375.96201464027,
+                    "hour_priceusd": 70999602.91419426,
+                    "month_priceusd": 0
+                },
+                "identifier": "bsc~token~0x3EE2200Efb3400fAbB9AacF31297cBdD1d435D47",
+                "symbol": "ADA",
+                "address": "0x3EE2200Efb3400fAbB9AacF31297cBdD1d435D47",
+                "market_cap": 373502034.83095956,
+                "name": "Cardano Token"
+            },
+            "sort": [
+                1646656700000,
+                373502034
+            ]
+        },
+        {
+            "_index": "catalog_20210721",
+            "_type": "_doc",
+            "_id": "bsc~token~0x3920123482070C1a2dff73AaD695c60e7c6F6862",
+            "_score": null,
+            "_source": {
+                "price_usd": 0.0520164681268798,
+                "price_changes": {
+                    "day_priceusd": 3913432.8687983695,
+                    "week_priceusd": 3494010.936860167,
+                    "hour_priceusd": 3913432.8687983695,
+                    "month_priceusd": 0
+                },
+                "identifier": "bsc~token~0x3920123482070C1a2dff73AaD695c60e7c6F6862",
+                "symbol": "EULER",
+                "address": "0x3920123482070C1a2dff73AaD695c60e7c6F6862",
+                "market_cap": 8658388.24917174,
+                "name": "Euler.Tools"
+            },
+            "sort": [
+                1646656700000,
+                8658388
+            ]
+        }
+    ]
+    token:
+      type: object
+      properties:
+        "_index": 
+          type: string
+          example: "catalog_20210721"
+        "_type":
+          type: string
+          example: "_doc"
+        "_id":
+          type: string
+          example: "bsc~token~0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c"
+        "_version": 
+          type: integer
+          format: int32
+          example: 1539456,
+        "_seq_no": 
+          type: integer
+          format: int32
+          example: 52994750,
+        "_primary_term": 
+          type: integer
+          format: int32
+          example: 13,
+        "found": 
+          type: boolean
+          example: true
+        "_source": 
+          type: object
+          example: {
+        "price_usd": 44261.71361070749,
+        "identifier": "bsc~token~0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c",
+        "symbol": "BTCB",
+        "chain": "bsc",
+        "address": "0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c",
+        "total_supply": 85501,
+        "kind": "token",
+        "totalSupply": 80501,
+        "update_date": 1646226647000,
+        "price_bnb": "107.57168201466517",
+        "price_changes": {
+            "day_priceusd": 6.5671297651871745,
+            "week_priceusd": 6.888346250409315,
+            "hour_priceusd": 6.5671297651871745,
+            "month_priceusd": 0
+        },
+        "market_cap": 4411657721.332781,
+        "price": 51597.73243977007,
+        "decimals": 18,
+        "name": "BTCB Token",
+        "category": "token",
+        "readable_update_date": "2022-03-02T13:10:47.000Z",
+        "coin": {
+            "image": {
+                "small": "https://assets.coingecko.com/coins/images/14108/small/Binance-bitcoin.png?1617332330",
+                "large": "https://assets.coingecko.com/coins/images/14108/large/Binance-bitcoin.png?1617332330",
+                "thumb": "https://assets.coingecko.com/coins/images/14108/thumb/Binance-bitcoin.png?1617332330"
+            },
+            "community_data": {
+                "twitter_followers": 0,
+                "telegram_channel_user_count": null,
+                "facebook_likes": null,
+                "reddit_subscribers": 0,
+                "reddit_average_posts_48h": 0,
+                "reddit_average_comments_48h": 0,
+                "reddit_accounts_active_48h": 0
+            },
+            "coin_id": "binance-bitcoin",
+            "asset_platform_id": "binance-smart-chain",
+            "public_notice": null,
+            "description": "Pegged tokens such as BTCB, are 100% backed by the native coin in reserve, which is Bitcoin (BTC) in BTCB’s case.",
+            "tickers": [
+                {
+                    "last_fetch_at": "2021-06-21T12:22:37+00:00",
+                    "is_anomaly": false,
+                    "last": 0.060155215657155,
+                    "last_traded_at": "2021-06-21T12:22:37+00:00",
+                    "coin_id": "ethereum",
+                    "converted_volume": {
+                        "btc": 152.742,
+                        "usd": 4954003,
+                        "eth": 2524
+                    },
+                    "target_coin_id": "binance-bitcoin",
+                    "is_stale": false,
+                    "target": "BTCB",
+                    "market": {
+                        "identifier": "pancakeswap",
+                        "name": "PancakeSwap (v2)",
+                        "has_trading_incentive": false
+                    },
+                    "volume": 2551.01721943594,
+                    "bid_ask_spread_percentage": 0.602713,
+                    "trade_url": "https://exchange.pancakeswap.finance/#/swap?outputCurrency=0x2170ed0880ac9a755fd29b2688956bd959f933f8",
+                    "converted_last": {
+                        "btc": 0.99533949,
+                        "usd": 32283,
+                        "eth": 16.445106
+                    },
+                    "token_info_url": null,
+                    "trust_score": "green",
+                    "base": "0X2170ED0880AC9A755FD29B2688956BD959F933F8",
+                    "timestamp": "2021-06-21T12:22:37+00:00"
+                },
+                {
+                    "last_fetch_at": "2021-06-21T11:03:40+00:00",
+                    "is_anomaly": false,
+                    "last": 32471.8862449659,
+                    "last_traded_at": "2021-06-21T11:03:40+00:00",
+                    "coin_id": "binance-bitcoin",
+                    "converted_volume": {
+                        "btc": 733.733,
+                        "usd": 23913790,
+                        "eth": 12227
+                    },
+                    "target_coin_id": "binance-usd",
+                    "is_stale": false,
+                    "target": "BUSD",
+                    "market": {
+                        "identifier": "pancakeswap",
+                        "name": "PancakeSwap (v2)",
+                        "has_trading_incentive": false
+                    },
+                    "volume": 739.416390801336,
+                    "bid_ask_spread_percentage": 0.602713,
+                    "trade_url": "https://exchange.pancakeswap.finance/#/swap?outputCurrency=0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c",
+                    "converted_last": {
+                        "btc": 0.99231304,
+                        "usd": 32341,
+                        "eth": 16.536326
+                    },
+                    "token_info_url": "https://pancakeswap.info/tokens/0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c",
+                    "trust_score": "green",
+                    "base": "0X7130D2A12B9BCBFAE4F2634D864A1EE1CE3EAD9C",
+                    "timestamp": "2021-06-21T11:03:40+00:00"
+                },
+                {
+                    "last_fetch_at": "2021-06-21T12:04:45+00:00",
+                    "is_anomaly": false,
+                    "last": 0.84661944647065,
+                    "last_traded_at": "2021-06-21T12:04:45+00:00",
+                    "coin_id": "t-bitcoin",
+                    "converted_volume": {
+                        "btc": 8.475062,
+                        "usd": 274040,
+                        "eth": 139.024
+                    },
+                    "target_coin_id": "binance-bitcoin",
+                    "is_stale": false,
+                    "target": "BTCB",
+                    "market": {
+                        "identifier": "pancakeswap",
+                        "name": "PancakeSwap (v2)",
+                        "has_trading_incentive": false
+                    },
+                    "volume": 10.1535848579999,
+                    "bid_ask_spread_percentage": 0.602724,
+                    "trade_url": "https://exchange.pancakeswap.finance/#/swap?outputCurrency=0x2cd1075682b0fccaadd0ca629e138e64015ba11c",
+                    "converted_last": {
+                        "btc": 0.98590538,
+                        "usd": 31879,
+                        "eth": 16.17268
+                    },
+                    "token_info_url": "https://pancakeswap.info/tokens/0x2cd1075682b0fccaadd0ca629e138e64015ba11c",
+                    "trust_score": "green",
+                    "base": "0X2CD1075682B0FCCAADD0CA629E138E64015BA11C",
+                    "timestamp": "2021-06-21T12:04:45+00:00"
+                },
+                {
+                    "last_fetch_at": "2021-06-21T12:14:43+00:00",
+                    "is_anomaly": false,
+                    "last": 107.530871383849,
+                    "last_traded_at": "2021-06-21T12:14:43+00:00",
+                    "coin_id": "binance-bitcoin",
+                    "converted_volume": {
+                        "btc": 66.287,
+                        "usd": 2151935,
+                        "eth": 1090
+                    },
+                    "target_coin_id": "binancecoin",
+                    "is_stale": false,
+                    "target": "BNB",
+                    "market": {
+                        "identifier": "bakeryswap",
+                        "name": "Bakeryswap",
+                        "has_trading_incentive": false
+                    },
+                    "volume": 66.0998642296781,
+                    "bid_ask_spread_percentage": 0.602727,
+                    "trade_url": "https://www.bakeryswap.org/#/swap/0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c",
+                    "converted_last": {
+                        "btc": 1.002833,
+                        "usd": 32556,
+                        "eth": 16.495942
+                    },
+                    "token_info_url": null,
+                    "trust_score": "green",
+                    "base": "0X7130D2A12B9BCBFAE4F2634D864A1EE1CE3EAD9C",
+                    "timestamp": "2021-06-21T12:14:43+00:00"
+                }
+              ],
+            "platforms": {
+                "harmony-shard-0": "0x34224dcf981da7488fdd01c7fdd64e74cd55dcf7",
+                "binance-smart-chain": "0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c"
+            },
+            "additional_notices": [],
+            "links": {
+                "subreddit_url": null,
+                "blockchain_site": [
+                    "https://bscscan.com/address/0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c",
+                    "",
+                    "",
+                    "",
+                    ""
+                ],
+                "official_forum_url": [
+                    "",
+                    "",
+                    ""
+                ],
+                "telegram_channel_identifier": "",
+                "twitter_screen_name": "",
+                "repos_url": {
+                    "github": [],
+                    "bitbucket": []
+                },
+                "bitcointalk_thread_identifier": null,
+                "announcement_url": [
+                    "",
+                    ""
+                ],
+                "facebook_username": "",
+                "chat_url": [
+                    "",
+                    "",
+                    ""
+                ],
+                "homepage": [
+                    "",
+                    "",
+                    ""
+                ]
+            },
+            "categories": [],
+            "developer_data": {
+                "forks": 0,
+                "total_issues": 0,
+                "pull_request_contributors": 0,
+                "code_additions_deletions_4_weeks": {
+                    "additions": null,
+                    "deletions": null
+                },
+                "subscribers": 0,
+                "commit_count_4_weeks": 0,
+                "pull_requests_merged": 0,
+                "stars": 0,
+                "last_4_weeks_commit_activity_series": [],
+                "closed_issues": 0
+            },
+            "coingecko_price": {
+                "usd_market_cap": 0,
+                "bnb_24h_change": -1.385177083159274,
+                "bnb_24h_vol": 411176.4083002917,
+                "last_updated_at": 1624278695,
+                "usd": 32392,
+                "bnb": 106.958,
+                "bnb_market_cap": 0,
+                "usd_24h_vol": 124524787.35552126,
+                "usd_24h_change": -4.3949431411943145
+            }
+        }
+    }
+    transactions:
+      type: object
+      properties:
+        "total":
+          type: integer
+          format: int32
+          example: 82
+        "limit":
+          type: integer
+          format: int32
+          example: 16
+        "skip":
+          type: integer
+          format: int32
+          example: 0
+        "data": 
+          type: array
+          items:
+            type: object
+            example: [
+        {
+            "hash": "0x6ead3425282e8a2bdba714afe81f97a7f11dd3330db0f6bb98795dd8211aa912",
+            "nonce": "3695",
+            "transaction_index": "149",
+            "from_address": "0x22cc5eabacac8e0607a79fdfd22ecc0f226e29e9",
+            "to_address": "0x06012c8cf97bead5deae237070f9587f8e7a266d",
+            "value": "0",
+            "gas": "24160",
+            "gas_price": "5000000000",
+            "input": "0x23b872dd00000000000000000000000022cc5eabacac8e0607a79fdfd22ecc0f226e29e9000000000000000000000000e052113bd7d7700d623414a0a4585bcae754e9d500000000000000000000000000000000000000000000000000000000000bb18e",
+            "receipt_cumulative_gas_used": null,
+            "receipt_gas_used": null,
+            "receipt_contract_address": null,
+            "receipt_root": null,
+            "receipt_status": "0",
+            "block_timestamp": "2021-12-02T23:56:26.000Z",
+            "block_number": "13144138",
+            "block_hash": "0xbce9637c60d9b046c28a0be69ffeefafe80a16c23cbcaa4b3074235e427ab0e5"
+        },
+        {
+            "hash": "0x4d3a4394ce7f97b0dc5de13d47dffabafa17b8be53a7e1d9d682b411279f7c57",
+            "nonce": "245",
+            "transaction_index": "447",
+            "from_address": "0x6166dd78e22c93ceb6d66de4051eef5afa2eccae",
+            "to_address": "0x06012c8cf97bead5deae237070f9587f8e7a266d",
+            "value": "0",
+            "gas": "24160",
+            "gas_price": "5000000000",
+            "input": "0x23b872dd0000000000000000000000006166dd78e22c93ceb6d66de4051eef5afa2eccae000000000000000000000000e052113bd7d7700d623414a0a4585bcae754e9d50000000000000000000000000000000000000000000000000000000000113e27",
+            "receipt_cumulative_gas_used": null,
+            "receipt_gas_used": null,
+            "receipt_contract_address": null,
+            "receipt_root": null,
+            "receipt_status": "0",
+            "block_timestamp": "2021-11-22T08:11:55.000Z",
+            "block_number": "12857083",
+            "block_hash": "0x0c1ca3f368132eada49197c2f2ac8e1773af957d2ccc3c09a70fbc3490c82ed5"
+        },
+        {
+            "hash": "0x9a9dc45896cdc465b33ea059da49d34ed319518f8d735df992b7c4ba69cd617b",
+            "nonce": "287",
+            "transaction_index": "71",
+            "from_address": "0x56c362a17d61a54fc1a0b8b2266dc39b3967c190",
+            "to_address": "0x06012c8cf97bead5deae237070f9587f8e7a266d",
+            "value": "0",
+            "gas": "32394",
+            "gas_price": "5000000000",
+            "input": "0x095ea7b300000000000000000000000088341d1a8f672d2780c8dc725902aae72f143b0c000000000000000000000000000000000000000000000000000000000019547c",
+            "receipt_cumulative_gas_used": null,
+            "receipt_gas_used": null,
+            "receipt_contract_address": null,
+            "receipt_root": null,
+            "receipt_status": "0",
+            "block_timestamp": "2021-11-09T00:51:23.000Z",
+            "block_number": "12488491",
+            "block_hash": "0x9aac4ba07057bd2a9e6cd5141797dc63df84ab716d6800a33d74ebf61df4c6a1"
+        },
+        {
+            "hash": "0x3ea222065b789401b20edc7126a657e904c76a0c513d26f33f2c8f6cb9e3f9c8",
+            "nonce": "3",
+            "transaction_index": "165",
+            "from_address": "0xf138b002f7f514936873081b9dfa56672cdae42b",
+            "to_address": "0x06012c8cf97bead5deae237070f9587f8e7a266d",
+            "value": "0",
+            "gas": "21596",
+            "gas_price": "5000000000",
+            "input": "0x095ea7b30000000000000000000000000ae4c5ec013ea16a6b187b5bcd0d9f8312ba0e9e00000000000000000000000000000000000000000000000000000000000bf691",
+            "receipt_cumulative_gas_used": null,
+            "receipt_gas_used": null,
+            "receipt_contract_address": null,
+            "receipt_root": null,
+            "receipt_status": "0",
+            "block_timestamp": "2021-10-28T19:40:08.000Z",
+            "block_number": "12172082",
+            "block_hash": "0xb2b339c6ff367ad125a2ff905530b4f0165dfb65eea4919e4f30c085ba5a9871"
+        },
+        {
+            "hash": "0x4806e26d4648be170fbd7aae07af33f47fcc975aad56c2203e0422d250f77b1f",
+            "nonce": "3",
+            "transaction_index": "77",
+            "from_address": "0x593189958b1337d9f35d46a2679bce1f427c7655",
+            "to_address": "0x06012c8cf97bead5deae237070f9587f8e7a266d",
+            "value": "91828540000000000",
+            "gas": "21000",
+            "gas_price": "5000000000",
+            "input": "0x",
+            "receipt_cumulative_gas_used": null,
+            "receipt_gas_used": null,
+            "receipt_contract_address": null,
+            "receipt_root": null,
+            "receipt_status": "0",
+            "block_timestamp": "2021-10-14T17:20:25.000Z",
+            "block_number": "11770803",
+            "block_hash": "0x91f6dd55d73cea72dba796e709520c3534e5cbf3302576f76f65e064ba913605"
+        },
+        {
+            "hash": "0x4a6bda427cfa54326962abe0f28a4c13f14429f4d9709e07ea8e687c729c7d90",
+            "nonce": "2",
+            "transaction_index": "77",
+            "from_address": "0x593189958b1337d9f35d46a2679bce1f427c7655",
+            "to_address": "0x06012c8cf97bead5deae237070f9587f8e7a266d",
+            "value": "0",
+            "gas": "21964",
+            "gas_price": "5000000000",
+            "input": "0x23b872dd000000000000000000000000593189958b1337d9f35d46a2679bce1f427c7655000000000000000000000000e052113bd7d7700d623414a0a4585bcae754e9d5000000000000000000000000000000000000000000000000000000000001f071",
+            "receipt_cumulative_gas_used": null,
+            "receipt_gas_used": null,
+            "receipt_contract_address": null,
+            "receipt_root": null,
+            "receipt_status": "0",
+            "block_timestamp": "2021-10-09T10:57:20.000Z",
+            "block_number": "11620949",
+            "block_hash": "0xa58a767ae1e0699299a1093c7d94e1323149b8953c724e21c57b72d8391d8846"
+        },
+        {
+            "hash": "0xf6e1fbbe1b4a2cffacfe039a2b019cb5be6dabb002304281560766b74a81ed60",
+            "nonce": "1",
+            "transaction_index": "164",
+            "from_address": "0x593189958b1337d9f35d46a2679bce1f427c7655",
+            "to_address": "0x06012c8cf97bead5deae237070f9587f8e7a266d",
+            "value": "0",
+            "gas": "21964",
+            "gas_price": "5000000000",
+            "input": "0x23b872dd000000000000000000000000593189958b1337d9f35d46a2679bce1f427c7655000000000000000000000000e052113bd7d7700d623414a0a4585bcae754e9d5000000000000000000000000000000000000000000000000000000000001ff24",
+            "receipt_cumulative_gas_used": null,
+            "receipt_gas_used": null,
+            "receipt_contract_address": null,
+            "receipt_root": null,
+            "receipt_status": "0",
+            "block_timestamp": "2021-10-09T10:50:02.000Z",
+            "block_number": "11620803",
+            "block_hash": "0xcfb0ac3f2fb6db3dec87f5721a9c17373b1da74692303959812e8b39fce9cb12"
+        },
+        {
+            "hash": "0xdfb2b77537b10ae563e22156ff2f19c748ac50f5722106be1ff7cf51fac9d5dd",
+            "nonce": "0",
+            "transaction_index": "264",
+            "from_address": "0x593189958b1337d9f35d46a2679bce1f427c7655",
+            "to_address": "0x06012c8cf97bead5deae237070f9587f8e7a266d",
+            "value": "0",
+            "gas": "21964",
+            "gas_price": "5000000000",
+            "input": "0x23b872dd000000000000000000000000593189958b1337d9f35d46a2679bce1f427c7655000000000000000000000000e052113bd7d7700d623414a0a4585bcae754e9d5000000000000000000000000000000000000000000000000000000000001ff24",
+            "receipt_cumulative_gas_used": null,
+            "receipt_gas_used": null,
+            "receipt_contract_address": null,
+            "receipt_root": null,
+            "receipt_status": "0",
+            "block_timestamp": "2021-10-09T10:41:15.000Z",
+            "block_number": "11620632",
+            "block_hash": "0x240928f93ca92a0094291e72b2a573e85c509eb0626ffc82630ff1fd55ef2da1"
+        },
+        {
+            "hash": "0x05e459a13acc7e3c74abbf1df516310e485472273f61a1a10409e837912a370c",
+            "nonce": "123",
+            "transaction_index": "69",
+            "from_address": "0x8cfa55076adf26f659bc49e36322bf793371bbe4",
+            "to_address": "0x06012c8cf97bead5deae237070f9587f8e7a266d",
+            "value": "0",
+            "gas": "21596",
+            "gas_price": "5000000000",
+            "input": "0xa9059cbb000000000000000000000000682d57889bfbeba0fcc4c9d4a536619e580933890000000000000000000000000000000000000000000000000000000000069d7a",
+            "receipt_cumulative_gas_used": null,
+            "receipt_gas_used": null,
+            "receipt_contract_address": null,
+            "receipt_root": null,
+            "receipt_status": "0",
+            "block_timestamp": "2021-10-08T08:03:29.000Z",
+            "block_number": "11588802",
+            "block_hash": "0xf5949f26df60bbf51da0d672bf790d1c6b02a79d767016742763bf4beae13579"
+        },
+        {
+            "hash": "0x2b41f02e906f8e748fbddc2a90151d4f612932e102849bdc2d4659c44054ee15",
+            "nonce": "766",
+            "transaction_index": "167",
+            "from_address": "0x70cfec09f9dfef2d0093f16f73e17b4066f0d3b9",
+            "to_address": "0x06012c8cf97bead5deae237070f9587f8e7a266d",
+            "value": "0",
+            "gas": "21596",
+            "gas_price": "5000000000",
+            "input": "0x095ea7b3000000000000000000000000d12998d712ae682b1d7d6f89bf32b23b90385e4600000000000000000000000000000000000000000000000000000000001ea56d",
+            "receipt_cumulative_gas_used": null,
+            "receipt_gas_used": null,
+            "receipt_contract_address": null,
+            "receipt_root": null,
+            "receipt_status": "0",
+            "block_timestamp": "2021-09-22T18:10:58.000Z",
+            "block_number": "11143058",
+            "block_hash": "0x7fb0cd0204cedf1d7a4dc02746e99fa997ec7b3f696c09497e899909a9dd08b3"
+        },
+        {
+            "hash": "0x2972241fa21943a19d32239265b05074405fe463765ca428a928043fd23acec2",
+            "nonce": "259",
+            "transaction_index": "197",
+            "from_address": "0x2f18f84ff15eb7f90c0c561a70c02d7004bae867",
+            "to_address": "0x06012c8cf97bead5deae237070f9587f8e7a266d",
+            "value": "0",
+            "gas": "21596",
+            "gas_price": "5000000000",
+            "input": "0x095ea7b3000000000000000000000000e55999545734a80f875ef749fa85868dac89b9a800000000000000000000000000000000000000000000000000000000001b3035",
+            "receipt_cumulative_gas_used": null,
+            "receipt_gas_used": null,
+            "receipt_contract_address": null,
+            "receipt_root": null,
+            "receipt_status": "0",
+            "block_timestamp": "2021-09-05T02:03:58.000Z",
+            "block_number": "10637379",
+            "block_hash": "0x1047dfd077dff4cd57ffd5504c9947f0d03b3b115742d245c4b40ad26fa60d82"
+        },
+        {
+            "hash": "0x0a962dba0500c7936e00e1ce1d3224f47f0304a2fed33df73e04fb6f9469b45e",
+            "nonce": "258",
+            "transaction_index": "196",
+            "from_address": "0x2f18f84ff15eb7f90c0c561a70c02d7004bae867",
+            "to_address": "0x06012c8cf97bead5deae237070f9587f8e7a266d",
+            "value": "0",
+            "gas": "50578",
+            "gas_price": "5000000000",
+            "input": "0x095ea7b3000000000000000000000000e55999545734a80f875ef749fa85868dac89b9a800000000000000000000000000000000000000000000000000000000001b3035",
+            "receipt_cumulative_gas_used": null,
+            "receipt_gas_used": null,
+            "receipt_contract_address": null,
+            "receipt_root": null,
+            "receipt_status": "0",
+            "block_timestamp": "2021-09-05T02:03:28.000Z",
+            "block_number": "10637369",
+            "block_hash": "0x484c7c65e866c69cacb386dd9de0db239de9cef74bca2c496aa9227d85d50ea1"
+        },
+        {
+            "hash": "0xe004dfa3463150dfb8460bc4d131b759dc3285f651de0f5c238fbe6bebbcc7e5",
+            "nonce": "256",
+            "transaction_index": "168",
+            "from_address": "0x2f18f84ff15eb7f90c0c561a70c02d7004bae867",
+            "to_address": "0x06012c8cf97bead5deae237070f9587f8e7a266d",
+            "value": "0",
+            "gas": "21596",
+            "gas_price": "5000000000",
+            "input": "0x095ea7b3000000000000000000000000e55999545734a80f875ef749fa85868dac89b9a800000000000000000000000000000000000000000000000000000000001b2ff9",
+            "receipt_cumulative_gas_used": null,
+            "receipt_gas_used": null,
+            "receipt_contract_address": null,
+            "receipt_root": null,
+            "receipt_status": "0",
+            "block_timestamp": "2021-09-05T01:46:07.000Z",
+            "block_number": "10637022",
+            "block_hash": "0xb98ab3a60fa0b7de24c98e837206e4e8cc7043bb2be108afd97d227873c95bef"
+        },
+        {
+            "hash": "0xd986bc912749442cd1e2afcb62dbaba642c25c1ef6f12d38c7f046754e9f773f",
+            "nonce": "254",
+            "transaction_index": "141",
+            "from_address": "0x2f18f84ff15eb7f90c0c561a70c02d7004bae867",
+            "to_address": "0x06012c8cf97bead5deae237070f9587f8e7a266d",
+            "value": "0",
+            "gas": "21596",
+            "gas_price": "5000000000",
+            "input": "0x095ea7b3000000000000000000000000e55999545734a80f875ef749fa85868dac89b9a800000000000000000000000000000000000000000000000000000000001554d0",
+            "receipt_cumulative_gas_used": null,
+            "receipt_gas_used": null,
+            "receipt_contract_address": null,
+            "receipt_root": null,
+            "receipt_status": "0",
+            "block_timestamp": "2021-09-05T01:25:34.000Z",
+            "block_number": "10636611",
+            "block_hash": "0xfe7939c9f787949c7d2aeef7f342a4592a147fe63d9ead1e1447a176101d238e"
+        },
+        {
+            "hash": "0x4061df16c41b23ad82cc2e19238085fa4f9d1f3786f4222353919dbd9403beef",
+            "nonce": "0",
+            "transaction_index": "160",
+            "from_address": "0xb8d5c91e71c4b7b8af3d1bcac166b1f48c8dd2ea",
+            "to_address": "0x06012c8cf97bead5deae237070f9587f8e7a266d",
+            "value": "0",
+            "gas": "21596",
+            "gas_price": "5000000000",
+            "input": "0x095ea7b3000000000000000000000000ac1ec9136766a1780551f045a89ab671f6d2bb840000000000000000000000000000000000000000000000000000000000143dcb",
+            "receipt_cumulative_gas_used": null,
+            "receipt_gas_used": null,
+            "receipt_contract_address": null,
+            "receipt_root": null,
+            "receipt_status": "0",
+            "block_timestamp": "2021-09-04T14:54:45.000Z",
+            "block_number": "10624121",
+            "block_hash": "0x1bbd38b3ebe57f55cbe4be7e42455085132418feb71de76f54df873e04b38b43"
+        },
+        {
+            "hash": "0xecfb612ee32411b7f2c9318dc115a87c8dc0d77ab0c8aa8aaea5a46facbab02b",
+            "nonce": "1398",
+            "transaction_index": "148",
+            "from_address": "0x6899f448072222c98e65ce3f29d9ccb92c739ad1",
+            "to_address": "0x06012c8cf97bead5deae237070f9587f8e7a266d",
+            "value": "0",
+            "gas": "21596",
+            "gas_price": "5000000000",
+            "input": "0x095ea7b300000000000000000000000076c4d8d73c9c493eb117fe4adc8dcee659f36cc700000000000000000000000000000000000000000000000000000000001ea0c7",
+            "receipt_cumulative_gas_used": null,
+            "receipt_gas_used": null,
+            "receipt_contract_address": null,
+            "receipt_root": null,
+            "receipt_status": "0",
+            "block_timestamp": "2021-09-03T18:51:57.000Z",
+            "block_number": "10600079",
+            "block_hash": "0x0ee24eff2b5ff89b19c6513f3f958c616b16c2261609e47b1a15ec4c713fa319"
+        }
+    ]
+    addresses:
+      type: object
+      properties:
+        "tokens":
+          type: array
+          items:
+            type: object
+            example: [
+        {
+            "name": "0x0Ad0D5610A19FD0Fb41274051d986F217746f5D2",
+            "quantity": 1000,
+            "token": {
+                "_index": "catalog_20210721",
+                "_type": "_doc",
+                "_id": "bsc~token~0x0Ad0D5610A19FD0Fb41274051d986F217746f5D2",
+                "_version": 8,
+                "_seq_no": 38655110,
+                "_primary_term": 14,
+                "found": true,
+                "_source": {
+                    "price_usd": 1.3497667220014e-7,
+                    "identifier": "bsc~token~0x0Ad0D5610A19FD0Fb41274051d986F217746f5D2",
+                    "symbol": "PIGI",
+                    "address": "0x0Ad0D5610A19FD0Fb41274051d986F217746f5D2",
+                    "name": "PIGI"
+                }
+            }
+        },
+        {
+            "name": "0x108f5f2b2d68f4075d5753caF41dA293DD4bC2B5",
+            "quantity": 1046.4887327377492,
+            "token": {
+                "_index": "catalog_20210721",
+                "_type": "_doc",
+                "_id": "bsc~token~0x108f5f2b2d68f4075d5753caF41dA293DD4bC2B5",
+                "_version": 19,
+                "_seq_no": 52771935,
+                "_primary_term": 13,
+                "found": true,
+                "_source": {
+                    "price_usd": 0.00003189755725471573,
+                    "identifier": "bsc~token~0x108f5f2b2d68f4075d5753caF41dA293DD4bC2B5",
+                    "symbol": "BAL",
+                    "address": "0x108f5f2b2d68f4075d5753caF41dA293DD4bC2B5",
+                    "name": "swap-bal.io"
+                }
+            }
+        },
+        {
+            "name": "0x1D2F0da169ceB9fC7B3144628dB156f3F6c60dBE",
+            "quantity": 59.4823,
+            "token": {
+                "_index": "catalog_20210721",
+                "_type": "_doc",
+                "_id": "bsc~token~0x1D2F0da169ceB9fC7B3144628dB156f3F6c60dBE",
+                "_version": 428650,
+                "_seq_no": 48134667,
+                "_primary_term": 13,
+                "found": true,
+                "_source": {
+                    "price_usd": 0.7648463314019186,
+                    "identifier": "bsc~token~0x1D2F0da169ceB9fC7B3144628dB156f3F6c60dBE",
+                    "symbol": "XRP",
+                    "address": "0x1D2F0da169ceB9fC7B3144628dB156f3F6c60dBE",
+                    "name": "XRP Token"
+                }
+            }
+        },
+        {
+            "name": "0x1fC1Bf23DC8DB822c744Dc34FE3659E34477f55c",
+            "quantity": 1,
+            "token": {
+                "_id": "bsc~token~0x1fC1Bf23DC8DB822c744Dc34FE3659E34477f55c",
+                "found": false
+            }
+        },
+        {
+            "name": "0x2538EB3dBbC1C2D2a1263fC3D822114C2989A692",
+            "quantity": 2000,
+            "token": {
+                "_index": "catalog_20210721",
+                "_type": "_doc",
+                "_id": "bsc~token~0x2538EB3dBbC1C2D2a1263fC3D822114C2989A692",
+                "_version": 57,
+                "_seq_no": 38981639,
+                "_primary_term": 13,
+                "found": true,
+                "_source": {
+                    "price_usd": 0.00005893346735686968,
+                    "identifier": "bsc~token~0x2538EB3dBbC1C2D2a1263fC3D822114C2989A692",
+                    "symbol": "ACD",
+                    "address": "0x2538EB3dBbC1C2D2a1263fC3D822114C2989A692",
+                    "name": "ACDswap.com"
+                }
+            }
+        },
+        {
+            "name": "0x3920123482070C1a2dff73AaD695c60e7c6F6862",
+            "quantity": 753.3024425384895,
+            "token": {
+                "_index": "catalog_20210721",
+                "_type": "_doc",
+                "_id": "bsc~token~0x3920123482070C1a2dff73AaD695c60e7c6F6862",
+                "_version": 16369,
+                "_seq_no": 53352372,
+                "_primary_term": 13,
+                "found": true,
+                "_source": {
+                    "price_usd": 0.05588311965857893,
+                    "identifier": "bsc~token~0x3920123482070C1a2dff73AaD695c60e7c6F6862",
+                    "symbol": "EULER",
+                    "address": "0x3920123482070C1a2dff73AaD695c60e7c6F6862",
+                    "name": "Euler.Tools"
+                }
+            }
+        },
+        {
+            "name": "0x55d398326f99059fF775485246999027B3197955",
+            "quantity": 21263.81741662,
+            "token": {
+                "_index": "catalog_20210721",
+                "_type": "_doc",
+                "_id": "bsc~token~0x55d398326f99059fF775485246999027B3197955",
+                "_version": 18012,
+                "_seq_no": 1474602,
+                "_primary_term": 6,
+                "found": true,
+                "_source": {
+                    "price_usd": 1.0065354025624953,
+                    "identifier": "bsc~token~0x55d398326f99059fF775485246999027B3197955",
+                    "symbol": "USDT",
+                    "address": "0x55d398326f99059fF775485246999027B3197955",
+                    "name": "Tether USD"
+                }
+            }
+        },
+        {
+            "name": "0x7Cb2f28505E733F60C0db208AfaA321c792F6Cf4",
+            "quantity": 0.5461993,
+            "token": {
+                "_index": "catalog_20210721",
+                "_type": "_doc",
+                "_id": "bsc~token~0x7Cb2f28505E733F60C0db208AfaA321c792F6Cf4",
+                "_version": 42,
+                "_seq_no": 24900546,
+                "_primary_term": 11,
+                "found": true,
+                "_source": {
+                    "price_usd": 0.31873557065916175,
+                    "identifier": "bsc~token~0x7Cb2f28505E733F60C0db208AfaA321c792F6Cf4",
+                    "symbol": "OPERAND",
+                    "address": "0x7Cb2f28505E733F60C0db208AfaA321c792F6Cf4",
+                    "name": "Operand"
+                }
+            }
+        },
+        {
+            "name": "0x8076C74C5e3F5852037F31Ff0093Eeb8c8ADd8D3",
+            "quantity": 8708110.039354727,
+            "token": {
+                "_index": "catalog_20210721",
+                "_type": "_doc",
+                "_id": "bsc~token~0x8076C74C5e3F5852037F31Ff0093Eeb8c8ADd8D3",
+                "_version": 745795,
+                "_seq_no": 53001803,
+                "_primary_term": 13,
+                "found": true,
+                "_source": {
+                    "price_usd": 5.3693788019212e-7,
+                    "identifier": "bsc~token~0x8076C74C5e3F5852037F31Ff0093Eeb8c8ADd8D3",
+                    "symbol": "SAFEMOON",
+                    "address": "0x8076C74C5e3F5852037F31Ff0093Eeb8c8ADd8D3",
+                    "name": "SafeMoon"
+                }
+            }
+        },
+        {
+            "name": "0xA58950F05FeA2277d2608748412bf9F802eA4901",
+            "quantity": 500000,
+            "token": {
+                "_index": "catalog_20210721",
+                "_type": "_doc",
+                "_id": "bsc~token~0xA58950F05FeA2277d2608748412bf9F802eA4901",
+                "_version": 192619,
+                "_seq_no": 53010724,
+                "_primary_term": 13,
+                "found": true,
+                "_source": {
+                    "price_usd": 1.617810223652e-8,
+                    "identifier": "bsc~token~0xA58950F05FeA2277d2608748412bf9F802eA4901",
+                    "symbol": "WSG",
+                    "address": "0xA58950F05FeA2277d2608748412bf9F802eA4901",
+                    "name": "Wall Street Games"
+                }
+            }
+        },
+        {
+            "name": "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
+            "quantity": 0,
+            "token": {
+                "_index": "catalog_20210721",
+                "_type": "_doc",
+                "_id": "bsc~token~0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
+                "_version": 5949695,
+                "_seq_no": 49887393,
+                "_primary_term": 13,
+                "found": true,
+                "_source": {
+                    "price_usd": 404.8762524482172,
+                    "identifier": "bsc~token~0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
+                    "symbol": "WBNB",
+                    "address": "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
+                    "name": "Wrapped BNB"
+                }
+            }
+        }
+       ]
+        "total":
+          type: string
+          nullable: true
+          example: null
+        "totalBNB":
+          type: string
+          nullable: true
+          example: null
+    singular_sale:
+      type: object
+      properties:
+        "_index":
+          type: string
+          example: "marketplace_01252022"
+        "_type": 
+          type: string
+          example: "_doc"
+        "_id": 
+          type: string
+          example: "121"  
+        "_version": 
+          type: integer
+          format: int32
+          example: 2
+        "_seq_no":
+          type: integer
+          format: int32
+          example: 65
+        "_primary_term": 
+          type: integer
+          format: int32
+          example: 1
+        "found": 
+          type: boolean
+          example: true
+        "_source": 
+          type: object
+          example: {
+        "next_claim": {},
+        "seller_wallet": "0x16846c8930f849fd7b11a9b4b25dc35be22febc1",
+        "close_date": 1646922341000,
+        "quote_token_name": "Euler.Tools",
+        "base_token_id": "0",
+        "quote_token_id": "0",
+        "base_token_quantity": 0.0001,
+        "quote_token_quantity": 0.0001,
+        "create_date": 1646775162000,
+        "base_token_name": "BNB",
+        "base_token_address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "identifier": "121",
+        "period": "0",
+        "purchases": {
+            "0xf319351f549a6757e5adbcb56b47a10872c64794": [
+                {
+                    "amountIn": 2,
+                    "amountOut": 0.01,
+                    "timestamp": 1646922341000
+                }
+            ]
+        },
+        "kind": "0",
+        "packages": "1",
+        "base_token_symbol": "BNB",
+        "update_date": 1646775162000,
+        "quote_token_address": "0x4e51d810015227fbe24aad99acf8cc82819e73ed",
+        "blockchain": "bsctest",
+        "quote_token_symbol": "EULER",
+        "claims": {},
+        "category": "token",
+        "ratio": 0.005,
+        "whitelisted_wallets": null
+        }
+    Subscriptions:
+      type: array
+      items:
+        type: object
+        properties:
+          "active":
+            type: boolean
+            example: true
+          "created_at": 
+            type: string
+            example: "2021-06-13T02:00:47.287Z"
+          "identifier": 
+            type: string
+            example: "free"
+          "user_sub": 
+            type: string
+            example: "system"
+          "details": 
+            type: object
+            example: {
+            "alerts": false,
+            "portfolios": "1",
+            "staking": {
+                "portfolioEntities": "50",
+                "portfolios": "3"
+            },
+            "wallets": "3",
+            "portfolioEntities": "20",
+            "notifications": {
+                "wallet": false
+            }
+        }
+          "name":
+            type: string
+            example: "free"
+    Profiles:
+      type: object
+      properties:
+        "user_sub": 
+          type: string
+          example: "18a4d00f-17ac-4f02-bd89-d3e4a671af63"
+        "identifier": 
+          type: string
+          example: "8dffaa18-46a2-4858-a82d-f74edd53e855"
+        "subscription":
+          type: object
+          example: {
+        "created_at": "2022-02-23T13:34:29.661Z",
+        "identifier": "4208cc9c-db93-4ec0-87bd-7cbf1db0219a",
+        "subscription": "877cfea9-bf77-4e71-9c6a-00e45c3226fb",
+        "status": "confirmed",
+        "user_sub": "18a4d00f-17ac-4f02-bd89-d3e4a671af63",
+        "details": {},
+        "permissions": {
+            "portfolios": 1,
+            "staking": {
+                "portfolios": 3,
+                "portfolioEntities": 50
+            },
+            "alerts": false,
+            "wallets": 3,
+            "portfolioEntities": 20,
+            "notifications": {
+                "wallet": false
+            }
+        },
+        "name": "free"
+     }
+    Portfolios:
+      type: object
+      properties:
+        "name":
+          type: string
+          example: "portfolio"
+        "created_at": 
+          type: string
+          example: "2022-03-02T17:21:22.580Z"
+        "identifier": 
+          type: string
+          example: "62dea784-ef19-4980-aa1d-5cc545b5131f"
+    Wallet:
+      type: array
+      items:
+        type: object
+        properties:
+          "user_sub": 
+            type: string
+            example: "18a4d00f-17ac-4f02-bd89-d3e4a671af63"
+          "created_at": 
+            type: string
+            example: "2022-02-25T17:54:09.683Z"
+          "address": 
+            type: string
+            example: "0xE7c5F631457e38cAa5d006e10936CDBDF41d3273"
+          "name": 
+            type: string
+            example: "mywallet20"
+          "identifier": 
+            type: string
+            example: "559d24d1-1502-44a5-b4a0-6ee62a9af58f"
+    App_trades:
+      type: object
+      properties:
+        total:
+          type: integer
+          format: int32
+          example: 440
+        limit:
+          type: integer
+          format: int32
+          example: 10
+        skip:
+          type: integer
+          format: int32
+          example: 0
+        data:
+          type: array
+          items:
+            type: object
+          example: [
+         {
+            "address": "0x51dddb90f8ec85be147a4b7f9922bdba063ac07e",
+            "base_token": "0x31045e7023e6c388f9447e632a3f9eaff90393fa",
+            "quote_token": "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
+            "transaction_hash": "0x6e0731acdf483a660d3140a9def02e42e3c4089a12b57b2990b0bf0b1b2eb9a4",
+            "log_index": "48",
+            "base_in": "285920091.35418170000000000000000000000000000000000000000000",
+            "base_out": "0.00000000000000000000000000000000000000000000000000",
+            "quote_in": "0.00000000000000000000000000000000000000000000000000",
+            "quote_out": "0.00046474655745459100000000000000000000000000000000",
+            "price_base": "0.00000000000162544211305140200000000000000000000000",
+            "price_quote": "615217233496.38390000000000000000000000000000000000000000000000",
+            "price_bnb": "0.00000000000162544211305140200000000000000000000000",
+            "price_usd": "0.00000000083885631632312350000000000000000000000000",
+            "block_number": "13918697",
+            "block_timestamp": "2021-12-30T05:29:48.000Z",
+            "volume": "0.23984587459613985000000000000000000000000000000000",
+            "factory": null,
+            "base_price_usd": "0.00000000083885631632312350000000000000000000000000",
+            "quote_price_usd": "317500609886658.90000000000000000000000000000000000000000000000000",
+            "ratio": "0.00000000000162544211305140200000000000000000000000"
+         },
+         {
+            "address": "0x1a9aa2a681b95112dc980edee56d23313a416ac8",
+            "base_token": "0x31045e7023e6c388f9447e632a3f9eaff90393fa",
+            "quote_token": "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
+            "transaction_hash": "0x15eade2abe8d5eb792cfdea5a7cb4e1ba97b7a2cd6401a68f806d92f9dbbbf46",
+            "log_index": "1016",
+            "base_in": "4178859636.21411400000000000000000000000000000000000000000000",
+            "base_out": "0.00000000000000000000000000000000000000000000000000",
+            "quote_in": "0.00000000000000000000000000000000000000000000000000",
+            "quote_out": "0.00744655891561249300000000000000000000000000000000",
+            "price_base": "0.00000000000178195956884514750000000000000000000000",
+            "price_quote": "561179960243.47520000000000000000000000000000000000000000000000",
+            "price_bnb": "0.00000000000178195956884514750000000000000000000000",
+            "price_usd": "0.00000000091502093998618010000000000000000000000000",
+            "block_number": "13914846",
+            "block_timestamp": "2021-12-30T02:17:01.000Z",
+            "volume": "3.82374407239894550000000000000000000000000000000000",
+            "factory": null,
+            "base_price_usd": "0.00000000091502093998618010000000000000000000000000",
+            "quote_price_usd": "288161091699838.90000000000000000000000000000000000000000000000000",
+            "ratio": "0.00000000000178195956884514750000000000000000000000"
+         },
+         {
+            "address": "0x1a9aa2a681b95112dc980edee56d23313a416ac8",
+            "base_token": "0x31045e7023e6c388f9447e632a3f9eaff90393fa",
+            "quote_token": "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
+            "transaction_hash": "0x72ac319a595386dd15e341c695944b122e47d8a89375e59e70f53612be26e4d3",
+            "log_index": "353",
+            "base_in": "11345389046.26648000000000000000000000000000000000000000000000",
+            "base_out": "0.00000000000000000000000000000000000000000000000000",
+            "quote_in": "0.00000000000000000000000000000000000000000000000000",
+            "quote_out": "0.02021826589686694000000000000000000000000000000000",
+            "price_base": "0.00000000000178206898101218770000000000000000000000",
+            "price_quote": "561145505956.79820000000000000000000000000000000000000000000000",
+            "price_bnb": "0.00000000000178206898101218770000000000000000000000",
+            "price_usd": "0.00000000092303132026635260000000000000000000000000",
+            "block_number": "13912931",
+            "block_timestamp": "2021-12-30T00:41:16.000Z",
+            "volume": "10.47214943031076300000000000000000000000000000000000",
+            "factory": null,
+            "base_price_usd": "0.00000000092303132026635260000000000000000000000000",
+            "quote_price_usd": "290648051643120.75000000000000000000000000000000000000000000000000",
+            "ratio": "0.00000000000178206898101218770000000000000000000000"
+         },
+         {
+            "address": "0x1a9aa2a681b95112dc980edee56d23313a416ac8",
+            "base_token": "0x31045e7023e6c388f9447e632a3f9eaff90393fa",
+            "quote_token": "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
+            "transaction_hash": "0x1e537fed960fcab00db7cca0002677f49300bb901ba0bceab07f5cfc0cde0120",
+            "log_index": "468",
+            "base_in": "44198176990.09643000000000000000000000000000000000000000000000",
+            "base_out": "0.00000000000000000000000000000000000000000000000000",
+            "quote_in": "0.00000000000000000000000000000000000000000000000000",
+            "quote_out": "0.07878150844278077000000000000000000000000000000000",
+            "price_base": "0.00000000000178246058565794470000000000000000000000",
+            "price_quote": "561022222901.42720000000000000000000000000000000000000000000000",
+            "price_bnb": "0.00000000000178246058565794470000000000000000000000",
+            "price_usd": "0.00000000091667709140675790000000000000000000000000",
+            "block_number": "13912032",
+            "block_timestamp": "2021-12-29T23:56:19.000Z",
+            "volume": "40.51545632876268000000000000000000000000000000000000",
+            "factory": null,
+            "base_price_usd": "0.00000000091667709140675790000000000000000000000000",
+            "quote_price_usd": "288520387851383.40000000000000000000000000000000000000000000000000",
+            "ratio": "0.00000000000178246058565794470000000000000000000000"
+         },
+         {
+            "address": "0x51dddb90f8ec85be147a4b7f9922bdba063ac07e",
+            "base_token": "0x31045e7023e6c388f9447e632a3f9eaff90393fa",
+            "quote_token": "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
+            "transaction_hash": "0x25d422b5ee76e83ea3cf6c509376c7c24e9eee614a9f6242cdab0425448cf54f",
+            "log_index": "210",
+            "base_in": "240489283.80011110000000000000000000000000000000000000000000",
+            "base_out": "0.00000000000000000000000000000000000000000000000000",
+            "quote_in": "0.00000000000000000000000000000000000000000000000000",
+            "quote_out": "0.00040530697180545100000000000000000000000000000000",
+            "price_base": "0.00000000000168534316956231800000000000000000000000",
+            "price_quote": "593350967363.93400000000000000000000000000000000000000000000000",
+            "price_bnb": "0.00000000000168534316956231800000000000000000000000",
+            "price_usd": "0.00000000090559418812652230000000000000000000000000",
+            "block_number": "13893229",
+            "block_timestamp": "2021-12-29T08:15:46.000Z",
+            "volume": "0.21778569771609038000000000000000000000000000000000",
+            "factory": null,
+            "base_price_usd": "0.00000000090559418812652230000000000000000000000000",
+            "quote_price_usd": "318828353339797.10000000000000000000000000000000000000000000000000",
+            "ratio": "0.00000000000168534316956231800000000000000000000000"
+         },
+         {
+            "address": "0x51dddb90f8ec85be147a4b7f9922bdba063ac07e",
+            "base_token": "0x31045e7023e6c388f9447e632a3f9eaff90393fa",
+            "quote_token": "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
+            "transaction_hash": "0xfb0afd185ae4c1318ce99f397fa6d1bd169bc8c6804b169854f796bc6032e769",
+            "log_index": "68",
+            "base_in": "242932587.65478653000000000000000000000000000000000000000000",
+            "base_out": "0.00000000000000000000000000000000000000000000000000",
+            "quote_in": "0.00000000000000000000000000000000000000000000000000",
+            "quote_out": "0.00042352250708026400000000000000000000000000000000",
+            "price_base": "0.00000000000174337461749718180000000000000000000000",
+            "price_quote": "573600183209.97300000000000000000000000000000000000000000000000",
+            "price_bnb": "0.00000000000174337461749718180000000000000000000000",
+            "price_usd": "0.00000000093985993154562630000000000000000000000000",
+            "block_number": "13888886",
+            "block_timestamp": "2021-12-29T04:38:37.000Z",
+            "volume": "0.22832260520342950000000000000000000000000000000000",
+            "factory": null,
+            "base_price_usd": "0.00000000093985993154562630000000000000000000000000",
+            "quote_price_usd": "309230055041314.40000000000000000000000000000000000000000000000000",
+            "ratio": "0.00000000000174337461749718180000000000000000000000"
+         },
+         {
+            "address": "0x1a9aa2a681b95112dc980edee56d23313a416ac8",
+            "base_token": "0x31045e7023e6c388f9447e632a3f9eaff90393fa",
+            "quote_token": "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
+            "transaction_hash": "0xd7aa39ac1baec84d328452cd952f9822e5587fc6d911c8f0ee8adf22eb249d5a",
+            "log_index": "275",
+            "base_in": "16344846685.36572600000000000000000000000000000000000000000000",
+            "base_out": "0.00000000000000000000000000000000000000000000000000",
+            "quote_in": "0.00000000000000000000000000000000000000000000000000",
+            "quote_out": "0.02914101648276320000000000000000000000000000000000",
+            "price_base": "0.00000000000178288711076467040000000000000000000000",
+            "price_quote": "560888007974.38350000000000000000000000000000000000000000000000",
+            "price_bnb": "0.00000000000178288711076467040000000000000000000000",
+            "price_usd": "0.00000000095616868891422550000000000000000000000000",
+            "block_number": "13882660",
+            "block_timestamp": "2021-12-28T23:26:31.000Z",
+            "volume": "15.62843062565017300000000000000000000000000000000000",
+            "factory": null,
+            "base_price_usd": "0.00000000095616868891422550000000000000000000000000",
+            "quote_price_usd": "300806230509210.60000000000000000000000000000000000000000000000000",
+            "ratio": "0.00000000000178288711076467040000000000000000000000"
+         },
+         {
+            "address": "0x1a9aa2a681b95112dc980edee56d23313a416ac8",
+            "base_token": "0x31045e7023e6c388f9447e632a3f9eaff90393fa",
+            "quote_token": "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
+            "transaction_hash": "0xbe2eafb10298c5a748199ad63d1a5d4cd87530a04473fcd57613f7589830187c",
+            "log_index": "327",
+            "base_in": "12759361424.43445600000000000000000000000000000000000000000000",
+            "base_out": "0.00000000000000000000000000000000000000000000000000",
+            "quote_in": "0.00000000000000000000000000000000000000000000000000",
+            "quote_out": "0.02275111883176990000000000000000000000000000000000",
+            "price_base": "0.00000000000178309227828604420000000000000000000000",
+            "price_quote": "560823470651.34880000000000000000000000000000000000000000000000",
+            "price_bnb": "0.00000000000178309227828604420000000000000000000000",
+            "price_usd": "0.00000000097683305925217400000000000000000000000000",
+            "block_number": "13795012",
+            "block_timestamp": "2021-12-25T22:16:41.000Z",
+            "volume": "12.46376605433448500000000000000000000000000000000000",
+            "factory": null,
+            "base_price_usd": "0.00000000097683305925217400000000000000000000000000",
+            "quote_price_usd": "307236430334030.94000000000000000000000000000000000000000000000000",
+            "ratio": "0.00000000000178309227828604420000000000000000000000"
+         },
+         {
+            "address": "0x1a9aa2a681b95112dc980edee56d23313a416ac8",
+            "base_token": "0x31045e7023e6c388f9447e632a3f9eaff90393fa",
+            "quote_token": "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
+            "transaction_hash": "0x9ba424b02515e4f1989833e25d19c7a4452d35c5089c5d831b5675308a1c9f9c",
+            "log_index": "241",
+            "base_in": "3485790596.28617860000000000000000000000000000000000000000000",
+            "base_out": "0.00000000000000000000000000000000000000000000000000",
+            "quote_in": "0.00000000000000000000000000000000000000000000000000",
+            "quote_out": "0.00621669319522930400000000000000000000000000000000",
+            "price_base": "0.00000000000178343851229981390000000000000000000000",
+            "price_quote": "560714593244.07030000000000000000000000000000000000000000000000",
+            "price_bnb": "0.00000000000178343851229981390000000000000000000000",
+            "price_usd": "0.00000000095603863135894700000000000000000000000000",
+            "block_number": "13705122",
+            "block_timestamp": "2021-12-22T19:17:53.000Z",
+            "volume": "3.33255047087732550000000000000000000000000000000000",
+            "factory": null,
+            "base_price_usd": "0.00000000095603863135894700000000000000000000000000",
+            "quote_price_usd": "300579363185766.94000000000000000000000000000000000000000000000000",
+            "ratio": "0.00000000000178343851229981390000000000000000000000"
+         },
+         {
+            "address": "0x1a9aa2a681b95112dc980edee56d23313a416ac8",
+            "base_token": "0x31045e7023e6c388f9447e632a3f9eaff90393fa",
+            "quote_token": "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
+            "transaction_hash": "0x57bf57559944e3e98b99dc69a0fda7d7719a2bd5f3f8a2d8dccbf2678ecb82ef",
+            "log_index": "470",
+            "base_in": "1024455055.42552590000000000000000000000000000000000000000000",
+            "base_out": "0.00000000000000000000000000000000000000000000000000",
+            "quote_in": "0.00000000000000000000000000000000000000000000000000",
+            "quote_out": "0.00182708517107033300000000000000000000000000000000",
+            "price_base": "0.00000000000178347030589001310000000000000000000000",
+            "price_quote": "560704597490.32130000000000000000000000000000000000000000000000",
+            "price_bnb": "0.00000000000178347030589001310000000000000000000000",
+            "price_usd": "0.00000000094307347694192370000000000000000000000000",
+            "block_number": "13698649",
+            "block_timestamp": "2021-12-22T13:53:16.000Z",
+            "volume": "0.96613639109088190000000000000000000000000000000000",
+            "factory": null,
+            "base_price_usd": "0.00000000094307347694192370000000000000000000000000",
+            "quote_price_usd": "296492536234651.20000000000000000000000000000000000000000000000000",
+            "ratio": "0.00000000000178347030589001310000000000000000000000"
+         }
+         ]
+    wallets:
+      type: object
+      properties:
+        "address": 
+          type: string
+          example: "0xE7c5F631457e38cAa5d006e10936CDBDF41d3273"
+        "name": 
+          type: string
+          example: "Wallet3"
+        "created_at": 
+          type: string
+          example: "2022-03-02T17:50:18.959Z"
+        "identifier": 
+          type: string
+          example: "4235ed2b-d8a4-4e51-99db-a5c077e0d254"
+    wallet_delete:
+      type: object
+      properties:
+        "$metadata":
+          type: object
+          example: {
+        "httpStatusCode": 200,
+        "requestId": "PGPT2I4RB12JM38TPUBI54ULO7VV4KQNSO5AEMVJF66Q9ASUAAJG",
+        "attempts": 1,
+        "totalRetryDelay": 0
+      }
+    portfolios_update:
+      type: object
+      properties:
+        "updated_at": 
+          type: string
+          example: "2022-03-02T17:29:53.255Z"
+        "user_sub":
+          type: string
+          example: "18a4d00f-17ac-4f02-bd89-d3e4a671af63"
+        "name": 
+          type: string
+          example: "portfolio10"
+        "identifier": 
+          type: string
+          example: "49b5985b-f95f-4869-9c25-e952ccb4624a"
+    portfolios_delete:
+      type: object
+      properties:
+        "$metadata":
+          type: object
+          example: {
+        "httpStatusCode": 200,
+        "requestId": "434VB5TPIBBETK624UJQHCMBTVVV4KQNSO5AEMVJF66Q9ASUAAJG",
+        "attempts": 1,
+        "totalRetryDelay": 0
+    }
+    wallet_update:
+      type: object
+      properties:
+        "address": 
+          type: string
+          example: "0xE7c5F631457e38cAa5d006e10936CDBDF41d3273"
+        "name": 
+          type: string
+          example: "MYWALLET3"
+        "updated_at": 
+          type: string
+          example: "2022-03-02T17:57:49.500Z"
+        "identifier": 
+          type: string
+          example: "baae0cde-117f-45ed-afa5-56307e03201c"
+    Get_portfolios:
+      type: array
+      items:
+        type: object
+        properties:
+          "user_sub": 
+                type: string
+                example: "18a4d00f-17ac-4f02-bd89-d3e4a671af63"
+          "created_at": 
+                type: string
+                example: "2022-02-24T14:56:32.704Z"
+          "name": 
+                type: string
+                example: "portfolio"
+          "identifier": 
+                type: string
+                example: "74929ee6-7a01-403c-b5bc-04ea777212c6"
+    sales:
+      type: object
+      properties:
+        "total":
+          type: object
+          example: {
+        "value": 45,
+        "relation": "eq"
+        }
+        "max_score":
+          type: integer
+          format: int32
+          example: 1
+        "hits": 
+          type: array
+          items: 
+            type: object
+            example: [
+        {
+            "_index": "marketplace_01252022",
+            "_type": "_doc",
+            "_id": "59",
+            "_score": null,
+            "_source": {
+                "next_claim": {},
+                "seller_wallet": "0x4884a0409f5f3748a3dfd3fd662199cdc6b01b2b",
+                "close_date": 0,
+                "quote_token_name": "BUSD Token",
+                "base_token_id": "0",
+                "quote_token_id": "0",
+                "base_token_quantity": 1000,
+                "quote_token_quantity": 35.5,
+                "create_date": 1657124571000,
+                "base_token_name": "Euler.Tools",
+                "base_token_address": "0x3920123482070c1a2dff73aad695c60e7c6f6862",
+                "identifier": "59",
+                "period": "0",
+                "purchases": {},
+                "kind": "0",
+                "packages": "0",
+                "base_token_symbol": "EULER",
+                "update_date": 1657124571000,
+                "quote_token_address": "0xe9e7cea3dedca5984780bafc599bd69add087d56",
+                "blockchain": "bsc",
+                "quote_token_symbol": "BUSD",
+                "claims": {},
+                "category": "token",
+                "ratio": 28.169014084507044,
+                "whitelisted_wallets": null
+            },
+            "sort": [
+                1657124571000
+            ]
+        },
+        {
+            "_index": "marketplace_01252022",
+            "_type": "_doc",
+            "_id": "58",
+            "_score": null,
+            "_source": {
+                "next_claim": {},
+                "seller_wallet": "0x651d5260e1cc2719c63560dc286dfb87a387a638",
+                "close_date": 0,
+                "quote_token_name": "PancakeSwap Token",
+                "base_token_id": "0",
+                "quote_token_id": "0",
+                "base_token_quantity": 0.1,
+                "quote_token_quantity": 100,
+                "create_date": 1655490052000,
+                "base_token_name": "BNB",
+                "base_token_address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+                "identifier": "58",
+                "period": "0",
+                "purchases": {},
+                "kind": "0",
+                "packages": "0",
+                "base_token_symbol": "BNB",
+                "update_date": 1655490052000,
+                "quote_token_address": "0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82",
+                "blockchain": "bsc",
+                "quote_token_symbol": "Cake",
+                "claims": {},
+                "category": "token",
+                "ratio": 0.001,
+                "whitelisted_wallets": null
+            },
+            "sort": [
+                1655490052000
+            ]
+        },
+        {
+            "_index": "marketplace_01252022",
+            "_type": "_doc",
+            "_id": "57",
+            "_score": null,
+            "_source": {
+                "next_claim": {},
+                "seller_wallet": "0x6ae2a9faa21ad96886b96d45d9927c7858292e72",
+                "close_date": 0,
+                "quote_token_name": "BUSD Token",
+                "base_token_id": "0",
+                "quote_token_id": "0",
+                "base_token_quantity": 1000,
+                "quote_token_quantity": 1000,
+                "create_date": 1652850738000,
+                "base_token_name": "Euler.Tools",
+                "base_token_address": "0x3920123482070c1a2dff73aad695c60e7c6f6862",
+                "identifier": "57",
+                "period": "0",
+                "purchases": {},
+                "kind": "0",
+                "packages": "0",
+                "base_token_symbol": "EULER",
+                "update_date": 1652850738000,
+                "quote_token_address": "0xe9e7cea3dedca5984780bafc599bd69add087d56",
+                "blockchain": "bsc",
+                "quote_token_symbol": "BUSD",
+                "claims": {},
+                "category": "token",
+                "ratio": 1,
+                "whitelisted_wallets": null
+            },
+            "sort": [
+                1652850738000
+            ]
+        },
+        {
+            "_index": "marketplace_01252022",
+            "_type": "_doc",
+            "_id": "51",
+            "_score": null,
+            "_source": {
+                "next_claim": {},
+                "seller_wallet": "0xde1d7d4fc3adc024953e80a28d33fc5968286a75",
+                "close_date": 0,
+                "quote_token_name": "BTCB Token",
+                "base_token_id": "0",
+                "quote_token_id": "0",
+                "base_token_quantity": 0.001,
+                "quote_token_quantity": 0.001,
+                "create_date": 1648151134000,
+                "base_token_name": "BNB",
+                "base_token_address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+                "identifier": "51",
+                "period": "0",
+                "purchases": {},
+                "kind": "0",
+                "packages": "0",
+                "base_token_symbol": "BNB",
+                "update_date": 1648151134000,
+                "quote_token_address": "0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c",
+                "blockchain": "bsc",
+                "quote_token_symbol": "BTCB",
+                "claims": {},
+                "category": "token",
+                "ratio": 1,
+                "whitelisted_wallets": null
+            },
+            "sort": [
+                1648151134000
+            ]
+        },
+        {
+            "_index": "marketplace_01252022",
+            "_type": "_doc",
+            "_id": "22",
+            "_score": null,
+            "_source": {
+                "next_claim": {},
+                "seller_wallet": "0x8465b056a6d712e8789b03b7994c9d77ce61c756",
+                "close_date": 0,
+                "quote_token_name": "Wrapped BNB",
+                "base_token_id": "0",
+                "quote_token_id": "0",
+                "base_token_quantity": 0.0000099,
+                "quote_token_quantity": 0.00001,
+                "create_date": 1647547321000,
+                "base_token_name": "Euler.Tools",
+                "base_token_address": "0x3920123482070c1a2dff73aad695c60e7c6f6862",
+                "identifier": "22",
+                "period": "0",
+                "purchases": {},
+                "kind": "0",
+                "packages": "0",
+                "base_token_symbol": "EULER",
+                "update_date": 1647547321000,
+                "quote_token_address": "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
+                "blockchain": "bsc",
+                "quote_token_symbol": "WBNB",
+                "claims": {},
+                "category": "token",
+                "ratio": 0.9899999999999999,
+                "whitelisted_wallets": null
+            },
+            "sort": [
+                1647547321000
+            ]
+        }
+    ]
+    pools:
+      type: object
+      properties:
+        "poolAddress":
+          type: string
+          example: "0xda98731d7Ca75bbf22FD1251d8B1dC6053018129"
+        "token1": 
+          type: object
+          example: {
+            "address": "0x3920123482070C1a2dff73AaD695c60e7c6F6862",
+            "balance": 1029742.7774930634
+            }
+        "token2":
+          type: object
+          example: {
+            "address": "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
+            "balance": 23027.936181338293
+            }
+        "LPBalance":
+          type: number
+          example: 0.018911825316195004,
+        "price":
+          type: number
+          example: 0.022362804269820107,
+    cognito:
+      type: object
+      properties:
+        "AuthenticationResult":
+          type: object
+          example: {
+        "AccessToken": "raWQiOiJEVU52WUpXbFwvYTJVTDN1SGd3Um1wZSt3ZmZ3VGVtZ0VVWitJbThYSDJUdz0iLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJhYTYxZTQ4NS1kMWNkLTRjNzMtODJmMy03ZTk2NGY2MjkzMmYiLCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAudXMtZWFzdC0xLmFtYXpvbmF3cy5jb21cL3VzLWVhc3QtMV9iTU5ha0VwQTkiLCJjbGllbnRfaWQiOiIybGw0Z2pzZW5lYjJxbXViZ3Q5aDFycG8iLCJvcmlnaW5fanRpIjoiYTBlYzc3ODktZTY1MS00NDMxLWEzYjktMGRlMDM1MTYzNWQ4IiwiZXZlbnRfaWQiOiI5MWNjMjE5Zi0xY2JkLTQyODEtYmNlMC1lYzhhMTQ4ZmU5NGUiLCJ0b2tlbl91c2UiOiJhY2Nlc3MiLCJzY29wZSI6ImF3cy5jb2duaXRvLnNpZ25pbi51c2VyLmFkbWluIiwiYXV0aF90aW1lIjoxNjY1NzU1Njc2LCJleHAiOjE2NjYzNzUxOTYsImlhdCI6MTY2NjM3MTU5NiwianRpIjoiZjZkZmUxNGMtYWI3Ni00MmQzLWFmYzItNWRlYzcyZTBhMjg3IiwidXNlcm5hbWUiOiJhYTYxZTQ4NS1kMWNkLTRjNzMtODJmMy03ZTk2NGY2MjkzMmYifQ.u0TySTBnRBIp44gooDfviOwA314odHhqobetUyCOZJdZVPhIzgRSVGJP_dMa48g8HLuzzsQLXRyCF0yWVk8oe8KRzXTjtCeKMsrTFihdDTBj4Qv7lxqSeaQxjOjs4GfDseDi2pmDYYpLcVnjuASy3bklkgVTtQGdK5_AgHlnEWAnKpfIn8q91a3EvsHCAMDpQNzVLHarx7faos_dgIgZOTUrIFGES0JkdEFCftpWs7dAuR9Y5r2FJI1-WtQE_v84Z7VZC9qUddlQCACrlkQvcSmZ2EiqWRXLX1LjG4SUa-2uM95H0l4E6hLLiDuTe06xFZHQFR5KV7OM8h_6RB-RNA",
+        "ExpiresIn": 3600,
+        "IdToken": "<redacted-jwt>",
+        "TokenType": "Bearer"
+        }
+        "ChallengeParameters":  
+          type: object
+          example: {}
+    settings:
+      type: object
+      properties:
+        "aws":
+          type: object
+          example: {
+           "region": "us-east-1",
+           "cognito": {
+            "region": "us-east-1",
+            "pool_id": "COGNITO_USER_POOL_ID",
+            "client_id": "COGNITO_CLIENT_ID"
+          }
+          }
+        "gtm":
+          type: object
+          example: {
+           "id": "GTM-P58NGC3"
+           }
+        "urls":
+          type: object
+          example: {
+            "api": "https://catalog.prod.euler.tools",
+            "private_api": "https://catalog.prod.euler.tools",
+            "ws": "wss://catalog.prod.euler.tools/bsc",
+            "nft_api": "https://nft.api.prod.euler.tools",
+            "directory_api": "https://directory.api.prod.euler.tools",
+            "app": "https://app.prod.euler.tools"
+              }
+        "external_links":
+          type: object
+          example: {
+            "pancakeSwap": "https://pancakeswap.finance/swap?",
+            "pancakeSwapv1": "https://v1exchange.pancakeswap.finance/#/swap?",
+            "mdex": "https://bsc.mdex.com/#/swap?",
+            "unisave": "https://app.unisave.exchange/#/swap?",
+            "biswap": "https://exchange.biswap.org/#/swap?",
+            "apeswap": "https://app.apeswap.finance/swap?",
+            "alitaswap": "https://exchange.alita.finance/#/swap?",
+            "wardenswap": "https://www.wardenswap.finance/#/best-rate-swap?",
+            "babyswap": "https://exchange.babyswap.finance/#/swap?",
+            "bscswap": "https://trade.bscswap.com/#/swap?",
+            "bakeryswap": "https://www.bakeryswap.org/#/swap?"
+            }
+        "chain":
+          type: object
+          example: {
+              "bsc": {
+                  "chain_id": 56,
+                  "rpc": "https://bsc-dataseed.binance.org/",
+                  "explorer": "https://euler.tools/bsc",
+                  "chain_token_address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+                  "chain_token_symbol": "BNB",
+                  "chain_token_name": "Build and Build",
+                  "chain_wrapper_token_address": "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
+                  "chain_wrapper_token_symbol": "WBNB",
+                  "tokens": {
+                      "euler": {
+                          "symbol": "EULER",
+                          "address": "0x3920123482070c1a2dff73aad695c60e7c6f6862",
+                          "total_supply": 100000000,
+                          "tvl": [
+                              {
+                                  "name": "staking",
+                                  "address": "0xb18fab4c6f054e734ea169561787cc87928f54ee"
+                              },
+                              {
+                                  "name": "pancakeV2Liquidity",
+                                  "address": "0x09907AA171cD131Eba5AcbAEEC4991d66A21294F"
+                              }
+                          ]
+                      },
+                      "bnb": {
+                          "symbol": "WBNB",
+                          "address": "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c"
+                      },
+                      "eth": {
+                          "symbol": "ETH",
+                          "address": "0x2170ed0880ac9a755fd29b2688956bd959f933f8"
+                      },
+                      "btc": {
+                          "symbol": "BTCB",
+                          "address": "0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c"
+                      },
+                      "stable": {
+                          "symbol": "BUSD",
+                          "address": "0xe9e7cea3dedca5984780bafc599bd69add087d56"
+                      }
+                  },
+                  "company_wallet": "0xdaabecacdd888dcf68ff1f2d9202e74aba0601bd",
+                  "products": {
+                      "marketplace": "0x89c7a3fcd89fc3b80da5b0629f0a644480117f35",
+                      "staking": "0xb18fab4c6f054e734ea169561787cc87928f54ee",
+                      "dex_agregator": "0xa9faccb02bef6cfdb2a411cb5f79f3e596362526",
+                      "token": "0xc7190522df188816736cf62fe11ae619ca1cf73c",
+                      "locker": "0x20d5f439ea2918e7aa9f518a438fdc6407104fd1",
+                      "manager_tax": "0x564b5ae80d27009fdb80ab05220f78b0968d755f"
+                  }
+              },
+              "eth": {
+                  "chain_id": 1,
+                  "rpc": "https://eth.nodes.prod.euler.tools/rpc",
+                  "explorer": "https://euler.tools/eth",
+                  "chain_token_address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+                  "chain_token_symbol": "ETH",
+                  "chain_token_name": "Ethereum",
+                  "chain_wrapper_token_address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                  "chain_wrapper_token_symbol": "WETH",
+                  "tokens": {
+                      "bnb": {
+                          "symbol": "BNB",
+                          "address": "0xb8c77482e45f1f44de1745f52c74426c631bdd52"
+                      },
+                      "eth": {
+                          "symbol": "WETH",
+                          "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                      },
+                      "btc": {
+                          "symbol": "WBTC",
+                          "address": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599"
+                      },
+                      "stable": {
+                          "symbol": "USDT",
+                          "address": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599"
+                      }
+                  },
+                  "company_wallet": "0xdaabecacdd888dcf68ff1f2d9202e74aba0601bd",
+                  "products": {}
+              },
+              "bsctest": {
+                  "chain_id": 97,
+                  "rpc": "https://bsc-testnet-rpc.publicnode.com",
+                  "explorer": "https://testnet.bscscan.com",
+                  "chain_token_address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+                  "chain_token_symbol": "BNB",
+                  "chain_token_name": "Build and Build",
+                  "chain_wrapper_token_address": "0xae13d989dac2f0debff460ac112a837c89baa7cd",
+                  "chain_wrapper_token_symbol": "WBNB",
+                  "tokens": {
+                      "euler": {
+                          "symbol": "EULER",
+                          "address": "0x4e51d810015227fbe24aad99acf8cc82819e73ed"
+                      },
+                      "bnb": {
+                          "symbol": "WBNB",
+                          "address": "0xae13d989dac2f0debff460ac112a837c89baa7cd"
+                      },
+                      "eth": {
+                          "symbol": "ETH",
+                          "address": "0x8babbb98678facc7342735486c851abd7a0d17ca"
+                      },
+                      "stable": {
+                          "symbol": "USDT",
+                          "address": "0x7ef95a0fee0dd31b22626fa2e10ee6a223f8a684"
+                      }
+                  },
+                  "company_wallet": "0xdaabecacdd888dcf68ff1f2d9202e74aba0601bd",
+                  "products": {
+                      "marketplace": "0xb8bdb88ab7ca5f86b9b89be395c4dade3df0a85c",
+                      "staking": "0x79ae145bcd504a13c8e76cf2ee7397088be1c4cc",
+                      "dex_agregator": "0x37f3c9533852fe37c486be29013817140935701b",
+                      "locker": "0x19ce890967d8e1b9f747dc8a6a56943ded26a3ae",
+                      "manager_tax": "0x182efdded72aca92dc7e7fb886028246199a1190",
+                      "token": "0x82cff851b5097438f3a78ced7774fb1b4473157c"
+                  }
+              },
+              "polygon": {
+                  "chain_id": 137,
+                  "rpc": "https://polygon-rpc.com",
+                  "explorer": "https://polygonscan.com",
+                  "chain_token_address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+                  "chain_token_symbol": "MATIC",
+                  "chain_token_name": "Polygon",
+                  "chain_wrapper_token_address": "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
+                  "chain_wrapper_token_symbol": "WMATIC",
+                  "tokens": {},
+                  "company_wallet": "0xdaabecacdd888dcf68ff1f2d9202e74aba0601bd",
+                  "products": {
+                      "token": "0xc7190522df188816736cf62fe11ae619ca1cf73c",
+                      "manager_tax": "0x89c7a3fcd89fc3b80da5b0629f0a644480117f35"
+                  }
+              }
+          }
+        "features": 
+          type: object
+          example: {
+        "marketplaceV2Enabled": true,
+        "marketsDisabled": true,
+        "profilesDisabled": true,
+        "nftDisabled": true
+    }
+
+      
+
+      
+    

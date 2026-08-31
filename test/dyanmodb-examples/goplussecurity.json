@@ -1,0 +1,469 @@
+{
+  "identifier": {
+    "S": "goplussecurity~bnb~0x3920123482070c1a2dff73aad695c60e7c6f6862"
+  },
+  "update_date": {
+    "N": "1659943321"
+  },
+  "buy_tax": {
+    "S": "0.01"
+  },
+  "cannot_buy": {
+    "S": "0"
+  },
+  "cannot_sell_all": {
+    "S": "0"
+  },
+  "canonical": {
+    "S": "euler-tools"
+  },
+  "can_take_back_ownership": {
+    "S": "0"
+  },
+  "chain": {
+    "S": "bnb"
+  },
+  "creator_address": {
+    "S": "0x642f94fb9d068ab4d8de1e9feae8c467080d2b24"
+  },
+  "creator_balance": {
+    "S": "1000"
+  },
+  "creator_percent": {
+    "S": "0.00001"
+  },
+  "dex": {
+    "L": [
+      {
+        "M": {
+          "liquidity": {
+            "S": "94509.57778603"
+          },
+          "name": {
+            "S": "PancakeV2"
+          },
+          "pair": {
+            "S": "0xda98731d7Ca75bbf22FD1251d8B1dC6053018129"
+          }
+        }
+      },
+      {
+        "M": {
+          "liquidity": {
+            "S": "5602.75271727"
+          },
+          "name": {
+            "S": "PancakeV1"
+          },
+          "pair": {
+            "S": "0xd4B293586cb74770749Aea799e277241B339C62C"
+          }
+        }
+      },
+      {
+        "M": {
+          "liquidity": {
+            "S": "433.47134249"
+          },
+          "name": {
+            "S": "PancakeV2"
+          },
+          "pair": {
+            "S": "0x09907AA171cD131Eba5AcbAEEC4991d66A21294F"
+          }
+        }
+      },
+      {
+        "M": {
+          "liquidity": {
+            "S": "0.06076918"
+          },
+          "name": {
+            "S": "PancakeV1"
+          },
+          "pair": {
+            "S": "0x58DFD26C7240Cca4383328e6aAf78564f6a49506"
+          }
+        }
+      }
+    ]
+  },
+  "external_call": {
+    "S": "0"
+  },
+  "hidden_owner": {
+    "S": "0"
+  },
+  "holders": {
+    "L": [
+      {
+        "M": {
+          "address": {
+            "S": "0xb18fab4c6f054e734ea169561787cc87928f54ee"
+          },
+          "balance": {
+            "S": "48270730.435287"
+          },
+          "is_contract": {
+            "N": "1"
+          },
+          "is_locked": {
+            "N": "0"
+          },
+          "percent": {
+            "S": "0.482707304352870000"
+          },
+          "tag": {
+            "NULL": true
+          }
+        }
+      },
+      {
+        "M": {
+          "address": {
+            "S": "0x000000000000000000000000000000000000dead"
+          },
+          "balance": {
+            "S": "10262236.88833"
+          },
+          "is_contract": {
+            "N": "0"
+          },
+          "is_locked": {
+            "N": "1"
+          },
+          "percent": {
+            "S": "0.102622368883300000"
+          },
+          "tag": {
+            "NULL": true
+          }
+        }
+      },
+      {
+        "M": {
+          "address": {
+            "S": "0xd786f053f93f2babd1e55617829cbae882a1a1e0"
+          },
+          "balance": {
+            "S": "9880000"
+          },
+          "is_contract": {
+            "N": "1"
+          },
+          "is_locked": {
+            "N": "0"
+          },
+          "percent": {
+            "S": "0.098800000000000000"
+          },
+          "tag": {
+            "NULL": true
+          }
+        }
+      },
+      {
+        "M": {
+          "address": {
+            "S": "0xdaabecacdd888dcf68ff1f2d9202e74aba0601bd"
+          },
+          "balance": {
+            "S": "3380407.2304841"
+          },
+          "is_contract": {
+            "N": "0"
+          },
+          "is_locked": {
+            "N": "0"
+          },
+          "percent": {
+            "S": "0.033804072304841000"
+          },
+          "tag": {
+            "NULL": true
+          }
+        }
+      },
+      {
+        "M": {
+          "address": {
+            "S": "0xda98731d7ca75bbf22fd1251d8b1dc6053018129"
+          },
+          "balance": {
+            "S": "3259456.1815287"
+          },
+          "is_contract": {
+            "N": "1"
+          },
+          "is_locked": {
+            "N": "0"
+          },
+          "percent": {
+            "S": "0.032594561815287000"
+          },
+          "tag": {
+            "S": "PancakeV2"
+          }
+        }
+      },
+      {
+        "M": {
+          "address": {
+            "S": "0x93e0506ff24f4cfafb823ed7cf74b644655fde11"
+          },
+          "balance": {
+            "S": "2632500"
+          },
+          "is_contract": {
+            "N": "0"
+          },
+          "is_locked": {
+            "N": "0"
+          },
+          "percent": {
+            "S": "0.026325000000000000"
+          },
+          "tag": {
+            "NULL": true
+          }
+        }
+      },
+      {
+        "M": {
+          "address": {
+            "S": "0x4bd23b8a50673f43f276f8c26ad420be97c112a4"
+          },
+          "balance": {
+            "S": "1000000"
+          },
+          "is_contract": {
+            "N": "0"
+          },
+          "is_locked": {
+            "N": "0"
+          },
+          "percent": {
+            "S": "0.010000000000000000"
+          },
+          "tag": {
+            "NULL": true
+          }
+        }
+      },
+      {
+        "M": {
+          "address": {
+            "S": "0xd00c43154d8962ae6275f0bfc82f065a633b083b"
+          },
+          "balance": {
+            "S": "818519.14642898"
+          },
+          "is_contract": {
+            "N": "0"
+          },
+          "is_locked": {
+            "N": "0"
+          },
+          "percent": {
+            "S": "0.008185191464289800"
+          },
+          "tag": {
+            "NULL": true
+          }
+        }
+      },
+      {
+        "M": {
+          "address": {
+            "S": "0xb6b41ec26d1556c9d916793aeed90a143f5dac31"
+          },
+          "balance": {
+            "S": "625000"
+          },
+          "is_contract": {
+            "N": "0"
+          },
+          "is_locked": {
+            "N": "0"
+          },
+          "percent": {
+            "S": "0.006250000000000000"
+          },
+          "tag": {
+            "NULL": true
+          }
+        }
+      },
+      {
+        "M": {
+          "address": {
+            "S": "0x33c4966c7089c66b4e607cd7c4542d72229860f3"
+          },
+          "balance": {
+            "S": "589954.08924859"
+          },
+          "is_contract": {
+            "N": "0"
+          },
+          "is_locked": {
+            "N": "0"
+          },
+          "percent": {
+            "S": "0.005899540892485900"
+          },
+          "tag": {
+            "NULL": true
+          }
+        }
+      }
+    ]
+  },
+  "holder_count": {
+    "S": "7775"
+  },
+  "is_anti_whale": {
+    "S": "0"
+  },
+  "is_blacklisted": {
+    "S": "0"
+  },
+  "is_honeypot": {
+    "S": "0"
+  },
+  "is_in_dex": {
+    "S": "1"
+  },
+  "is_mintable": {
+    "S": "0"
+  },
+  "is_open_source": {
+    "S": "1"
+  },
+  "is_proxy": {
+    "S": "0"
+  },
+  "is_whitelisted": {
+    "S": "0"
+  },
+  "lp_holders": {
+    "L": [
+      {
+        "M": {
+          "address": {
+            "S": "0xdaabecacdd888dcf68ff1f2d9202e74aba0601bd"
+          },
+          "balance": {
+            "S": "0.069253472997103"
+          },
+          "is_contract": {
+            "N": "0"
+          },
+          "is_locked": {
+            "N": "0"
+          },
+          "percent": {
+            "S": "0.999201067206152848"
+          },
+          "tag": {
+            "NULL": true
+          }
+        }
+      },
+      {
+        "M": {
+          "address": {
+            "S": "0x0ed943ce24baebf257488771759f9bf482c39706"
+          },
+          "balance": {
+            "S": "0.000055373110058036"
+          },
+          "is_contract": {
+            "N": "1"
+          },
+          "is_locked": {
+            "N": "0"
+          },
+          "percent": {
+            "S": "0.000798932793837326"
+          },
+          "tag": {
+            "NULL": true
+          }
+        }
+      },
+      {
+        "M": {
+          "address": {
+            "S": "0x0000000000000000000000000000000000000000"
+          },
+          "balance": {
+            "S": "0.000000000000001000"
+          },
+          "is_contract": {
+            "N": "0"
+          },
+          "is_locked": {
+            "N": "1"
+          },
+          "percent": {
+            "S": "0.000000000000014428"
+          },
+          "tag": {
+            "NULL": true
+          }
+        }
+      }
+    ]
+  },
+  "lp_holder_count": {
+    "S": "3"
+  },
+  "lp_total_supply": {
+    "S": "0.069308846107161717"
+  },
+  "owner_address": {
+    "S": "0xdaabecacdd888dcf68ff1f2d9202e74aba0601bd"
+  },
+  "owner_balance": {
+    "S": "3380407.230484113392461459"
+  },
+  "owner_change_balance": {
+    "S": "0"
+  },
+  "owner_percent": {
+    "S": "0.033804"
+  },
+  "personal_slippage_modifiable": {
+    "S": "0"
+  },
+  "readable_update_date": {
+    "S": "2022-08-08T07:22:01.149Z"
+  },
+  "selfdestruct": {
+    "S": "0"
+  },
+  "sell_tax": {
+    "S": "0.0099989682474185"
+  },
+  "slippage_modifiable": {
+    "S": "0"
+  },
+  "source": {
+    "S": "goplussecurity"
+  },
+  "token_name": {
+    "S": "Euler.Tools"
+  },
+  "token_symbol": {
+    "S": "EULER"
+  },
+  "total_supply": {
+    "S": "100000000.000000000000000000"
+  },
+  "trading_cooldown": {
+    "S": "0"
+  },
+  "transfer_pausable": {
+    "S": "0"
+  }
+}

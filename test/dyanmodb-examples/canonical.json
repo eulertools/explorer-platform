@@ -1,0 +1,252 @@
+{
+  "identifier": {
+    "S": "tether"
+  },
+  "update_date": {
+    "N": "1659976500"
+  },
+  "coingecko_id": {
+    "S": "tether"
+  },
+  "description": {
+    "S": "Tether (USDT) is a cryptocurrency with a value meant to mirror the value of the U.S. dollar. The idea was to create a stable cryptocurrency that can be used like digital dollars. Coins that serve this purpose of being a stable dollar substitute are called “stable coins.” Tether is the most popular stable coin and even acts as a dollar replacement on many popular exchanges! According to their site, Tether converts cash into digital currency, to anchor or “tether” the value of the coin to the price of national currencies like the US dollar, the Euro, and the Yen. Like other cryptos it uses blockchain. Unlike other cryptos, it is [according to the official Tether site] “100% backed by USD” (USD is held in reserve). The primary use of Tether is that it offers some stability to the otherwise volatile crypto space and offers liquidity to exchanges who can’t deal in dollars and with banks (for example to the sometimes controversial but leading exchange <a href=\"https://www.coingecko.com/en/exchanges/bitfinex\">Bitfinex</a>).\r\n\r\nThe digital coins are issued by a company called Tether Limited that is governed by the laws of the British Virgin Islands, according to the legal part of its website. It is incorporated in Hong Kong. It has emerged that Jan Ludovicus van der Velde is the CEO of cryptocurrency exchange Bitfinex, which has been accused of being involved in the price manipulation of bitcoin, as well as tether. Many people trading on exchanges, including Bitfinex, will use tether to buy other cryptocurrencies like bitcoin. Tether Limited argues that using this method to buy virtual currencies allows users to move fiat in and out of an exchange more quickly and cheaply. Also, exchanges typically have rocky relationships with banks, and using Tether is a way to circumvent that.\r\n\r\nUSDT is fairly simple to use. Once on exchanges like <a href=\"https://www.coingecko.com/en/exchanges/poloniex\">Poloniex</a> or Bittrex, it can be used to purchase Bitcoin and other cryptocurrencies. It can be easily transferred from an exchange to any Omni Layer enabled wallet. Tether has no transaction fees, although external wallets and exchanges may charge one. In order to convert USDT to USD and vise versa through the Tether.to Platform, users must pay a small fee. Buying and selling Tether for Bitcoin can be done through a variety of exchanges like the ones mentioned previously or through the Tether.to platform, which also allows the conversion between USD to and from your bank account."
+  },
+  "image": {
+    "M": {
+      "cg": {
+        "M": {
+          "large": {
+            "S": "https://assets.coingecko.com/coins/images/325/large/Tether-logo.png?1598003707"
+          },
+          "small": {
+            "S": "https://assets.coingecko.com/coins/images/325/small/Tether-logo.png?1598003707"
+          },
+          "thumb": {
+            "S": "https://assets.coingecko.com/coins/images/325/thumb/Tether-logo.png?1598003707"
+          }
+        }
+      }
+    }
+  },
+  "links": {
+    "L": [
+      {
+        "M": {
+          "kind": {
+            "S": "homepage"
+          },
+          "url": {
+            "S": "https://tether.to/"
+          }
+        }
+      },
+      {
+        "M": {
+          "kind": {
+            "S": "blockchain_site"
+          },
+          "url": {
+            "S": "https://blockchair.com/bitcoin/omni/property/31"
+          }
+        }
+      },
+      {
+        "M": {
+          "kind": {
+            "S": "blockchain_site"
+          },
+          "url": {
+            "S": "https://etherscan.io/token/0xdac17f958d2ee523a2206206994597c13d831ec7"
+          }
+        }
+      },
+      {
+        "M": {
+          "kind": {
+            "S": "blockchain_site"
+          },
+          "url": {
+            "S": "https://ethplorer.io/address/0xdac17f958d2ee523a2206206994597c13d831ec7"
+          }
+        }
+      },
+      {
+        "M": {
+          "kind": {
+            "S": "blockchain_site"
+          },
+          "url": {
+            "S": "https://tronscan.org/#/token20/TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"
+          }
+        }
+      },
+      {
+        "M": {
+          "kind": {
+            "S": "blockchain_site"
+          },
+          "url": {
+            "S": "https://polygonscan.com/token/0xc2132d05d31c914a87c6611c10748aeb04b58e8f"
+          }
+        }
+      },
+      {
+        "M": {
+          "kind": {
+            "S": "blockchain_site"
+          },
+          "url": {
+            "S": "https://bscscan.com/token/0x55d398326f99059ff775485246999027b3197955"
+          }
+        }
+      },
+      {
+        "M": {
+          "kind": {
+            "S": "blockchain_site"
+          },
+          "url": {
+            "S": "https://usdt.tokenview.com/en"
+          }
+        }
+      },
+      {
+        "M": {
+          "kind": {
+            "S": "blockchain_site"
+          },
+          "url": {
+            "S": "https://cronos-explorer.crypto.org/token/0x66e428c3f67a68878562e79a0234c1f83c208770"
+          }
+        }
+      },
+      {
+        "M": {
+          "kind": {
+            "S": "blockchain_site"
+          },
+          "url": {
+            "S": "https://snowtrace.io/token/0x9702230a8ea53601f5cd2dc00fdbc13d4df4a8c7"
+          }
+        }
+      },
+      {
+        "M": {
+          "kind": {
+            "S": "blockchain_site"
+          },
+          "url": {
+            "S": "https://avascan.info/blockchain/c/address/0x9702230a8ea53601f5cd2dc00fdbc13d4df4a8c7/token"
+          }
+        }
+      }
+    ]
+  },
+  "name": {
+    "S": "Tether"
+  },
+  "networks": {
+    "M": {
+      "bnb": {
+        "M": {
+          "address": {
+            "S": "0x55d398326f99059ff775485246999027b3197955"
+          }
+        }
+      }
+    }
+  },
+  "rank": {
+    "M": {
+      "cg": {
+        "M": {
+          "global": {
+            "N": "145"
+          },
+          "market_cap": {
+            "N": "3"
+          }
+        }
+      }
+    }
+  },
+  "readable_update_date": {
+    "S": "2022-08-08T16:34:59.639Z"
+  },
+  "score": {
+    "M": {
+      "cg": {
+        "M": {
+          "community": {
+            "N": "11.057"
+          },
+          "liquidity": {
+            "N": "102.701"
+          },
+          "public_interest": {
+            "N": "0.043"
+          },
+          "score": {
+            "N": "41.56"
+          }
+        }
+      }
+    }
+  },
+  "socials_media": {
+    "M": {
+      "facebook": {
+        "S": "tether.to"
+      },
+      "twitter": {
+        "S": "Tether_to"
+      }
+    }
+  },
+  "symbol": {
+    "S": "USDT"
+  },
+  "tags": {
+    "L": [
+      {
+        "S": "Stablecoins"
+      },
+      {
+        "S": "USD Stablecoin"
+      },
+      {
+        "S": "Polygon Ecosystem"
+      },
+      {
+        "S": "BNB Chain Ecosystem"
+      },
+      {
+        "S": "Avalanche Ecosystem"
+      },
+      {
+        "S": "Moonriver Ecosystem"
+      },
+      {
+        "S": "Arbitrum Ecosystem"
+      },
+      {
+        "S": "Fantom Ecosystem"
+      },
+      {
+        "S": "Near Protocol Ecosystem"
+      },
+      {
+        "S": "Moonbeam Ecosystem"
+      },
+      {
+        "S": "Ethereum Ecosystem"
+      },
+      {
+        "S": "Cronos Ecosystem"
+      }
+    ]
+  },
+  "update_date_coingecko": {
+    "S": "2022-08-08T04:06:01.324Z"
+  }
+}

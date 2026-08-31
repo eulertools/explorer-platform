@@ -1,0 +1,89 @@
+{
+  "identifier": {
+    "S": "coingecko-marketcap~euler-tools"
+  },
+  "update_date": {
+    "N": "1659882734"
+  },
+  "ath": {
+    "N": "0.319587"
+  },
+  "ath_change_percentage": {
+    "N": "-90.92898"
+  },
+  "ath_date": {
+    "S": "2021-05-05T16:59:29.738Z"
+  },
+  "atl": {
+    "N": "0.01561748"
+  },
+  "atl_change_percentage": {
+    "N": "85.62412"
+  },
+  "atl_date": {
+    "S": "2021-07-20T11:05:24.058Z"
+  },
+  "circulating_supply": {
+    "N": "72268870.5917564"
+  },
+  "current_price": {
+    "N": "0.02911222"
+  },
+  "fully_diluted_valuation": {
+    "N": "2908640"
+  },
+  "high_24h": {
+    "N": "0.02919627"
+  },
+  "id": {
+    "S": "euler-tools"
+  },
+  "image": {
+    "S": "https://assets.coingecko.com/coins/images/14677/large/euler_logo.png?1617705515"
+  },
+  "last_updated": {
+    "S": "2022-08-07T14:32:14.332Z"
+  },
+  "low_24h": {
+    "N": "0.02847818"
+  },
+  "market_cap": {
+    "N": "2102041"
+  },
+  "market_cap_change_24h": {
+    "N": "24795"
+  },
+  "market_cap_change_percentage_24h": {
+    "N": "1.19365"
+  },
+  "market_cap_rank": {
+    "N": "1598"
+  },
+  "max_supply": {
+    "N": "100000000"
+  },
+  "name": {
+    "S": "Euler Tools"
+  },
+  "price_change_24h": {
+    "N": "0.00037226"
+  },
+  "price_change_percentage_24h": {
+    "N": "1.29528"
+  },
+  "roi": {
+    "NULL": true
+  },
+  "source": {
+    "S": "coingecko-marketcap"
+  },
+  "symbol": {
+    "S": "euler"
+  },
+  "total_supply": {
+    "N": "100000000"
+  },
+  "total_volume": {
+    "N": "2367.39"
+  }
+}

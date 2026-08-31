@@ -1,0 +1,376 @@
+{
+  "identifier": {
+    "S": "coimarketcap~825"
+  },
+  "update_date": {
+    "N": "1661160540"
+  },
+  "category": {
+    "S": "token"
+  },
+  "date_added": {
+    "S": "2015-02-25T00:00:00.000Z"
+  },
+  "date_launched": {
+    "NULL": true
+  },
+  "description": {
+    "S": "Tether (USDT) is a cryptocurrency and operates on the Ethereum platform. Tether has a current supply of 69,157,777,033.00569 with 67,549,555,015.74651 in circulation. The last known price of Tether is 1.0000064 USD and is up -0.00 over the last 24 hours. It is currently trading on 38586 active market(s) with $45,699,064,001.56 traded over the last 24 hours. More information can be found at https://tether.to."
+  },
+  "id": {
+    "N": "825"
+  },
+  "is_hidden": {
+    "N": "0"
+  },
+  "logo": {
+    "S": "https://s2.coinmarketcap.com/static/img/coins/64x64/825.png"
+  },
+  "name": {
+    "S": "Tether"
+  },
+  "networks": {
+    "M": {
+      "algorand": {
+        "S": "312769"
+      },
+      "aurora_near": {
+        "S": "0x4988a896b1227218e4a686fde5eabdcabd91571f"
+      },
+      "avalanche": {
+        "S": "0xc7198437980c041c805a1edcba50c1ce5db95118"
+      },
+      "bitcoin_cash": {
+        "S": "0xbc2f884680c95a02cea099da2f524b366d9028ba"
+      },
+      "bitrise_token": {
+        "S": "0xde14b85cf78f2add2e867fee40575437d5f10c06"
+      },
+      "bnb": {
+        "S": "0x55d398326f99059ff775485246999027b3197955"
+      },
+      "boba_network": {
+        "S": "0x5de1677344d3cb0d7d465c10b72a8f60699c062d"
+      },
+      "cardano": {
+        "S": "0x3795c36e7d12a8c252a20c5a7b455f7c57b60283"
+      },
+      "conflux_network": {
+        "S": "0xfe97e85d13abd9c1c33384e796f10b73905637ce"
+      },
+      "cronos": {
+        "S": "0x66e428c3f67a68878562e79a0234c1f83c208770"
+      },
+      "ethereum": {
+        "S": "0xdac17f958d2ee523a2206206994597c13d831ec7"
+      },
+      "everscale": {
+        "S": "0:a519f99bb5d6d51ef958ed24d337ad75a1c770885dcd42d51d6663f9fcdacfb2"
+      },
+      "fantom": {
+        "S": "0x049d68029688eabf473097a2fc38ef61633a3c7a"
+      },
+      "fusion": {
+        "S": "0x9636d3294e45823ec924c8d89dd1f1dffcf044e6"
+      },
+      "harmony": {
+        "S": "0x3c2b8be99c50593081eaa2a724f0b8285f5aba8f"
+      },
+      "hoo_smart_chain": {
+        "S": "0xd16babe52980554520f6da505df4d1b124c815a7"
+      },
+      "huobi_token": {
+        "S": "0xa71edc38d189767582c38a3145b5873052c3e47a"
+      },
+      "iotex": {
+        "S": "0x6fbcdc1169b5130c59e72e51ed68a84841c98cd1"
+      },
+      "kardiachain": {
+        "S": "0x551a5dcac57c66aa010940c2dcff5da9c53aa53b"
+      },
+      "klaytn": {
+        "S": "0xcee8faf64bb97a73bb51e115aa89c17ffa8dd167"
+      },
+      "kucoin_token": {
+        "S": "0x0039f574ee5cc39bdd162e9a88e3eb1f111baf48"
+      },
+      "meter_governance": {
+        "S": "0x5fa41671c48e3c951afc30816947126ccc8c162e"
+      },
+      "metisdao": {
+        "S": "0xbb06dca3ae6887fabf931640f67cab3e3a16f4dc"
+      },
+      "moonbeam": {
+        "S": "0xefaeee334f0fd1712f9a8cc375f427d9cdd40d73"
+      },
+      "moonriver": {
+        "S": "0xe936caa7f6d9f5c9e907111fcaf7c351c184cda7"
+      },
+      "near_protocol": {
+        "S": "dac17f958d2ee523a2206206994597c13d831ec7.factory.bridge.near"
+      },
+      "oasis_network": {
+        "S": "0xdc19a122e268128b5ee20366299fc7b5b199c8e3"
+      },
+      "okt": {
+        "S": "0x382bb369d343125bfb2117af9c149795c6c65c50"
+      },
+      "optimism_ethereum": {
+        "S": "0x94b008aa00579c1307b0ef2c499ad98a8ce58e58"
+      },
+      "polygon": {
+        "S": "0xc2132d05d31c914a87c6611c10748aeb04b58e8f"
+      },
+      "rsk_smart_bitcoin": {
+        "S": "0xef213441a85df4d7acbdae0cf78004e1e486bb96"
+      },
+      "secret": {
+        "S": "secret18wpjn83dayu4meu6wnn29khfkwdxs7kyrz9c8f"
+      },
+      "solana": {
+        "S": "es9vmfrzacermjfrf4h2fyd4kconky11mcce8benwnyb"
+      },
+      "telos": {
+        "S": "0xefaeee334f0fd1712f9a8cc375f427d9cdd40d73"
+      },
+      "terra_luna": {
+        "S": "terra1ce06wkrdm4vl6t0hvc0g86rsy27pu8yadg3dva"
+      },
+      "tezos": {
+        "S": "kt1xntn74butxhfdtbmm2bgzaqfhpbvkwr8o"
+      },
+      "tomochain": {
+        "S": "0x381b31409e4d220919b2cff012ed94d70135a59e"
+      },
+      "tron": {
+        "S": "tr7nhqjekqxgtci8q8zy4pl8otszgjlj6t"
+      },
+      "velas": {
+        "S": "0x01445c31581c354b7338ac35693ab2001b50b9ae"
+      },
+      "waves": {
+        "S": "34n9yceetlwn93qyq64esp1x89tsruju44rremsxxepj"
+      },
+      "xdai": {
+        "S": "0x4ecaba5870353805a9f068101a40e0f32ed605c6"
+      },
+      "zilliqa": {
+        "S": "zil1sxx29cshups269ahh5qjffyr58mxjv9ft78jqy"
+      }
+    }
+  },
+  "notice": {
+    "S": ""
+  },
+  "platform": {
+    "M": {
+      "id": {
+        "S": "1027"
+      },
+      "name": {
+        "S": "Ethereum"
+      },
+      "slug": {
+        "S": "ethereum"
+      },
+      "symbol": {
+        "S": "ETH"
+      },
+      "token_address": {
+        "S": "0xdac17f958d2ee523a2206206994597c13d831ec7"
+      }
+    }
+  },
+  "self_reported_circulating_supply": {
+    "NULL": true
+  },
+  "self_reported_market_cap": {
+    "NULL": true
+  },
+  "self_reported_tags": {
+    "NULL": true
+  },
+  "slug": {
+    "S": "tether"
+  },
+  "source": {
+    "S": "coinmarketcap"
+  },
+  "subreddit": {
+    "S": ""
+  },
+  "symbol": {
+    "S": "USDT"
+  },
+  "tags": {
+    "L": [
+      {
+        "S": "payments"
+      },
+      {
+        "S": "stablecoin"
+      },
+      {
+        "S": "asset-backed-stablecoin"
+      },
+      {
+        "S": "avalanche-ecosystem"
+      },
+      {
+        "S": "solana-ecosystem"
+      },
+      {
+        "S": "arbitrum-ecosytem"
+      },
+      {
+        "S": "moonriver-ecosystem"
+      },
+      {
+        "S": "injective-ecosystem"
+      },
+      {
+        "S": "bnb-chain"
+      },
+      {
+        "S": "usd-stablecoin"
+      }
+    ]
+  },
+  "tag_groups": {
+    "L": [
+      {
+        "S": "INDUSTRY"
+      },
+      {
+        "S": "CATEGORY"
+      },
+      {
+        "S": "CATEGORY"
+      },
+      {
+        "S": "PLATFORM"
+      },
+      {
+        "S": "PLATFORM"
+      },
+      {
+        "S": "PLATFORM"
+      },
+      {
+        "S": "CATEGORY"
+      },
+      {
+        "S": "PLATFORM"
+      },
+      {
+        "S": "PLATFORM"
+      },
+      {
+        "S": "CATEGORY"
+      }
+    ]
+  },
+  "tag_names": {
+    "L": [
+      {
+        "S": "Payments"
+      },
+      {
+        "S": "Stablecoin"
+      },
+      {
+        "S": "Asset-Backed Stablecoin"
+      },
+      {
+        "S": "Avalanche Ecosystem"
+      },
+      {
+        "S": "Solana Ecosystem"
+      },
+      {
+        "S": "Arbitrum Ecosystem"
+      },
+      {
+        "S": "Moonriver Ecosystem"
+      },
+      {
+        "S": "Injective Ecosystem"
+      },
+      {
+        "S": "BNB Chain"
+      },
+      {
+        "S": "USD Stablecoin"
+      }
+    ]
+  },
+  "twitter_username": {
+    "S": "tether_to"
+  },
+  "urls": {
+    "M": {
+      "announcement": {
+        "L": []
+      },
+      "chat": {
+        "L": [
+          {
+            "S": "https://t.me/OfficialTether"
+          }
+        ]
+      },
+      "explorer": {
+        "L": [
+          {
+            "S": "https://www.omniexplorer.info/asset/31"
+          },
+          {
+            "S": "https://etherscan.io/token/0xdac17f958d2ee523a2206206994597c13d831ec7"
+          },
+          {
+            "S": "https://algoexplorer.io/asset/312769"
+          },
+          {
+            "S": "https://tronscan.org/#/token20/TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"
+          },
+          {
+            "S": "https://bscscan.com/token/0x55d398326f99059ff775485246999027b3197955"
+          }
+        ]
+      },
+      "facebook": {
+        "L": []
+      },
+      "message_board": {
+        "L": []
+      },
+      "reddit": {
+        "L": []
+      },
+      "source_code": {
+        "L": []
+      },
+      "technical_doc": {
+        "L": [
+          {
+            "S": "https://tether.to/wp-content/uploads/2016/06/TetherWhitePaper.pdf"
+          }
+        ]
+      },
+      "twitter": {
+        "L": [
+          {
+            "S": "https://twitter.com/tether_to"
+          }
+        ]
+      },
+      "website": {
+        "L": [
+          {
+            "S": "https://tether.to"
+          }
+        ]
+      }
+    }
+  }
+}

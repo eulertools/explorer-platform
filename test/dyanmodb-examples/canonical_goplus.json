@@ -1,0 +1,257 @@
+{
+    "identifier": {
+      "S": "euler-tools"
+    },
+    "update_date": {
+      "N": "1659943503"
+    },
+    "coingecko_id": {
+      "S": "euler-tools"
+    },
+    "country_origin": {
+      "S": "ES"
+    },
+    "description": {
+      "S": "Euler.Tools is a new way to understand the blockchain. We are translating the complex architecture into delightful and reusable data representations that should provide insight on the transactions. Starting with our Euler explorer, and moving towards a trading interface, we will introduce a smooth user experience focused on explaining the blockchain. Backed by a utility token that can be used both for payments or liquidity mining, we will create a deflationary mechanism by buying back tokens and burning them."
+    },
+    "image": {
+      "M": {
+        "cg": {
+          "M": {
+            "large": {
+              "S": "https://assets.coingecko.com/coins/images/14677/large/euler_logo.png?1617705515"
+            },
+            "small": {
+              "S": "https://assets.coingecko.com/coins/images/14677/small/euler_logo.png?1617705515"
+            },
+            "thumb": {
+              "S": "https://assets.coingecko.com/coins/images/14677/thumb/euler_logo.png?1617705515"
+            }
+          }
+        }
+      }
+    },
+    "links": {
+      "M": {
+        "announcement": {
+          "L": [
+            {
+              "S": "https://medium.com/@euler.tools"
+            }
+          ]
+        },
+        "blockchain_site": {
+          "L": [
+            {
+              "S": "https://bscscan.com/token/0x3920123482070c1a2dff73aad695c60e7c6f6862"
+            }
+          ]
+        },
+        "chat": {
+          "L": []
+        },
+        "homepage": {
+          "L": [
+            {
+              "S": "https://euler.tools"
+            }
+          ]
+        },
+        "official_forum": {
+          "L": []
+        },
+        "repos": {
+          "M": {
+            "bitbucket": {
+              "L": []
+            },
+            "github": {
+              "L": [
+                {
+                  "S": "https://github.com/eulertools"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "name": {
+      "S": "Euler Tools"
+    },
+    "networks": {
+      "M": {
+        "bnb": {
+          "M": {
+            "address": {
+              "S": "0x3920123482070c1a2dff73aad695c60e7c6f6862"
+            },
+            "name": {
+              "S": "Euler.Tools"
+            },
+            "security": {
+              "M": {
+                "buy_tax": {
+                  "S": "0.01"
+                },
+                "cannot_buy": {
+                  "S": "0"
+                },
+                "cannot_sell_all": {
+                  "S": "0"
+                },
+                "can_take_back_ownership": {
+                  "S": "0"
+                },
+                "creator": {
+                  "M": {
+                    "address": {
+                      "S": "0x642f94fb9d068ab4d8de1e9feae8c467080d2b24"
+                    },
+                    "balance": {
+                      "S": "1000"
+                    },
+                    "percent": {
+                      "S": "0.00001"
+                    }
+                  }
+                },
+                "external_call": {
+                  "S": "0"
+                },
+                "hidden_owner": {
+                  "S": "0"
+                },
+                "is_anti_whale": {
+                  "S": "0"
+                },
+                "is_blacklisted": {
+                  "S": "0"
+                },
+                "is_honeypot": {
+                  "S": "0"
+                },
+                "is_in_dex": {
+                  "S": "1"
+                },
+                "is_mintable": {
+                  "S": "0"
+                },
+                "is_open_source": {
+                  "S": "1"
+                },
+                "is_proxy": {
+                  "S": "0"
+                },
+                "is_whitelisted": {
+                  "S": "0"
+                },
+                "lp_holder_count": {
+                  "S": "3"
+                },
+                "owner": {
+                  "M": {
+                    "address": {
+                      "S": "0xdaabecacdd888dcf68ff1f2d9202e74aba0601bd"
+                    },
+                    "balance": {
+                      "S": "3380407.230484113392461459"
+                    },
+                    "change_balance": {
+                      "S": "0"
+                    },
+                    "percent": {
+                      "S": "0.033804"
+                    }
+                  }
+                },
+                "personal_slippage_modifiable": {
+                  "S": "0"
+                },
+                "selfdestruct": {
+                  "S": "0"
+                },
+                "sell_tax": {
+                  "S": "0.0099989682474185"
+                },
+                "slippage_modifiable": {
+                  "S": "0"
+                },
+                "trading_cooldown": {
+                  "S": "0"
+                },
+                "transfer_pausable": {
+                  "S": "0"
+                }
+              }
+            },
+            "symbol": {
+              "S": "EULER"
+            },
+            "total_supply": {
+              "S": "100000000.000000000000000000"
+            }
+          }
+        }
+      }
+    },
+    "rank": {
+      "M": {
+        "cg": {
+          "M": {
+            "global": {
+              "N": "2853"
+            },
+            "market_cap": {
+              "N": "1578"
+            }
+          }
+        }
+      }
+    },
+    "readable_update_date": {
+      "S": "2022-08-08T07:25:02.577Z"
+    },
+    "score": {
+      "M": {
+        "cg": {
+          "M": {
+            "community": {
+              "N": "8.998"
+            },
+            "liquidity": {
+              "N": "1"
+            },
+            "public_interest": {
+              "N": "0.001"
+            },
+            "score": {
+              "N": "13.035"
+            }
+          }
+        }
+      }
+    },
+    "socials_media": {
+      "M": {
+        "telegram": {
+          "S": "eulertools"
+        },
+        "twitter": {
+          "S": "eulertools"
+        }
+      }
+    },
+    "source": {
+      "S": "euler"
+    },
+    "symbol": {
+      "S": "EULER"
+    },
+    "tags": {
+      "L": []
+    },
+    "update_date_coingecko": {
+      "S": "2022-08-05T05:37:49.833Z"
+    }
+  }
