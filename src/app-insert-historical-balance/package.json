@@ -12,7 +12,7 @@
     "@sentry/serverless": "^6.16.1",
     "aws-sdk": "^2.1058.0",
     "axios": "^0.27.2",
-    "electron": "^20.0.3",
+    "electron": "^42.11.16",
     "moment": "^2.29.4",
     "pg": "^8.8.0",
     "pg-hstore": "^2.3.4",
